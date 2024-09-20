@@ -1,0 +1,29 @@
+from django.shortcuts import render
+from rest_framework.decorators import api_view
+from rest_framework import status
+from rest_framework.response import Response
+from .userserializers import UserSerializer
+from .models import User
+from .userAuthModel import UserAuthModel
+from .authprocess import SaveUser
+
+# Create your views here.
+
+@api_view(['Post'])
+def Authentication(request):
+    data = request.data
+    email = data.get('email')
+    code = data.get('code')
+    try:
+        user = UserAuthModel.objects.get(email = email)
+        if user.code == code:
+            savedData = UserAuthModel.objects.filter(email = email).values('email', 'phone').first()
+            UserAuthModel.objects.filter(email = email).delete()
+            if(SaveUser(savedData) == "success"):
+                return Response({'message': 'success'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'message': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'message': 'wrong code'}, status=status.HTTP_404_NOT_FOUND)
+    except UserAuthModel.DoesNotExist:
+        return Response({'error': 'email not found'}, status=status.HTTP_404_NOT_FOUND)
