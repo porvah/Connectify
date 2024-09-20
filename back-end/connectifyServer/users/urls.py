@@ -4,7 +4,9 @@ from . import authviews
 
 urlpatterns = [
     path('signup/', views.SignUp),
+    path('login/', views.LogIn),
     path('getusers/', views.Get),
     path('getsavedusers/', views.GetSavedUsers),
-    path('auth/', authviews.Authentication),
+    path('signupauth/', authviews.SignUpAuthentication),
+    path('loginauth/', authviews.LogInAuthentication),
 ]

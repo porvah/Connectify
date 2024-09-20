@@ -10,7 +10,7 @@ from .authprocess import SaveUser
 # Create your views here.
 
 @api_view(['Post'])
-def Authentication(request):
+def SignUpAuthentication(request):
     data = request.data
     email = data.get('email')
     code = data.get('code')
@@ -23,6 +23,21 @@ def Authentication(request):
                 return Response({'message': 'success'}, status=status.HTTP_200_OK)
             else:
                 return Response({'message': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'message': 'wrong code'}, status=status.HTTP_404_NOT_FOUND)
+    except UserAuthModel.DoesNotExist:
+        return Response({'error': 'email not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+@api_view(['Post'])
+def LogInAuthentication(request):
+    data = request.data
+    email = data.get('email')
+    code = data.get('code')
+    try:
+        user = UserAuthModel.objects.get(email = email)
+        if user.code == code:
+            UserAuthModel.objects.filter(email = email).delete()
+            return Response({'message': 'success'}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'wrong code'}, status=status.HTTP_404_NOT_FOUND)
     except UserAuthModel.DoesNotExist:

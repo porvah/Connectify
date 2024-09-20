@@ -29,7 +29,27 @@ def SignUp(request):
                 else:
                     return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
         else:
-             return Response({'message': 'User Exists'},status=status.HTTP_400_BAD_REQUEST)  
+             return Response({'message': 'User Exists'},status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['Post'])
+def LogIn(request):
+        code = generateCode()
+        time = timezone.now().time()
+        savedData = request.data
+        savedData['code'] = code
+        savedData['time'] = time
+        serializer = AuthSerializer(data = savedData)
+        user = User.objects.filter(Q(email=savedData.get('email')) | Q(phone=savedData.get('phone')))
+        if(user.exists()):
+                if serializer.is_valid():
+                        serializer.save()
+                        return Response(serializer.data,status = status.HTTP_201_CREATED)
+                else:
+                    return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
+        else:
+             return Response({'message': 'User doesnot exist'},status=status.HTTP_400_BAD_REQUEST)    
+
 
 @api_view(['GET'])
 def Get(request):
