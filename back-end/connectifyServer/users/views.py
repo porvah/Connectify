@@ -9,6 +9,7 @@ from .models import User
 from django.utils import timezone
 from .randomCodeGenerator import generateCode
 from django.db.models import Q
+from .authprocess import SendEmail
 
 
 # Create your views here.
@@ -25,6 +26,7 @@ def SignUp(request):
         if(not user.exists()):
                 if serializer.is_valid():
                         serializer.save()
+                        SendEmail(code,savedData.get('email'))
                         return Response(serializer.data,status = status.HTTP_201_CREATED)
                 else:
                     return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
@@ -44,6 +46,7 @@ def LogIn(request):
         if(user.exists()):
                 if serializer.is_valid():
                         serializer.save()
+                        SendEmail(code,savedData.get('email'))
                         return Response(serializer.data,status = status.HTTP_201_CREATED)
                 else:
                     return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
