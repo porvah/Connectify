@@ -23,13 +23,19 @@ def SignUp(request):
         savedData['time'] = time
         serializer = AuthSerializer(data = savedData)
         user = User.objects.filter(Q(email=savedData.get('email')) | Q(phone=savedData.get('phone')))
+        userauth = UserAuthModel.objects.filter(email = savedData.get('email'))
         if(not user.exists()):
-                if serializer.is_valid():
-                        serializer.save()
-                        SendEmail(code,savedData.get('email'))
-                        return Response(serializer.data,status = status.HTTP_201_CREATED)
-                else:
-                    return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
+                if (userauth.exists()):
+                       userauth.update(code = code , time = time)
+                       SendEmail(code,savedData.get('email'))
+                       return Response({'message': 'success'},status = status.HTTP_201_CREATED)
+                else: 
+                        if serializer.is_valid():
+                                serializer.save()
+                                SendEmail(code,savedData.get('email'))
+                                return Response({'message': 'success'},status = status.HTTP_201_CREATED)
+                        else:
+                             return Response({'message': 'failed'},status=status.HTTP_400_BAD_REQUEST)
         else:
              return Response({'message': 'User Exists'},status=status.HTTP_400_BAD_REQUEST)
 
@@ -43,15 +49,31 @@ def LogIn(request):
         savedData['time'] = time
         serializer = AuthSerializer(data = savedData)
         user = User.objects.filter(email=savedData.get('email') , phone=savedData.get('phone'))
+        userauth = UserAuthModel.objects.filter(email = savedData.get('email'))
         if(user.exists()):
-                if serializer.is_valid():
-                        serializer.save()
-                        SendEmail(code,savedData.get('email'))
-                        return Response(serializer.data,status = status.HTTP_201_CREATED)
-                else:
-                    return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
+                if userauth.exists():
+                       userauth.update(code = code , time = time)
+                       SendEmail(code,savedData.get('email'))
+                       return Response({'message': 'success'},status = status.HTTP_201_CREATED)
+                else:       
+                        if serializer.is_valid():
+                                serializer.save()
+                                SendEmail(code,savedData.get('email'))
+                                return Response({'message': 'success'},status = status.HTTP_201_CREATED)
+                        else:
+                            return Response({'message': 'failed'},status=status.HTTP_400_BAD_REQUEST)
         else:
-             return Response({'message': 'User doesnot exist'},status=status.HTTP_400_BAD_REQUEST)    
+             return Response({'message': 'User doesnot exist'},status=status.HTTP_400_BAD_REQUEST)
+        
+
+@api_view(['Post'])
+def ResendCode(request):
+       savedData = request.data
+       code = generateCode()
+       time = timezone.now().time()
+       UserAuthModel.objects.filter(email = savedData.get('email')).update(code = code,time = time)
+       SendEmail(code,savedData.get('email')) 
+       return Response({'message': 'success'}, status=status.HTTP_200_OK)  
 
 
 @api_view(['GET'])

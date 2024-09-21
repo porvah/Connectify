@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -5,7 +6,7 @@ from rest_framework.response import Response
 from .userserializers import UserSerializer
 from .models import User
 from .userAuthModel import UserAuthModel
-from .authprocess import SaveUser
+from .authprocess import SaveUser,ValidateCode
 
 # Create your views here.
 
@@ -17,12 +18,15 @@ def SignUpAuthentication(request):
     try:
         user = UserAuthModel.objects.get(email = email)
         if user.code == code:
-            savedData = UserAuthModel.objects.filter(email = email).values('email', 'phone').first()
-            UserAuthModel.objects.filter(email = email).delete()
-            if(SaveUser(savedData) == "success"):
-                return Response({'message': 'success'}, status=status.HTTP_200_OK)
+            if ValidateCode(user.time):
+                savedData = UserAuthModel.objects.filter(email = email).values('email', 'phone').first()
+                UserAuthModel.objects.filter(email = email).delete()
+                if(SaveUser(savedData) == "success"):
+                    return Response({'message': 'success'}, status=status.HTTP_200_OK)
+                else:
+                    return Response({'message': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
             else:
-                return Response({'message': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'message': 'expired code'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({'message': 'wrong code'}, status=status.HTTP_404_NOT_FOUND)
     except UserAuthModel.DoesNotExist:
@@ -36,8 +40,11 @@ def LogInAuthentication(request):
     try:
         user = UserAuthModel.objects.get(email = email)
         if user.code == code:
-            UserAuthModel.objects.filter(email = email).delete()
-            return Response({'message': 'success'}, status=status.HTTP_200_OK)
+            if ValidateCode(user.time):
+                UserAuthModel.objects.filter(email = email).delete()
+                return Response({'message': 'success'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'message': 'expired code'}, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response({'message': 'wrong code'}, status=status.HTTP_404_NOT_FOUND)
     except UserAuthModel.DoesNotExist:

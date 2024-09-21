@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+from django.utils import timezone
 from .models import User
 from .userserializers import UserSerializer
 from django.core.mail import send_mail
@@ -28,4 +30,26 @@ def SendEmail(code, email):
         )
     except Exception as e:
         logging.error(f"Error sending email: {e}")
+
+
+from datetime import datetime
+from django.utils import timezone
+
+def ValidateCode(saved_time):
+    if isinstance(saved_time, str):
+        saved_time = datetime.strptime(saved_time, '%H:%M:%S').time()  
+
+    current_datetime = timezone.now()  
+    saved_datetime = datetime.combine(current_datetime.date(), saved_time)
+    saved_datetime = timezone.make_aware(saved_datetime)
+
+    time_difference = current_datetime - saved_datetime
+    difference_in_seconds = time_difference.total_seconds()
+    print(difference_in_seconds)
+
+    return difference_in_seconds <= 60  
+
+
+
+
 
