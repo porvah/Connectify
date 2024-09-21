@@ -2,8 +2,11 @@ from datetime import datetime, timezone
 from django.utils import timezone
 from .models import User
 from .userserializers import UserSerializer
+from .LoggedUsersSerializers import LoggedUsersSerializer
+from .loggedusersmodel import LoggedUsersModel
 from django.core.mail import send_mail
 from django.conf import settings
+from .randomCodeGenerator import generateSessionCode
 import logging
 
 
@@ -48,6 +51,25 @@ def ValidateCode(saved_time):
     print(difference_in_seconds)
 
     return difference_in_seconds <= 60  
+
+
+def LogUser(email,phone):
+    token = generateSessionCode()
+    data = {
+        'email' : email,
+        'phone' : phone,
+        'token' : token
+    }
+    loggeduser = LoggedUsersModel.objects.filter(email = data.get('email'))
+    serializer = LoggedUsersSerializer(data = data)
+    if loggeduser.exists():
+        loggeduser.update(token = token)
+    else:
+        if serializer.is_valid():
+            serializer.save()
+
+
+
 
 
 

@@ -4,8 +4,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from .userserializers import UserSerializer
 from .authserializer import AuthSerializer
+from .LoggedUsersSerializers import LoggedUsersSerializer
 from .userAuthModel import UserAuthModel
 from .models import User
+from .loggedusersmodel import LoggedUsersModel
 from django.utils import timezone
 from .randomCodeGenerator import generateCode
 from django.db.models import Q
@@ -73,8 +75,29 @@ def ResendCode(request):
        time = timezone.now().time()
        UserAuthModel.objects.filter(email = savedData.get('email')).update(code = code,time = time)
        SendEmail(code,savedData.get('email')) 
-       return Response({'message': 'success'}, status=status.HTTP_200_OK)  
+       return Response({'message': 'success'}, status=status.HTTP_200_OK) 
 
+
+@api_view(['Post'])
+def LogOut(request):
+       try:
+          data = request.data
+          email = data.get('email')
+          LoggedUsersModel.objects.filter(email = email).delete()
+          return Response({'message': 'success'}, status=status.HTTP_200_OK)
+       except LoggedUsersModel.DoesNotExist:
+              return Response({'error': 'failed'}, status=status.HTTP_404_NOT_FOUND)
+       
+@api_view(['Post'])
+def OpenSession(request):
+       data = request.data
+       token = data.get('token')
+       user = LoggedUsersModel.objects.filter(token = token)
+       if user.exists():
+              return Response({'message': 'success'}, status=status.HTTP_200_OK)
+       else:
+            return Response({'message': 'start new session'}, status=status.HTTP_404_NOT_FOUND)  
+              
 
 @api_view(['GET'])
 def Get(request):
@@ -88,6 +111,13 @@ def GetSavedUsers(request):
         print(User.objects.all())
         user = User.objects.all()
         serializer = UserSerializer(user,many = True)
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def GetLoggedUsers(request):
+        print(LoggedUsersModel.objects.all())
+        user = LoggedUsersModel.objects.all()
+        serializer = LoggedUsersSerializer(user,many = True)
         return Response(serializer.data)
        
     

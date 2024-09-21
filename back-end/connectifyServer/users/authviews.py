@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from .userserializers import UserSerializer
 from .models import User
 from .userAuthModel import UserAuthModel
-from .authprocess import SaveUser,ValidateCode
+from .authprocess import SaveUser,ValidateCode,LogUser
 
 # Create your views here.
 
@@ -14,6 +14,7 @@ from .authprocess import SaveUser,ValidateCode
 def SignUpAuthentication(request):
     data = request.data
     email = data.get('email')
+    phone = data.get('phone')
     code = data.get('code')
     try:
         user = UserAuthModel.objects.get(email = email)
@@ -22,6 +23,7 @@ def SignUpAuthentication(request):
                 savedData = UserAuthModel.objects.filter(email = email).values('email', 'phone').first()
                 UserAuthModel.objects.filter(email = email).delete()
                 if(SaveUser(savedData) == "success"):
+                    LogUser(email , phone)
                     return Response({'message': 'success'}, status=status.HTTP_200_OK)
                 else:
                     return Response({'message': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
@@ -36,12 +38,14 @@ def SignUpAuthentication(request):
 def LogInAuthentication(request):
     data = request.data
     email = data.get('email')
+    phone = data.get('phone')
     code = data.get('code')
     try:
         user = UserAuthModel.objects.get(email = email)
         if user.code == code:
             if ValidateCode(user.time):
                 UserAuthModel.objects.filter(email = email).delete()
+                LogUser(email , phone)
                 return Response({'message': 'success'}, status=status.HTTP_200_OK)
             else:
                 return Response({'message': 'expired code'}, status=status.HTTP_404_NOT_FOUND)
