@@ -18,8 +18,6 @@ def SaveUser(savedData):
 
 
 def SendEmail(code, email):
-    print(f"EMAIL_HOST_USER: {settings.EMAIL_HOST_USER}")
-    print(f"EMAIL_HOST_PASSWORD: {settings.EMAIL_HOST_PASSWORD}")
     try:
         send_mail(
             'Welcome to Connectify',
@@ -28,8 +26,6 @@ def SendEmail(code, email):
             [email],
             fail_silently=False,
         )
-        print("Email sent successfully.")
     except Exception as e:
         logging.error(f"Error sending email: {e}")
-        print(f"Failed to send email: {e}")
 

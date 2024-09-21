@@ -42,7 +42,7 @@ def LogIn(request):
         savedData['code'] = code
         savedData['time'] = time
         serializer = AuthSerializer(data = savedData)
-        user = User.objects.filter(Q(email=savedData.get('email')) | Q(phone=savedData.get('phone')))
+        user = User.objects.filter(email=savedData.get('email') , phone=savedData.get('phone'))
         if(user.exists()):
                 if serializer.is_valid():
                         serializer.save()
