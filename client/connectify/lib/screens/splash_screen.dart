@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     Future.delayed(const Duration(seconds: 2), (){
-      Navigator.of(context).pushReplacementNamed('/HomePage', arguments: "Home Page");
+      Navigator.of(context).pushReplacementNamed('/Signup');
     });
   }
   @override
@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         fit: StackFit.expand,
         children: [
           Container(
-            decoration: const BoxDecoration(color: Color.fromARGB(255, 26, 200, 243)),
+            decoration: BoxDecoration(color: Theme.of(context).primaryColor),
           ),
           const Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -62,15 +62,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   ],
                 ),
               ),
-              // Expanded(
-              //   flex: 1,
-              // child: Column(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     CircularProgressIndicator.adaptive(value: 3.0,),
-              //     Padding(padding: const EdgeInsets.only(top: 20.0))
-              //   ],
-              // ),)
             ],
           )
         ],

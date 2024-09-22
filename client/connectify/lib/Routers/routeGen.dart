@@ -1,4 +1,7 @@
+import 'package:Connectify/screens/authentication_page.dart';
 import 'package:Connectify/screens/home_page.dart';
+import 'package:Connectify/screens/login_page.dart';
+import 'package:Connectify/screens/signup_page.dart';
 import 'package:Connectify/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +16,12 @@ class RouteGen{
           return MaterialPageRoute(builder: (_)=> HomePage(title: args));
         }
         return _errorRoute('${settings.name}');
+      case '/Signup':
+        return MaterialPageRoute(builder: (_)=> SignUpScreen());
+      case '/Login':
+        return MaterialPageRoute(builder: (_)=> LoginScreen());
+      case '/Auth':
+        return MaterialPageRoute(builder: (_)=> AuthenticationScreen());
       default:
         return _errorRoute('${settings.name}');
     }

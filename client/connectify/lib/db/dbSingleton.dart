@@ -23,7 +23,8 @@ CREATE TABLE user (
   id integer primary key autoincrement,
   email text not null,
   phone text not null unique,
-  logged integer not null)
+  logged integer not null,
+  token text not null)
       ''');
     
   }

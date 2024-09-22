@@ -3,12 +3,13 @@ final String columnId = 'id';
 final String columnEmail = 'email';
 final String columnPhone = 'phone';
 final String columnLogged = 'logged';
-
+final String columnToken = 'token';
 class User{
   int? id;
   String? email;
   String? phone;
   int? logged;
+  String? token;
 
 
   User(this.email, this.phone, this.logged);
@@ -22,6 +23,9 @@ class User{
     };
     if(id != null){
       map[columnId] = id;
+    }
+    if(token != null){
+      map[columnToken] = token;
     }
     return map;
   }
