@@ -27,8 +27,7 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
-assets:
-  - .env
+
 
 dependencies:
   flutter:
@@ -66,7 +65,8 @@ flutter_launcher_icons:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  assets:
+    - .env
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
