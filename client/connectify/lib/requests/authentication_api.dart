@@ -18,12 +18,15 @@ class AuthAPI{
         })
       );
       if (response.statusCode == 201) {
+
         print('Data posted: ${response.body}');
+        return true;
       } else {
         throw Exception('Failed to post data');
       }
     }catch(e){
       print('sign up failed!');
+      return false;
     }
   }
 }
