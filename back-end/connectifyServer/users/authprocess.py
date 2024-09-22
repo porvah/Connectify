@@ -67,6 +67,7 @@ def LogUser(email,phone):
     else:
         if serializer.is_valid():
             serializer.save()
+    return token
 
 
 

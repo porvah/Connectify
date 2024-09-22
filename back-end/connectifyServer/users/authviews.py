@@ -23,8 +23,8 @@ def SignUpAuthentication(request):
                 savedData = UserAuthModel.objects.filter(email = email).values('email', 'phone').first()
                 UserAuthModel.objects.filter(email = email).delete()
                 if(SaveUser(savedData) == "success"):
-                    LogUser(email , phone)
-                    return Response({'message': 'success'}, status=status.HTTP_200_OK)
+                    token = LogUser(email , phone)
+                    return Response(data = token, status=status.HTTP_200_OK)
                 else:
                     return Response({'message': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
             else:
@@ -45,8 +45,8 @@ def LogInAuthentication(request):
         if user.code == code:
             if ValidateCode(user.time):
                 UserAuthModel.objects.filter(email = email).delete()
-                LogUser(email , phone)
-                return Response({'message': 'success'}, status=status.HTTP_200_OK)
+                token = LogUser(email , phone)
+                return Response(data = token, status=status.HTTP_200_OK)
             else:
                 return Response({'message': 'expired code'}, status=status.HTTP_404_NOT_FOUND)
         else:
