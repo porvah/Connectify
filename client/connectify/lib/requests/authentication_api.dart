@@ -69,7 +69,7 @@ class AuthAPI {
       }),
     );
     Map data = jsonDecode(response.body);
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       print('Data posted: ${response.body}');    
       return data;
     } else {

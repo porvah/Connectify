@@ -44,7 +44,7 @@ class UserAuthentication {
     AuthAPI api = AuthAPI();
     await api.resend(email!);
   }
-  static Future<void> sign_up_check_code(BuildContext ctx, User user, String code)async{
+  static Future<bool> sign_up_check_code(BuildContext ctx, User user, String code)async{
     AuthAPI api = AuthAPI();
     Map data = await api.signupauth(user.email!, user.phone!, code);
     if (data['token'] != null){
@@ -54,6 +54,7 @@ class UserAuthentication {
       user.token = token;
       user.logged = 1;
       UserProvider.insert(user, db!);
+      return true;
     }else{
       ScaffoldMessenger.of(ctx).showSnackBar(
         SnackBar(
@@ -62,6 +63,7 @@ class UserAuthentication {
           duration: Duration(seconds: 3),
         ),
       );
+      return false;
     }
   }
 }
