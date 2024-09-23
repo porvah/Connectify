@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 class SignUpScreen extends StatelessWidget {
   final TextEditingController _controller_email = TextEditingController();
   final TextEditingController _controller_phone = TextEditingController();
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,11 +41,19 @@ class SignUpScreen extends StatelessWidget {
                 PhoneField(_controller_phone),
                 SizedBox(height: 20),
                 StringField('Email',Icons.email, _controller_email),
+                TextButton(
+                  onPressed: () {
+                    // Navigate to the login page
+                    Navigator.of(context).pushReplacementNamed('/Login');
+                  },
+                  child: Text('Already have an account? Log in'),
+                ), 
                 SizedBox(height: 40),
+                
                 Elevbutton("Sign Up", (){
                   String mail = _controller_email.text;
                   String phone = _controller_phone.text;
-                  UserAuthentication.sign_up(mail, phone);
+                  UserAuthentication.sign_up(context, mail, phone);
                 })
               ],
             ),

@@ -38,7 +38,15 @@ class LoginScreen extends StatelessWidget {
                 PhoneField(_controller_phone),
                 SizedBox(height: 20),
                 StringField('Email',Icons.email, _controller_email),
+                TextButton(
+                  onPressed: () {
+                    // Navigate to the login page
+                    Navigator.of(context).pushReplacementNamed('/Login');
+                  },
+                  child: Text("Don't have an account? Sign up"),
+                ),
                 SizedBox(height: 40),
+                 
                 Elevbutton("Log In", (){})
               ],
             ),
