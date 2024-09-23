@@ -24,7 +24,7 @@ def SignUpAuthentication(request):
                 UserAuthModel.objects.filter(email = email).delete()
                 if(SaveUser(savedData) == "success"):
                     token = LogUser(email , phone)
-                    return Response(data = token, status=status.HTTP_200_OK)
+                    return Response({"token" : token}, status=status.HTTP_200_OK)
                 else:
                     return Response({'message': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
             else:

@@ -82,8 +82,8 @@ def ResendCode(request):
 def LogOut(request):
        try:
           data = request.data
-          email = data.get('email')
-          LoggedUsersModel.objects.filter(email = email).delete()
+          token = data.get('token')
+          LoggedUsersModel.objects.filter(token = token).delete()
           return Response({'message': 'success'}, status=status.HTTP_200_OK)
        except LoggedUsersModel.DoesNotExist:
               return Response({'error': 'failed'}, status=status.HTTP_404_NOT_FOUND)
