@@ -12,7 +12,7 @@ class User{
   String? token;
 
 
-  User(this.email, this.phone, this.logged);
+  User(this.email, this.phone);
 
 
   Map<String, Object?> toMap(){
@@ -36,5 +36,6 @@ class User{
     email = map[columnEmail] as String;
     phone = map[columnPhone] as String;
     logged = map[columnLogged] as int;
+    token = map[columnToken] as String;
   }
 }

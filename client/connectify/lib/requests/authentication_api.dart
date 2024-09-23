@@ -31,4 +31,50 @@ class AuthAPI {
       return false;
     }
   }
+  Future resend(String email) async {
+    try {
+      final response = await http.post(
+        Uri.parse(_url! + 'resend/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        print('Data posted: ${response.body}');
+        return true;
+      } else {
+        print('Failed with status: ${response.statusCode}, body: ${response.body}');
+        throw Exception('Failed to post data');
+      }
+    } catch (e) {
+      print('Resend failed! Error: $e');
+      return false;
+    }
+  }
+  Future<Map> signupauth(String email, String phone, String code) async {
+
+    final response = await http.post(
+      Uri.parse(_url! + 'signupauth/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(<String, String>{
+        'email': email,
+        'phone': phone,
+        'code': code
+      }),
+    );
+    Map data = jsonDecode(response.body);
+    if (response.statusCode == 201) {
+      print('Data posted: ${response.body}');    
+      return data;
+    } else {
+      print('Failed with status: ${response.statusCode}, body: ${response.body}');
+      return data;
+    }
+  }
 }
