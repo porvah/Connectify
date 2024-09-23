@@ -1,31 +1,33 @@
 import 'dart:convert';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
-class AuthAPI{
+class AuthAPI {
   final _url = dotenv.env['API_URL'];
-  Future signup(String email, String phone)async{
-    try{
+
+  Future signup(String email, String phone) async {
+
+    try {
       final response = await http.post(
-        Uri.parse(''+_url!+'signup/'),
-        headers: <String,String>{
+        Uri.parse(_url! + 'signup/'),
+        headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: jsonEncode(<String,String>{
+        body: jsonEncode(<String, String>{
           'email': email,
-          'phone': phone
-        })
+          'phone': phone,
+        }),
       );
-      if (response.statusCode == 201) {
 
+      if (response.statusCode == 201) {
         print('Data posted: ${response.body}');
         return true;
       } else {
+        print('Failed with status: ${response.statusCode}, body: ${response.body}');
         throw Exception('Failed to post data');
       }
-    }catch(e){
-      print('sign up failed!');
+    } catch (e) {
+      print('Sign up failed! Error: $e');
       return false;
     }
   }
