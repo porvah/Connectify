@@ -77,4 +77,29 @@ class AuthAPI {
       return data;
     }
   }
+  Future<bool> opensession(String token) async {
+    try {
+      final response = await http.post(
+        Uri.parse(_url! + 'opensession/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: jsonEncode(<String, String>{
+          'token': token,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Data posted: ${response.body}');
+        return true;
+      } else {
+        print('Failed with status: ${response.statusCode}, body: ${response.body}');
+        throw Exception('Failed to post data');
+      }
+    } catch (e) {
+      print('Resend failed! Error: $e');
+      return false;
+    }
+  }
+
 }

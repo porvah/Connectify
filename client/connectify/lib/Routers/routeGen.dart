@@ -21,7 +21,7 @@ class RouteGen{
       case '/Login':
         return MaterialPageRoute(builder: (_)=> LoginScreen());
       case '/Auth':
-        if (args is List){
+        if (args is List<dynamic>){
           return MaterialPageRoute(builder: (_)=> AuthenticationScreen(args));
         }
         return _errorRoute('${settings.name}');

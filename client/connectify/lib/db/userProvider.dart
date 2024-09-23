@@ -8,7 +8,7 @@ class UserProvider{
   
   static Future<User?> getUser(String phone, Database db) async{
     List<Map<String,Object>> maps = await db.query(tableUser, 
-    columns:[columnId, columnEmail, columnPhone, columnLogged],
+    columns:[columnId, columnEmail, columnPhone, columnLogged, columnToken],
     where: '$columnPhone = ?',
     whereArgs: [phone]
     ) as List<Map<String,Object>>;
@@ -28,11 +28,11 @@ class UserProvider{
   }
 
   static Future<User?> getLoggedUser(Database db)async{
-    List<Map<String,Object>> maps = await db.query(tableUser, 
-    columns:[columnId, columnEmail, columnPhone, columnLogged],
+    List<Map<String,dynamic>> maps = await db.query(tableUser, 
+    columns:[columnId, columnEmail, columnPhone, columnLogged, columnToken],
     where: '$columnLogged = ?',
     whereArgs: [1]
-    ) as List<Map<String,Object>>;
+    ) as List<Map<String,dynamic>>;
     if (maps.length > 0){
       return User.fromMap(maps.first);
     }

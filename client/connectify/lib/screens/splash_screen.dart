@@ -1,3 +1,4 @@
+import 'package:Connectify/utils/userAuthentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,13 +16,23 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     Future.delayed(const Duration(seconds: 2), (){
-      Navigator.of(context).pushReplacementNamed('/Signup');
+      UserAuthentication.startup(go_signup, go_home, go_login);
+      
     });
   }
   @override
   void dispose(){
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     super.dispose();
+  }
+  void go_signup(){
+    Navigator.of(context).pushReplacementNamed('/Signup');
+  }
+  void go_home(){
+    Navigator.of(context).pushReplacementNamed('/HomePage');
+  }
+  void go_login(){
+    Navigator.of(context).pushReplacementNamed('/Login');
   }
 
 
