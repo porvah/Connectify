@@ -50,7 +50,7 @@ def ValidateCode(saved_time):
     difference_in_seconds = time_difference.total_seconds()
     print(difference_in_seconds)
 
-    return difference_in_seconds <= 60  
+    return difference_in_seconds <= 5*60  
 
 
 def LogUser(email,phone):
