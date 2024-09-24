@@ -46,7 +46,7 @@ def LogInAuthentication(request):
             if ValidateCode(user.time):
                 UserAuthModel.objects.filter(email = email).delete()
                 token = LogUser(email , phone)
-                return Response(data = token, status=status.HTTP_200_OK)
+                return Response({"token" : token}, status=status.HTTP_200_OK)
             else:
                 return Response({'message': 'expired code'}, status=status.HTTP_404_NOT_FOUND)
         else:

@@ -1,3 +1,4 @@
+import 'package:Connectify/utils/userAuthentication.dart';
 import 'package:Connectify/widgets/ElevButton.dart';
 import 'package:Connectify/widgets/phoneField.dart';
 import 'package:Connectify/widgets/stringField.dart';
@@ -41,13 +42,17 @@ class LoginScreen extends StatelessWidget {
                 TextButton(
                   onPressed: () {
                     // Navigate to the login page
-                    Navigator.of(context).pushReplacementNamed('/Login');
+                    Navigator.of(context).pushReplacementNamed('/Signup');
                   },
                   child: Text("Don't have an account? Sign up"),
                 ),
                 SizedBox(height: 40),
                  
-                Elevbutton("Log In", (){})
+                Elevbutton("Log In", (){
+                  String mail = _controller_email.text;
+                  String phone = _controller_phone.text;
+                  UserAuthentication.log_in(context, mail, phone);
+                })
               ],
             ),
           ),
