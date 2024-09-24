@@ -13,11 +13,13 @@ class UserAuthentication {
     User? loggedUser = await UserProvider.getLoggedUser(db!);
     if (loggedUser != null) {
       AuthAPI api = AuthAPI();
+      print(loggedUser.token);
       bool success = await api.opensession(loggedUser.token!);
       if (success) {
         go_home();
       } else {
         loggedUser.logged = 0;
+        UserProvider.update(loggedUser, db);
         go_login();
       }
     } else {
@@ -105,7 +107,12 @@ class UserAuthentication {
       String token = data['token'];
       user.token = token;
       user.logged = 1;
-      UserProvider.insert(user, db!);
+      User? existedUser = await UserProvider.getUser(user.phone!, db!);
+      if (existedUser == null) {
+        UserProvider.insert(user, db);
+      } else {
+        UserProvider.update(user, db);
+      }
       return true;
     } else {
       ScaffoldMessenger.of(ctx).showSnackBar(
