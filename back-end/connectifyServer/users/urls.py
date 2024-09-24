@@ -7,6 +7,7 @@ urlpatterns = [
     path('login/', views.LogIn),
     path('getusers/', views.Get),
     path('getloggedusers/', views.GetLoggedUsers),
+    path('getcontacts/', views.getContacts),
     path('resend/', views.ResendCode),
     path('logout/', views.LogOut),
     path('opensession/', views.OpenSession),
