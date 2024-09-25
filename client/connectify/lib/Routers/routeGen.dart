@@ -3,13 +3,14 @@ import 'package:Connectify/screens/home_page.dart';
 import 'package:Connectify/screens/login_page.dart';
 import 'package:Connectify/screens/signup_page.dart';
 import 'package:Connectify/screens/splash_screen.dart';
+import 'package:Connectify/screens/settings_page.dart';
 import 'package:flutter/material.dart';
 
 class RouteGen{
   static Route<dynamic> generateRoute(RouteSettings settings){
     final args = settings.arguments;
     switch (settings.name){
-      case '/':
+      case '/splash':
         return MaterialPageRoute(builder: (_)=> const SplashScreen());
       case '/HomePage':
         if (args is String){
@@ -20,6 +21,8 @@ class RouteGen{
         return MaterialPageRoute(builder: (_)=> SignUpScreen());
       case '/Login':
         return MaterialPageRoute(builder: (_)=> LoginScreen());
+      case '/':
+        return MaterialPageRoute(builder: (_)=> SettingsPage());
       case '/Auth':
         if (args is List<dynamic>){
           return MaterialPageRoute(builder: (_)=> AuthenticationScreen(args));

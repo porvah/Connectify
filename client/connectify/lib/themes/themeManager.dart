@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeManager extends ChangeNotifier{
   late SharedPreferences preferences;
-  String ThemeKey = 'light';
+  String ThemeKey = 'selectedtheme';
   late ThemeData _currTheme;
   
   ThemeManager(){
@@ -14,10 +14,11 @@ class ThemeManager extends ChangeNotifier{
   
   ThemeData get currentTheme => _currTheme;
 
-  _initializePreferences() async {
+  Future<void> _initializePreferences() async {
     preferences = await SharedPreferences.getInstance();
     loadTheme();
   }
+
 
   toggleTheme(){
     _currTheme = isLight()? Themes().dark: Themes().light;
@@ -31,10 +32,6 @@ class ThemeManager extends ChangeNotifier{
       _currTheme = Themes().dark;
     }else if(theme == 'light'){
       _currTheme = Themes().light;
-    }
-    else{
-      _currTheme = Themes().light;
-      saveTheme();
     }
     notifyListeners();
   }
