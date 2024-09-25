@@ -56,7 +56,9 @@ class SettingsPage extends StatelessWidget {
               Divider(color: Theme.of(context).colorScheme.onSurface),
 
               //delete account
-              ListtileWidget('Delete Account', () {}, Icons.delete),
+              ListtileWidget('Delete Account', () {
+                Settings.delete_account(context);
+              }, Icons.delete),
             ],
           ),
         ),

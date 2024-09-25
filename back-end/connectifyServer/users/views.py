@@ -93,7 +93,7 @@ def DeleteAccount(request):
        try:
           data = request.data
           token = data.get('token')
-          loggedUser = LoggedUsersModel.objects.filter(token = token).first()
+          loggedUser = LoggedUsersModel.objects.get(token = token)
           User.objects.filter(email = loggedUser.email).delete()
           LoggedUsersModel.objects.filter(token = token).delete()
           return Response({'message': 'success'}, status=status.HTTP_200_OK)

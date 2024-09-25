@@ -10,7 +10,7 @@ class RouteGen{
   static Route<dynamic> generateRoute(RouteSettings settings){
     final args = settings.arguments;
     switch (settings.name){
-      case '/splash':
+      case '/':
         return MaterialPageRoute(builder: (_)=> const SplashScreen());
       case '/HomePage':
         if (args is String){
@@ -21,7 +21,7 @@ class RouteGen{
         return MaterialPageRoute(builder: (_)=> SignUpScreen());
       case '/Login':
         return MaterialPageRoute(builder: (_)=> LoginScreen());
-      case '/':
+      case '/Settings':
         return MaterialPageRoute(builder: (_)=> SettingsPage());
       case '/Auth':
         if (args is List<dynamic>){
