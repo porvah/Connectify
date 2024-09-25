@@ -8,8 +8,15 @@ class ListtileWidget extends StatelessWidget {
   IconData _icon;
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
+Widget build(BuildContext context) {
+  return Container(
+    height: 70, 
+    width: double.infinity,
+    decoration: BoxDecoration(
+      color: Theme.of(context).colorScheme.primary, 
+      borderRadius: BorderRadius.circular(12), 
+    ),
+    child: ListTile(
       leading: Icon(
         _icon,
         color: Theme.of(context).colorScheme.onSurface,
@@ -19,6 +26,7 @@ class ListtileWidget extends StatelessWidget {
         style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
       ),
       onTap: _onTap,
-    );
-  }
+    ),
+  );
+}
 }

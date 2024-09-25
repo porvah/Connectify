@@ -13,7 +13,7 @@ class Settings {
       context: ctx,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Theme.of(context).colorScheme.surface,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           title: Text("Log Out" , style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
           content: Text("Are you sure you want to log out?",style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
           actions: [
@@ -57,7 +57,7 @@ class Settings {
       context: ctx,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Theme.of(context).colorScheme.surface,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           title: Text("Log Out" , style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
           content: Text("Are you sure you want to delete your account , all your data will be deleted?"
           ,style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),

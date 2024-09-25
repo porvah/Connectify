@@ -29,7 +29,7 @@ class SettingsPage extends StatelessWidget {
             children: [
               // Profile Photo
               Photo(NetworkImage('https://via.placeholder.com/150'), 50),
-              SizedBox(height: 10),
+              SizedBox(height: 25),
 
               // Dark Mode Switch
               ListtileWidget(
@@ -39,21 +39,21 @@ class SettingsPage extends StatelessWidget {
                 },
                 themeManager.isLight() ? Icons.dark_mode : Icons.light_mode,
               ),
-              Divider(color: Theme.of(context).colorScheme.onSurface),
+              Divider(color: Theme.of(context).colorScheme.surface),
 
               // starred messages
               ListtileWidget('Starred Messages', () {}, Icons.star),
-              Divider(color: Theme.of(context).colorScheme.onSurface),
+              Divider(color: Theme.of(context).colorScheme.surface),
 
               //Favorite Contacts
               ListtileWidget('Favorite Contacts', () {}, Icons.favorite),
-              Divider(color: Theme.of(context).colorScheme.onSurface),
+              Divider(color: Theme.of(context).colorScheme.surface),
 
               //logout
               ListtileWidget('Logout', () {
                 Settings.log_out(context);
               }, Icons.logout),
-              Divider(color: Theme.of(context).colorScheme.onSurface),
+              Divider(color: Theme.of(context).colorScheme.surface),
 
               //delete account
               ListtileWidget('Delete Account', () {
