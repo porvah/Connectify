@@ -1,4 +1,5 @@
 import 'package:Connectify/themes/themeManager.dart';
+import 'package:Connectify/utils/settings.dart';
 import 'package:Connectify/widgets/listTile.dart';
 import 'package:Connectify/widgets/photo.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,9 @@ class SettingsPage extends StatelessWidget {
               Divider(color: Theme.of(context).colorScheme.onSurface),
 
               //logout
-              ListtileWidget('Logout', () {}, Icons.logout),
+              ListtileWidget('Logout', () {
+                Settings.log_out(context);
+              }, Icons.logout),
               Divider(color: Theme.of(context).colorScheme.onSurface),
 
               //delete account
