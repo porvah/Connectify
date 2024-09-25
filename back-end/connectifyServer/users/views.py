@@ -97,7 +97,17 @@ def OpenSession(request):
               return Response({'message': 'success'}, status=status.HTTP_200_OK)
        else:
             return Response({'message': 'start new session'}, status=status.HTTP_404_NOT_FOUND)  
-              
+
+@api_view(['POST'])
+def getContacts(request):
+       data = request.data
+       phones = data.get('phones',[])
+       if not phones:
+         return Response({'error': 'Phones list is required.'}, status=400)
+       users = User.objects.filter(phone__in=phones).values_list('phone', flat=True)
+       return Response({"phones" : list(users)})
+
+                    
 
 @api_view(['GET'])
 def Get(request):
