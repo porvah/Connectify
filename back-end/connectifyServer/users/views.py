@@ -105,7 +105,7 @@ def getContacts(request):
        if not phones:
          return Response({'error': 'Phones list is required.'}, status=400)
        users = User.objects.filter(phone__in=phones).values_list('phone', flat=True)
-       return Response({"phones" : list(users)})
+       return Response({"phones" : list(users)}, status=status.HTTP_200_OK)
 
                     
 
