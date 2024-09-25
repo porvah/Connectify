@@ -5,7 +5,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 class PhoneField extends StatelessWidget {
   PhoneField(this._controller);
   TextEditingController _controller;
-
+  String country = '';
   @override
   Widget build(BuildContext context) {
     return IntlPhoneField(
@@ -31,6 +31,7 @@ class PhoneField extends StatelessWidget {
       ),
       initialCountryCode: 'EG', // Set the default country code
       onChanged: (phone) {
+        country = phone.countryCode;
         print(phone.completeNumber); // Callback when phone number changes
       },
       style: TextStyle(color: Theme.of(context).colorScheme.onSurface), // Phone number text color
