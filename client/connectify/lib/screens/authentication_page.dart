@@ -19,7 +19,9 @@ class AuthenticationScreen extends StatelessWidget {
     _onResend = _args[1];
     _onContinue = _args[2];
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary
+      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

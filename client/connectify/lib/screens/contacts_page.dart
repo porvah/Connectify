@@ -1,5 +1,6 @@
 import 'package:Connectify/requests/chats_api.dart';
 import 'package:Connectify/widgets/contactPreview.dart';
+import 'package:Connectify/widgets/costumAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -73,9 +74,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Contacts'),
-      ),
+      appBar: CustomAppBar(title: "Contacts", menuOptions: []),
       body: contacts.isNotEmpty
           ? ListView.builder(
               itemCount: contacts.length,

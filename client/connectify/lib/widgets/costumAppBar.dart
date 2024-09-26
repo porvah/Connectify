@@ -19,6 +19,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: theme.colorScheme.primary,
       title: Text(title),
       actions: [
+        if (!menuOptions.isEmpty)
         PopupMenuButton<MenuOption>(
           icon: Icon(
             Icons.more_vert,
