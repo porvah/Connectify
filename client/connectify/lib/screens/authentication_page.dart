@@ -27,7 +27,7 @@ class AuthenticationScreen extends StatelessWidget {
             end: Alignment.bottomLeft,
             colors: [
               Theme.of(context).colorScheme.primary, // Gradient color similar to the image
-              Theme.of(context).colorScheme.secondary
+              Theme.of(context).colorScheme.surface
             ],
           ),
         ),
@@ -41,7 +41,7 @@ class AuthenticationScreen extends StatelessWidget {
                   'Authentication',
                   style: TextStyle(
                     fontSize: 32,
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

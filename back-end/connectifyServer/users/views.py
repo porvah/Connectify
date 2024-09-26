@@ -88,6 +88,20 @@ def LogOut(request):
        except LoggedUsersModel.DoesNotExist:
               return Response({'error': 'failed'}, status=status.HTTP_404_NOT_FOUND)
        
+@api_view(['Post'])       
+def DeleteAccount(request):
+       try:
+          data = request.data
+          token = data.get('token')
+          loggedUser = LoggedUsersModel.objects.get(token = token)
+          User.objects.filter(email = loggedUser.email).delete()
+          LoggedUsersModel.objects.filter(token = token).delete()
+          return Response({'message': 'success'}, status=status.HTTP_200_OK)
+       except LoggedUsersModel.DoesNotExist:
+              return Response({'error': 'failed'}, status=status.HTTP_404_NOT_FOUND)
+
+       
+       
 @api_view(['Post'])
 def OpenSession(request):
        data = request.data
