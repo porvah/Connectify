@@ -1,4 +1,5 @@
 import 'package:Connectify/screens/authentication_page.dart';
+import 'package:Connectify/screens/contacts_page.dart';
 import 'package:Connectify/screens/home_page.dart';
 import 'package:Connectify/screens/login_page.dart';
 import 'package:Connectify/screens/signup_page.dart';
@@ -28,6 +29,8 @@ class RouteGen{
           return MaterialPageRoute(builder: (_)=> AuthenticationScreen(args));
         }
         return _errorRoute('${settings.name}');
+      case '/Contacts':
+        return MaterialPageRoute(builder: (_)=> ContactsScreen());
       default:
         return _errorRoute('${settings.name}');
     }
