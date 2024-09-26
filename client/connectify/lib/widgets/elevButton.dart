@@ -10,7 +10,7 @@ class Elevbutton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         
-        backgroundColor: Theme.of(context).colorScheme.surface, // Button color
+        backgroundColor: Theme.of(context).colorScheme.secondary, // Button color
         foregroundColor: Theme.of(context).colorScheme.onSurface,// Text color
         padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
         shape: RoundedRectangleBorder(

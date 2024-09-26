@@ -14,8 +14,8 @@ class PhoneField extends StatelessWidget {
         filled: true,
         fillColor: Theme.of(context).colorScheme.surface.withOpacity(0.3), // Translucent background
         labelText: 'Phone Number',
-        labelStyle: TextStyle(color: Colors.white), // Label color
-        prefixIcon: Icon(Icons.phone, color: Colors.white), // Icon color
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface), // Label color
+        prefixIcon: Icon(Icons.phone, color: Theme.of(context).colorScheme.onSurface), // Icon color
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30), // Rounded corners
           borderSide: BorderSide.none, // No border
@@ -26,7 +26,7 @@ class PhoneField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide(color: Colors.white), // Border color when focused
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.onSurface), // Border color when focused
         ),
       ),
       initialCountryCode: 'EG', // Set the default country code
