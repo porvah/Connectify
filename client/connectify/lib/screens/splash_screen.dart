@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     Navigator.of(context).pushReplacementNamed('/Signup');
   }
   void go_home(){
-    Navigator.of(context).pushReplacementNamed('/HomePage', arguments: 'home');
+    Navigator.of(context).pushReplacementNamed('/HomePage', arguments: 'Connectify');
   }
   void go_login(){
     Navigator.of(context).pushReplacementNamed('/Login');

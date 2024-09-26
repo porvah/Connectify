@@ -46,6 +46,12 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: "Start a Chat",
+        child: Icon(Icons.messenger_outlined),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        onPressed: ()=> Navigator.of(context).pushNamed("/Contacts"),
+      ),
     );
   }
 }

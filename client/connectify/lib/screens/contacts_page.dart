@@ -1,4 +1,5 @@
 import 'package:Connectify/requests/chats_api.dart';
+import 'package:Connectify/widgets/contactPreview.dart';
 import 'package:flutter/material.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -80,19 +81,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
               itemCount: contacts.length,
               itemBuilder: (context, index) {
                 Contact contact = contacts[index];
-                return ListTile(
-                  leading: (contact.avatar != null && contact.avatar!.isNotEmpty)
-                    ? CircleAvatar(
-                        backgroundImage: MemoryImage(contact.avatar!),
-                      )
-                    : CircleAvatar(
-                        child: Icon(Icons.person),
-                      ),
-                  title: Text(contact.displayName ?? 'No name'),
-                  subtitle: Text(contact.phones!.isNotEmpty
-                      ? contact.phones?.first.value ?? 'No phone'
-                      : 'No phone'),
-                );
+                return ContactPreview(name: contact.displayName!,
+                 phone: contact.phones!.first.value!.replaceAll(" ", "").replaceAll("-", ""));
               },
             )
           : Center(child: CircularProgressIndicator()),
