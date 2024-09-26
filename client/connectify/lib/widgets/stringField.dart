@@ -15,9 +15,9 @@ class StringField extends StatelessWidget {
     filled: true,
     fillColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
     labelText: _hint,
-    labelStyle: TextStyle(color: Colors.white),
+    labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
     floatingLabelBehavior: FloatingLabelBehavior.auto, // Make label float like the phone field
-    prefixIcon: Icon(_icon, color: Colors.white),
+    prefixIcon: Icon(_icon, color: Theme.of(context).colorScheme.onSurface),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(30),
       borderSide: BorderSide.none,
@@ -28,7 +28,7 @@ class StringField extends StatelessWidget {
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(30),
-      borderSide: BorderSide(color: Colors.white),
+      borderSide: BorderSide(color: Theme.of(context).colorScheme.onSurface),
     ),
   ),
   );

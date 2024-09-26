@@ -8,9 +8,10 @@ class SignUpScreen extends StatelessWidget {
   final TextEditingController _controller_email = TextEditingController();
   final TextEditingController _controller_phone = TextEditingController();
   
-
+  
   @override
   Widget build(BuildContext context) {
+    PhoneField phone_field = PhoneField(_controller_phone);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -19,7 +20,7 @@ class SignUpScreen extends StatelessWidget {
             end: Alignment.bottomLeft,
             colors: [
               Theme.of(context).colorScheme.primary, // Gradient color similar to the image
-              Theme.of(context).colorScheme.secondary
+              Theme.of(context).colorScheme.surface
             ],
           ),
         ),
@@ -33,12 +34,12 @@ class SignUpScreen extends StatelessWidget {
                   'Sign up',
                   style: TextStyle(
                     fontSize: 32,
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: 40),
-                PhoneField(_controller_phone),
+                phone_field,
                 SizedBox(height: 20),
                 StringField('Email',Icons.email, _controller_email),
                 TextButton(
@@ -52,7 +53,7 @@ class SignUpScreen extends StatelessWidget {
                 
                 Elevbutton("Sign Up", (){
                   String mail = _controller_email.text;
-                  String phone = _controller_phone.text;
+                  String phone = phone_field.country+_controller_phone.text;
                   UserAuthentication.sign_up(context, mail, phone);
                 })
               ],

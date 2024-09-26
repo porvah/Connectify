@@ -88,6 +88,20 @@ def LogOut(request):
        except LoggedUsersModel.DoesNotExist:
               return Response({'error': 'failed'}, status=status.HTTP_404_NOT_FOUND)
        
+@api_view(['Post'])       
+def DeleteAccount(request):
+       try:
+          data = request.data
+          token = data.get('token')
+          loggedUser = LoggedUsersModel.objects.get(token = token)
+          User.objects.filter(email = loggedUser.email).delete()
+          LoggedUsersModel.objects.filter(token = token).delete()
+          return Response({'message': 'success'}, status=status.HTTP_200_OK)
+       except LoggedUsersModel.DoesNotExist:
+              return Response({'error': 'failed'}, status=status.HTTP_404_NOT_FOUND)
+
+       
+       
 @api_view(['Post'])
 def OpenSession(request):
        data = request.data
@@ -97,7 +111,17 @@ def OpenSession(request):
               return Response({'message': 'success'}, status=status.HTTP_200_OK)
        else:
             return Response({'message': 'start new session'}, status=status.HTTP_404_NOT_FOUND)  
-              
+
+@api_view(['POST'])
+def getContacts(request):
+       data = request.data
+       phones = data.get('phones',[])
+       if not phones:
+         return Response({'error': 'Phones list is required.'}, status=400)
+       users = User.objects.filter(phone__in=phones).values_list('phone', flat=True)
+       return Response({"phones" : list(users)}, status=status.HTTP_200_OK)
+
+                    
 
 @api_view(['GET'])
 def Get(request):

@@ -1,0 +1,4 @@
+django
+djangorestframework
+python-decouple
+psycopg2

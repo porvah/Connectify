@@ -1,8 +1,10 @@
 import 'package:Connectify/screens/authentication_page.dart';
+import 'package:Connectify/screens/contacts_page.dart';
 import 'package:Connectify/screens/home_page.dart';
 import 'package:Connectify/screens/login_page.dart';
 import 'package:Connectify/screens/signup_page.dart';
 import 'package:Connectify/screens/splash_screen.dart';
+import 'package:Connectify/screens/settings_page.dart';
 import 'package:flutter/material.dart';
 
 class RouteGen{
@@ -20,11 +22,15 @@ class RouteGen{
         return MaterialPageRoute(builder: (_)=> SignUpScreen());
       case '/Login':
         return MaterialPageRoute(builder: (_)=> LoginScreen());
+      case '/Settings':
+        return MaterialPageRoute(builder: (_)=> SettingsPage());
       case '/Auth':
         if (args is List<dynamic>){
           return MaterialPageRoute(builder: (_)=> AuthenticationScreen(args));
         }
         return _errorRoute('${settings.name}');
+      case '/Contacts':
+        return MaterialPageRoute(builder: (_)=> ContactsScreen());
       default:
         return _errorRoute('${settings.name}');
     }
