@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   ];
 
   final List<MenuOption> menuOptions = [
-    MenuOption(title: 'Settings', route: '/HomePage'), // Add other options here
+    MenuOption(title: 'Settings', route: '/Settings'), // Add other options here
     // Add more MenuOption instances as needed
   ];
 
