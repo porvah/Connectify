@@ -39,28 +39,32 @@ class _ContactsScreenState extends State<ContactsScreen> {
   Future<void> _getContacts() async {
     Iterable<Contact> _contacts = await ContactsService.getContacts();
     List<Contact> contact_list = _contacts.toList();
-    List<String> numbers = [];
-    for (final contact in contact_list){
+    
+    var api = ChatsAPI();
+    List<String> phoneNumbers = [];
+    for (Contact contact in contact_list) {
       if (contact.phones!.isNotEmpty) {
-        numbers.addAll(contact.phones!.map((phone) => phone.value ?? '').toList());
+        phoneNumbers.addAll(
+          contact.phones!.map(
+            (phone) => phone.value?.replaceAll(" ", "").replaceAll("-", "") ?? ''
+            ).toList()
+        );
       }
     }
-    var api = ChatsAPI();
-    List<String> saved_contacts = await api.getcontacts(numbers);
+    print("phones sent = " + phoneNumbers.toString());
+    List<String> filteredPhoneNumbers = await api.getcontacts(phoneNumbers);
     List<Contact> filteredContacts = [];
-
-    for (Contact contact in contacts) {
-      // Check if the contact has phone numbers
+    for (Contact contact in contact_list) {
       if (contact.phones!.isNotEmpty) {
-        // Check if any phone number of the contact matches the numbers in the list
-        bool hasMatchingNumber = contact.phones!.any((phone) => saved_contacts.contains(phone.value));
-        
-        // If a match is found, add the contact to the filtered list
+        String? number = contact.phones?.first.value?.replaceAll(" ", "").replaceAll("-", "");
+        print(number);
+        bool hasMatchingNumber = filteredPhoneNumbers.contains(number);
         if (hasMatchingNumber) {
           filteredContacts.add(contact);
         }
       }
     }
+    print(filteredContacts);
     setState(() {
       contacts = filteredContacts;
     });
@@ -77,7 +81,13 @@ class _ContactsScreenState extends State<ContactsScreen> {
               itemBuilder: (context, index) {
                 Contact contact = contacts[index];
                 return ListTile(
-                
+                  leading: (contact.avatar != null && contact.avatar!.isNotEmpty)
+                    ? CircleAvatar(
+                        backgroundImage: MemoryImage(contact.avatar!),
+                      )
+                    : CircleAvatar(
+                        child: Icon(Icons.person),
+                      ),
                   title: Text(contact.displayName ?? 'No name'),
                   subtitle: Text(contact.phones!.isNotEmpty
                       ? contact.phones?.first.value ?? 'No phone'

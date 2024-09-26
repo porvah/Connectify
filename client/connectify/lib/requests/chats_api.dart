@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 class ChatsAPI{
   final _url = dotenv.env['API_URL'];
-  
-  get http => null;
+
   Future<List<String>> getcontacts(List<String> numbers) async {
     try {
       final response = await http.post(
@@ -20,13 +20,13 @@ class ChatsAPI{
       Map data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         print('Data posted: ${response.body}');
-        return data['phones'];
+        return List<String>.from(data['phones']);
       } else {
         print('Failed with status: ${response.statusCode}, body: ${response.body}');
         throw Exception('Failed to post data');
       }
     } catch (e) {
-      print('Sign up failed! Error: $e');
+      print('loading contacts failed! Error: $e');
       return [];
     }
   
