@@ -105,13 +105,16 @@ class UserAuthentication {
       Dbsingleton dbsingleton = Dbsingleton();
       Database? db = await dbsingleton.db;
       String token = data['token'];
-      user.token = token;
-      user.logged = 1;
-      User? existedUser = await UserProvider.getUser(user.phone!, db!);
-      if (existedUser == null) {
+      
+      User? existingUser = await UserProvider.getUser(user.phone!, db!);
+      if (existingUser == null) {
+        user.token = token;
+        user.logged = 1;
         UserProvider.insert(user, db);
       } else {
-        UserProvider.update(user, db);
+        existingUser.token = token;
+        existingUser.logged = 1;
+        UserProvider.update(existingUser, db);
       }
       return true;
     } else {

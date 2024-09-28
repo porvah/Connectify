@@ -26,7 +26,7 @@ class SettingsApi {
         throw Exception('Failed to post data');
       }
     } catch (e) {
-      print('Sign up failed! Error: $e');
+      print('Log out failed! Error: $e');
       return false;
     }
   }
