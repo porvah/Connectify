@@ -44,6 +44,7 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
     'channels',
     'rest_framework',
+    'chat_handler.apps.ChatHandlerConfig',
     'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
