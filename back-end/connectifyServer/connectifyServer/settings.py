@@ -54,6 +54,9 @@ INSTALLED_APPS = [
     'corsheaders'
 ]
 
+ASGI_APPLICATION = 'connectifyServer.asgi.application'
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
