@@ -3,38 +3,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({ super.key });
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin{
-
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-    Future.delayed(const Duration(seconds: 2), (){
+    Future.delayed(const Duration(seconds: 2), () {
       UserAuthentication.startup(go_signup, go_home, go_login);
-      
     });
   }
+
   @override
-  void dispose(){
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+  void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     super.dispose();
   }
-  void go_signup(){
+
+  void go_signup() {
     Navigator.of(context).pushReplacementNamed('/Signup');
   }
-  void go_home(){
-    Navigator.of(context).pushReplacementNamed('/HomePage', arguments: 'Connectify');
-  }
-  void go_login(){
-    Navigator.of(context).pushReplacementNamed('/Login');
+
+  void go_home() {
+    Navigator.of(context).pushReplacementNamed('/HomePage', arguments: 'Chats');
   }
 
+  void go_login() {
+    Navigator.of(context).pushReplacementNamed('/Login');
+  }
 
   @override
   Widget build(BuildContext context) {
