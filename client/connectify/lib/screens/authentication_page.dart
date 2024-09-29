@@ -4,7 +4,9 @@ import 'package:Connectify/widgets/stringField.dart';
 import 'package:flutter/material.dart';
 
 typedef resendCodeCallback = Future<void> Function(User user);
-typedef authCodeCallback = Future<bool> Function(BuildContext context, User user, String code);
+typedef authCodeCallback = Future<bool> Function(
+    BuildContext context, User user, String code);
+
 // ignore: must_be_immutable
 class AuthenticationScreen extends StatelessWidget {
   AuthenticationScreen(this._args);
@@ -19,16 +21,16 @@ class AuthenticationScreen extends StatelessWidget {
     _onResend = _args[1];
     _onContinue = _args[2];
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary
-      ),
+      appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.primary),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
             colors: [
-              Theme.of(context).colorScheme.primary, // Gradient color similar to the image
+              Theme.of(context)
+                  .colorScheme
+                  .primary, // Gradient color similar to the image
               Theme.of(context).colorScheme.surface
             ],
           ),
@@ -48,17 +50,21 @@ class AuthenticationScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 40),
-                StringField('Code',Icons.code, _controller),
+                StringField('Code', Icons.code, _controller),
                 SizedBox(height: 20),
-                Elevbutton("Resend", (){_onResend(_user);}),
+                Elevbutton("Resend", () {
+                  _onResend(_user);
+                }),
                 SizedBox(height: 40),
-                Elevbutton("Continue", ()async{
-                  bool success = await _onContinue(context, _user, _controller.text);
+                Elevbutton("Continue", () async {
+                  bool success =
+                      await _onContinue(context, _user, _controller.text);
                   if (success) {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushReplacementNamed('/HomePage', arguments: 'home');
+                    Navigator.of(context)
+                        .pushReplacementNamed('/HomePage', arguments: 'Chats');
                   }
-                  })
+                })
               ],
             ),
           ),
@@ -66,5 +72,4 @@ class AuthenticationScreen extends StatelessWidget {
       ),
     );
   }
-
 }
