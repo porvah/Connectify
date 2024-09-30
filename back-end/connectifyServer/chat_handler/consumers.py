@@ -1,6 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from asgiref.sync import async_to_sync
+from asgiref.sync import sync_to_async
+from .connectHandler import get_user_phone
 
 # A global dictionary to store connected users by phone number
 connected_users = {}
@@ -8,7 +9,9 @@ connected_users = {}
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         # The phone number will be passed through the URL when the user connects
-        self.phone_number = self.scope['url_route']['kwargs']['phone_number']
+        self.token = self.scope['url_route']['kwargs']['token']
+        self.phone_number = await get_user_phone(self.token)
+        print(f"User with phone number {self.phone_number} is trying to connect.")
 
         # Add the user's WebSocket channel to the connected_users dictionary
         connected_users[self.phone_number] = self.channel_name
@@ -44,6 +47,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.send(text_data=json.dumps({
                 'error': 'Receiver is not connected.',
             }))
+            return connected_users
 
     # Handle the incoming message and send it to the WebSocket client (receiver)
     async def chat_message(self, event):
