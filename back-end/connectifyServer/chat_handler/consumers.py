@@ -1,7 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-from .connectHandler import get_user_phone,generateID,saveUser
+from .connectHandler import get_user_phone,generateID,saveUser,getQueuedMessages
 
 connected_users = {}
 
@@ -10,7 +10,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.token = self.scope['url_route']['kwargs']['token']
         self.phone_number = await get_user_phone(self.token)
         connected_users[self.phone_number] = self.channel_name
+        queuedMessages = await getQueuedMessages(self.phone_number)
         await self.accept()
+        await self.send(text_data=json.dumps(queuedMessages))
 
     async def disconnect(self, close_code):
         if self.phone_number in connected_users:
