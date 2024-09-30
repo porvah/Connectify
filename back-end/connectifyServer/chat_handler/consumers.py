@@ -35,6 +35,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
             )
         else:
             await saveUser(data)
+            await self.send(text_data=json.dumps({
+               'message' : 'user not connected',
+            }))
             return connected_users
 
     # Handle the incoming message and send it to the WebSocket client (receiver)

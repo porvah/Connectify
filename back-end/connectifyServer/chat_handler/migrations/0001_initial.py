@@ -15,7 +15,15 @@ class Migration(migrations.Migration):
             name='Message',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('packet', models.CharField()),
+                ('signal', models.IntegerField(default=0, null=False)),
+                ('sender', models.CharField(max_length=255, null=False)),
+                ('receiver', models.CharField(max_length=255, null=False)),
+                ('hasattachment', models.IntegerField(default=0, null=False)),
+                ('text', models.CharField(max_length=1000, null=True)),
+                ('attachment_name', models.CharField(max_length=255, null=True)),
+                ('attachment', models.CharField(max_length=255, null=True)),
+                ('message_id', models.CharField(null = False)),
+                ('time', models.CharField(max_length=255, null=True)),
             ],
         ),
     ]

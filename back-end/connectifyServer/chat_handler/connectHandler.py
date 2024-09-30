@@ -14,9 +14,7 @@ def generateID():
 @sync_to_async
 def saveUser(data):
     from . messageSerializer import MessageSerializer
-    savedData = {
-      'packet' : json.dumps(data)
-    }
-    serializer = MessageSerializer(data = savedData)
+    del data['type']
+    serializer = MessageSerializer(data = data)
     if serializer.is_valid():
         serializer.save()
