@@ -14,7 +14,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         connected_users[self.phone_number] = self.channel_name
         queuedMessages = await getQueuedMessages(self.phone_number)
         await self.accept()
-        await self.send(text_data=json.dumps(queuedMessages))
+        for message in queuedMessages:
+            await self.send(text_data=json.dumps(message))
 
     async def disconnect(self, close_code):
         if self.phone_number in connected_users:
