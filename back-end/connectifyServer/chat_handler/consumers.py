@@ -1,7 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-from .connectHandler import get_user_phone,generateID
+from .connectHandler import get_user_phone,generateID,saveUser
 
 # A global dictionary to store connected users by phone number
 connected_users = {}
@@ -34,9 +34,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 data  
             )
         else:
-            await self.send(text_data=json.dumps({
-                'error': 'Receiver is not connected.',
-            }))
+            await saveUser(data)
             return connected_users
 
     # Handle the incoming message and send it to the WebSocket client (receiver)

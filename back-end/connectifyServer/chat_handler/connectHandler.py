@@ -1,5 +1,6 @@
 from asgiref.sync import sync_to_async
 import uuid
+import json
 
 @sync_to_async
 def get_user_phone(token):
@@ -10,3 +11,12 @@ def get_user_phone(token):
 def generateID():
     message_id = str(uuid.uuid4())  
     return message_id
+@sync_to_async
+def saveUser(data):
+    from . messageSerializer import MessageSerializer
+    savedData = {
+      'packet' : json.dumps(data)
+    }
+    serializer = MessageSerializer(data = savedData)
+    if serializer.is_valid():
+        serializer.save()
