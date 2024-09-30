@@ -3,7 +3,6 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from .connectHandler import get_user_phone,generateID,saveUser
 
-# A global dictionary to store connected users by phone number
 connected_users = {}
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -27,7 +26,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'message_id' : data.get('message_id'),
         }))
 
-        # Check if the receiver is connected
         if receiver in connected_users:
             await self.channel_layer.send(
                 connected_users[receiver],
@@ -40,7 +38,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }))
             return connected_users
 
-    # Handle the incoming message and send it to the WebSocket client (receiver)
     async def chat_message(self, event):
         del event['type']
         await self.send(text_data=json.dumps(event))
