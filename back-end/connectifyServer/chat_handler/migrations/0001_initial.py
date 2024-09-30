@@ -22,6 +22,7 @@ class Migration(migrations.Migration):
                 ('text', models.CharField(max_length=1000, null=True)),
                 ('attachment_name', models.CharField(max_length=255, null=True)),
                 ('attachment', models.CharField(max_length=255, null=True)),
+                ('replied', models.CharField(max_length=255,default="none",null = True)),
                 ('message_id', models.CharField(null = False)),
                 ('time', models.CharField(max_length=255, null=True)),
             ],
