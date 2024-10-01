@@ -1,4 +1,5 @@
 // home_page.dart
+import 'package:Connectify/requests/webSocketService.dart';
 import 'package:Connectify/utils/menuOption.dart';
 import 'package:Connectify/widgets/ChatPreview.dart';
 import 'package:Connectify/widgets/costumAppBar.dart';
@@ -30,6 +31,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    WebSocketService().connect();
     return Scaffold(
       appBar: CustomAppBar(
         title: widget.title,

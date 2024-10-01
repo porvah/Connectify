@@ -47,6 +47,17 @@ class Dbsingleton {
         token TEXT NOT NULL
       )
     ''');
+    await db.execute('''
+      CREATE TABLE message (
+        id INTEGER,
+        sender TEXT NOT NULL,
+        receiver TEXT NOT NULL,
+        replied_id INTEGER,
+        time TEXT NOT NULL,
+        string_content TEXT NOT NULL,
+        attachment_id INTEGER
+      )
+    ''');
   }
 
   // Close the database
