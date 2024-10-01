@@ -62,10 +62,9 @@ def LogUser(email,phone):
         'token' : token
     }
     loggeduser = LoggedUsersModel.objects.filter(email = data.get('email'))
-    connectedUser = LoggedUsersModel.objects.get(email = data.get('email'))
-    print(connectedUser.phone)
     serializer = LoggedUsersSerializer(data = data)
     if loggeduser.exists():
+        connectedUser = LoggedUsersModel.objects.get(email = data.get('email'))
         ChatConsumer.send_signal(connectedUser.phone)
         loggeduser.update(token = token)
     else:
