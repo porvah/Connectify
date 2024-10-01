@@ -12,10 +12,9 @@ class WebSocketService {
   static final WebSocketService _instance = WebSocketService._internal();
   factory WebSocketService() => _instance;
   WebSocketService._internal();
-  final int _reconnectDelay = 5; // Delay in seconds before reconnecting
+  final int _reconnectDelay = 5; 
   bool _isReconnecting = false;
 
-  // Connect to the WebSocket
   Future<void> connect() async {
     if (_channel == null) {
       Database? db = await Dbsingleton().db;
@@ -28,11 +27,11 @@ class WebSocketService {
         ChatManagement.socketHandler(message);
       }, onError: (error) {
         print("WebSocket error: $error");
-        _reconnect(); // Try to reconnect on error
+        _reconnect(); 
       }, onDone: () {
         print("WebSocket closed");
-        _channel = null; // Reset the channel
-        _reconnect(); // Try to reconnect when done
+        _channel = null; 
+        _reconnect();
       });
     }
   }
@@ -49,12 +48,11 @@ class WebSocketService {
       Future.delayed(Duration(seconds: _reconnectDelay), () async {
         print("Attempting to reconnect...");
         await connect();
-        _isReconnecting = false; // Reset the reconnecting state
+        _isReconnecting = false; 
       });
     }
   }
 
-  // Close the WebSocket connection
   void disconnect() {
     _channel?.sink.close();
     _channel = null;

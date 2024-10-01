@@ -15,7 +15,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # Accept the WebSocket connection
         await self.accept()
-        print(self.phone_number)
 
     async def disconnect(self, close_code):
         # Remove the user's connection from the connected_users dictionary on disconnect
