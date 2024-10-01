@@ -1,7 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-from .connectHandler import get_user_phone,generateID,saveUser,getQueuedMessages
+from .connectHandler import get_user_phone,saveUser,getQueuedMessages
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
@@ -24,12 +24,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         data = json.loads(text_data)
         data['type'] = 'chat_message'
-        data['message_id'] = generateID()
         receiver = data['receiver']
-
-        await self.send(text_data=json.dumps({
-            'message_id' : data.get('message_id'),
-        }))
 
         if receiver in connected_users:
             await self.channel_layer.send(
@@ -63,7 +58,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 {
                     "type": 'signal_message',
                     "signal": 1,
-                    "command": 1,
                     "command_type": "logout"
                 }
             )

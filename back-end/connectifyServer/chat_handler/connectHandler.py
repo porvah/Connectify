@@ -8,9 +8,6 @@ def get_user_phone(token):
     user = LoggedUsersModel.objects.filter(token=token).first()
     return user.phone
 
-def generateID():
-    message_id = str(uuid.uuid4())  
-    return message_id
 @sync_to_async
 def saveUser(data):
     from . messageSerializer import MessageSerializer
