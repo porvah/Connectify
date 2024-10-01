@@ -19,7 +19,7 @@ class WebSocketService {
     if (_channel == null) {
       Database? db = await Dbsingleton().db;
       User? user = await UserProvider.getLoggedUser(db!);
-      Uri uri =Uri.parse(_url!+user!.phone!+'/');
+      Uri uri =Uri.parse(_url!+user!.token!+'/');
       print(uri);
       _channel = WebSocketChannel.connect(uri);
       _channel?.stream.listen((message) {

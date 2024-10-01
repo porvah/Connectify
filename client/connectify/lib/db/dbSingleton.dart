@@ -49,10 +49,10 @@ class Dbsingleton {
     ''');
     await db.execute('''
       CREATE TABLE message (
-        id INTEGER,
+        id TEXT NOT NULL,
         sender TEXT NOT NULL,
         receiver TEXT NOT NULL,
-        replied_id INTEGER,
+        replied_id TEXT,
         time TEXT NOT NULL,
         string_content TEXT NOT NULL,
         attachment_id INTEGER
