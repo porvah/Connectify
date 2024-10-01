@@ -4,7 +4,7 @@ import 'package:sqflite/sqflite.dart';
 
 class Messageprovider {
   static Future<dynamic> insert(Message message, Database db) async{
-    message.id = await db.insert(tableMessage, message.toMap());
+    await db.insert(tableMessage, message.toMap());
   }
   
   static Future<Message?> getUser(int id, Database db) async{
