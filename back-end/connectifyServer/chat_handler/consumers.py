@@ -61,5 +61,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     "command_type": "logout"
                 }
             )
-        del connected_users[phone]
 
