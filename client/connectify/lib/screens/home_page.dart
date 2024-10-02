@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
     WebSocketService().connect();
     return Scaffold(
       appBar: CustomAppBar(
-        title: widget.title,
+        title: "Connectify",
         menuOptions: menuOptions, // Pass the menu options here
       ),
       body: ListView.builder(

@@ -34,7 +34,6 @@ class ChatManagement {
     Database? db = await dbsingleton.db;
     Messageprovider.insert(m, db!);
     print(m);
-    sendMessage(m);
   }
   static void handleLogoutSignal(){
 

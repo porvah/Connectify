@@ -28,17 +28,4 @@ class Messageprovider {
   static delete(int id, Database db) async{
     return await db.delete(tableMessage, where: '$columnId = ?', whereArgs: [id]);
   }
-
-  // static Future<Message?> getLoggedUser(Database db)async{
-  //   List<Map<String,dynamic>> maps = await db.query(tableMessage, 
-  //   columns:[columnId, columnSender, columnReceiver, columnReplied,
-  //    columnTime, columnString, columnAttachment],
-  //   where: '$columnLogged = ?',
-  //   whereArgs: [1]
-  //   ) as List<Map<String,dynamic>>;
-  //   if (maps.length > 0){
-  //     return User.fromMap(maps.first);
-  //   }
-  //   return null;
-  // }
 }

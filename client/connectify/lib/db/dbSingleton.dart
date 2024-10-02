@@ -58,6 +58,14 @@ class Dbsingleton {
         attachment_id INTEGER
       )
     ''');
+    await db.execute('''
+      CREATE TABLE chat (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        contact TEXT NOT NULL,
+        last TEXT,
+        alert INTEGER NOT NULL
+      )
+  ''');
   }
 
   // Close the database

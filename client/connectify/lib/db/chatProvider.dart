@@ -1,0 +1,30 @@
+
+import 'package:Connectify/core/chat.dart';
+import 'package:sqflite/sqflite.dart';
+
+class Chatprovider {
+  static Future<dynamic> insert(Chat chat, Database db) async{
+    await db.insert(tableChat, chat.toMap());
+  }
+  
+  static Future<Chat?> getUser(int id, Database db) async{
+    List<Map<String, dynamic>> maps = await db.query(tableChat, 
+    columns:[columnId, columnContact, columnLastMessage, columnAlert],
+    where: '$columnId = ?',
+    whereArgs: [id]
+    ) as List<Map<String,dynamic>>;
+    if (maps.length > 0){
+      return Chat.fromMap(maps.first);
+    }
+    return null;
+  } 
+
+  static Future<int> update(Chat chat, Database db) async{
+    return await db.update(tableChat, chat.toMap(),
+    where: '$columnId = ?', whereArgs: [chat.id]);
+  }
+
+  static delete(int id, Database db) async{
+    return await db.delete(tableChat, where: '$columnId = ?', whereArgs: [id]);
+  }
+}
