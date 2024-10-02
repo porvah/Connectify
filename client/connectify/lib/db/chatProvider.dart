@@ -6,7 +6,16 @@ class Chatprovider {
   static Future<dynamic> insert(Chat chat, Database db) async{
     await db.insert(tableChat, chat.toMap());
   }
-  
+  static Future<List<Chat>> getAllChats(Database db) async{
+    List<Map<String, dynamic>> maps = await db.query(tableChat,
+    columns: [columnId, columnContact, columnPhone, columnLastMessage, columnAlert],
+    ) as List<Map<String, dynamic>>;
+    List<Chat> res = [];
+    for (Map<String, dynamic> map in maps){
+      res.add(Chat.fromMap(map));
+    }
+    return res;
+  }
   static Future<Chat?> getChat(int id, Database db) async{
     List<Map<String, dynamic>> maps = await db.query(tableChat, 
     columns:[columnId, columnContact, columnPhone, columnLastMessage, columnAlert],

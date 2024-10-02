@@ -17,7 +17,7 @@ class RouteGen{
         return MaterialPageRoute(builder: (_)=> const SplashScreen());
       case '/HomePage':
         if (args is String){
-          return MaterialPageRoute(builder: (_)=> HomePage(title: args));
+          return MaterialPageRoute(builder: (_)=> HomePage());
         }
         return _errorRoute('${settings.name}');
       case '/Signup':
