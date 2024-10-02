@@ -1,4 +1,6 @@
+import 'package:Connectify/core/chat.dart';
 import 'package:Connectify/screens/authentication_page.dart';
+import 'package:Connectify/screens/chat_page.dart';
 import 'package:Connectify/screens/contacts_page.dart';
 import 'package:Connectify/screens/home_page.dart';
 import 'package:Connectify/screens/login_page.dart';
@@ -31,6 +33,11 @@ class RouteGen{
         return _errorRoute('${settings.name}');
       case '/Contacts':
         return MaterialPageRoute(builder: (_)=> ContactsScreen());
+      case '/Chat':
+        if (args is Chat){
+          return MaterialPageRoute(builder: (_)=> ChatScreen(chat: args));
+        }
+        return _errorRoute('${settings.name}');
       default:
         return _errorRoute('${settings.name}');
     }

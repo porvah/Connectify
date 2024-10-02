@@ -53,7 +53,6 @@ class _ContactsScreenState extends State<ContactsScreen> {
         );
       }
     }
-    print("phones sent = " + phoneNumbers.toString());
     List<String> filteredPhoneNumbers = await api.getcontacts(phoneNumbers);
     List<Contact> filteredContacts = [];
     for (Contact contact in contact_list) {
@@ -66,7 +65,6 @@ class _ContactsScreenState extends State<ContactsScreen> {
         }
       }
     }
-    print(filteredContacts);
     setState(() {
       contacts = filteredContacts;
     });

@@ -7,7 +7,7 @@ class Messageprovider {
     await db.insert(tableMessage, message.toMap());
   }
   
-  static Future<Message?> getUser(int id, Database db) async{
+  static Future<Message?> getMessage(int id, Database db) async{
     List<Map<String, dynamic>> maps = await db.query(tableMessage, 
     columns:[columnId, columnSender, columnReceiver, columnReplied,
      columnTime, columnString, columnAttachment],

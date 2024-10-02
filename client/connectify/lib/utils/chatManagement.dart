@@ -1,12 +1,32 @@
 import 'dart:convert';
 
+import 'package:Connectify/core/chat.dart';
 import 'package:Connectify/core/message.dart';
+import 'package:Connectify/db/chatProvider.dart';
 import 'package:Connectify/db/dbSingleton.dart';
 import 'package:Connectify/db/messageProvider.dart';
 import 'package:Connectify/requests/webSocketService.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ChatManagement {
+  static Future<Chat> createChat(String name, String phone)async{
+    Chat newChat = Chat(name, phone, "", 0);
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    Chat? createdChat = await Chatprovider.getChatByPhone(phone, db!);
+    if( createdChat == null){
+      Chatprovider.insert(newChat, db);
+    }else{
+      newChat = createdChat;
+    }
+    return newChat;
+    
+  }
+  // static void navigateChat(BuildContext ctx, Chat chat){
+  //   Navigator.of(ctx).pushNamed()
+  // }
+
+
   static void socketHandler(String message){
     print(message);
     Map p = jsonDecode(message);

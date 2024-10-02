@@ -7,11 +7,22 @@ class Chatprovider {
     await db.insert(tableChat, chat.toMap());
   }
   
-  static Future<Chat?> getUser(int id, Database db) async{
+  static Future<Chat?> getChat(int id, Database db) async{
     List<Map<String, dynamic>> maps = await db.query(tableChat, 
-    columns:[columnId, columnContact, columnLastMessage, columnAlert],
+    columns:[columnId, columnContact, columnPhone, columnLastMessage, columnAlert],
     where: '$columnId = ?',
     whereArgs: [id]
+    ) as List<Map<String,dynamic>>;
+    if (maps.length > 0){
+      return Chat.fromMap(maps.first);
+    }
+    return null;
+  } 
+  static Future<Chat?> getChatByPhone(String phone, Database db) async{
+    List<Map<String, dynamic>> maps = await db.query(tableChat, 
+    columns:[columnId, columnContact, columnPhone, columnLastMessage, columnAlert],
+    where: '$columnPhone = ?',
+    whereArgs: [phone]
     ) as List<Map<String,dynamic>>;
     if (maps.length > 0){
       return Chat.fromMap(maps.first);

@@ -62,6 +62,7 @@ class Dbsingleton {
       CREATE TABLE chat (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         contact TEXT NOT NULL,
+        phone TEXT NOT NULL UNIQUE,
         last TEXT,
         alert INTEGER NOT NULL
       )
