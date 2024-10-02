@@ -20,7 +20,7 @@ def saveUser(data):
 def getQueuedMessages(phone):
     from . messagemodels import Message
     messages = Message.objects.filter(receiver = phone)
-    messages_list = list(messages.values('id', 'sender',
+    messages_list = list(messages.values('id', 'sender','receiver',
      'text', 'time', 'attachment_name', 'attachment', 'message_id', 'hasattachment', 'signal','replied'))
     Message.objects.filter(receiver = phone).delete()
     return messages_list
