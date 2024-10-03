@@ -1,11 +1,13 @@
 import 'package:Connectify/core/chat.dart';
+import 'package:Connectify/core/message.dart';
+import 'package:Connectify/utils/chatManagement.dart';
 import 'package:Connectify/widgets/MessageInput.dart';
 import 'package:Connectify/widgets/ReceivedMessage.dart';
 import 'package:Connectify/widgets/SentMessage.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({ Key? key, required this.chat}) : super(key: key);
+  const ChatScreen({Key? key, required this.chat}) : super(key: key);
   final Chat chat;
   @override
   _ChatScreenState createState() => _ChatScreenState(chat);
@@ -14,12 +16,25 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   _ChatScreenState(this.chat);
   Chat chat;
-  final ValueNotifier<List<Map<String, String>>> _messages = ValueNotifier([
-    {'message': 'De la biblioteca envió?', 'time': '10:45 AM', 'type': 'received'},
-    {'message': 'Sí, la biblioteca envió.', 'time': '10:46 AM', 'type': 'sent'},
-    {'message': 'De componentes se encuentran...?','time': '10:47 AM', 'type': 'received'},
-    {'message': 'Si desea crear "nueva línea", ...','time': '10:48 AM', 'type': 'sent'},
-  ]);
+  // final ValueNotifier<List<Map<String, String>>> _messages = ValueNotifier([
+  //   {
+  //     'message': 'De la biblioteca envió?',
+  //     'time': '10:45 AM',
+  //     'type': 'received'
+  //   },
+  //   {'message': 'Sí, la biblioteca envió.', 'time': '10:46 AM', 'type': 'sent'},
+  //   {
+  //     'message': 'De componentes se encuentran...?',
+  //     'time': '10:47 AM',
+  //     'type': 'received'
+  //   },
+  //   {
+  //     'message': 'Si desea crear "nueva línea", ...',
+  //     'time': '10:48 AM',
+  //     'type': 'sent'
+  //   },
+  // ]);
+  final ValueNotifier<List<Message>> _messages = ValueNotifier([]);
 
   final TextEditingController _controller = TextEditingController();
 
@@ -43,9 +58,8 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
-          // Chat messages
           Expanded(
-            child: ValueListenableBuilder<List<Map<String, String>>>(
+            child: ValueListenableBuilder<List<Message>>(
               valueListenable: _messages,
               builder: (context, messages, _) {
                 return ListView.builder(
@@ -53,18 +67,17 @@ class _ChatScreenState extends State<ChatScreen> {
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     final message = messages[index];
-                    return message['type'] == 'sent'
-                        ? Sentmessage(message['message']!, message['time']!, (){})
-                        : Receivedmessage(message['message']!, message['time']!,(){});
-                    
+                    return message.receiver == chat.phone
+                        ? Sentmessage(
+                            message.stringContent!, message.time!, () {})
+                        : Receivedmessage(
+                            message.stringContent!, message.time!, () {});
                   },
                 );
               },
             ),
           ),
-
-          // Input field with photo button
-           Messageinput(_sendPhoto, _sendMessage, _controller),
+          Messageinput(_sendPhoto, _sendMessage, _controller),
         ],
       ),
     );
@@ -73,29 +86,24 @@ class _ChatScreenState extends State<ChatScreen> {
   // Function to send a new message
   void _sendMessage() {
     if (_controller.text.isNotEmpty) {
-      final newMessage = {
-        'message': _controller.text,
-        'time': TimeOfDay.now().format(context),
-        'type': 'sent',
-      };
-
-      // Update the ValueNotifier without setState
-      _messages.value = List.from(_messages.value)..add(newMessage);
-
-      // Clear the input field after sending
+      String time = TimeOfDay.now().format(context);
+      Message m = Message(time + "+201114339511", "+201114339511", chat.phone,
+          time, _controller.text);
+      ChatManagement.sendMessage(m);
+      _messages.value = List.from(_messages.value)..add(m);
       _controller.clear();
     }
   }
 
   // Function to handle sending a photo
   void _sendPhoto() {
-    final photoMessage = {
-      'message': '📷 Photo sent!',
-      'time': TimeOfDay.now().format(context),
-      'type': 'sent',
-    };
+    // final photoMessage = {
+    //   'message': '📷 Photo sent!',
+    //   'time': TimeOfDay.now().format(context),
+    //   'type': 'sent',
+    // };
 
-    _messages.value = List.from(_messages.value)..add(photoMessage);
+    // _messages.value = List.from(_messages.value)..add(photoMessage);
   }
 
   @override
