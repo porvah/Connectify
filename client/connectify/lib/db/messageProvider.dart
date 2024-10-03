@@ -20,6 +20,23 @@ class Messageprovider {
     return null;
   } 
 
+  static Future<List<Message>> getMessagesOfChat(Database db, String sender,
+   String receiver)async{
+    List<Map<String, dynamic>> maps = await db.query(tableMessage, 
+    columns:[columnId, columnSender, columnReceiver, columnReplied,
+     columnTime, columnString, columnAttachment],
+    where: '( $columnSender = ? AND $columnReceiver = ? ) OR ( $columnSender = ? AND $columnReceiver = ? )',
+    whereArgs: [sender, receiver, receiver, sender],
+    orderBy: '$columnTime ASC',
+    ) as List<Map<String,dynamic>>;
+    List<Message> res = [];
+    for(Map<String, dynamic> map in maps){
+      res.add(Message.fromMap(map));
+    }
+
+    return res;
+  }
+
   static Future<int> update(Message message, Database db) async{
     return await db.update(tableMessage, message.toMap(),
     where: '$columnId = ?', whereArgs: [message.id]);

@@ -5,23 +5,30 @@ import 'package:Connectify/core/message.dart';
 import 'package:Connectify/db/chatProvider.dart';
 import 'package:Connectify/db/dbSingleton.dart';
 import 'package:Connectify/db/messageProvider.dart';
+import 'package:Connectify/db/userProvider.dart';
 import 'package:Connectify/requests/webSocketService.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ChatManagement {
   
-  final ValueNotifier<List<Message>> _messages;
   
-  ChatManagement(this._messages);
+  
 
+  static ValueNotifier<List<Message>>? messages = null;
   //  void listenForMessages() {
   //   WebSocketService()
   //   _channel!.stream.listen((message) {
   //     socketHandler(message);
   //   });
   // }
+  static Future<dynamic> loadSender()async{
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    return await UserProvider.getLoggedUser(db!);
+    
+  }
+
 
   static Future<Chat> createChat(String name, String phone)async{
     Chat newChat = Chat(name, phone, "", 0);
@@ -39,9 +46,13 @@ class ChatManagement {
   // static void navigateChat(BuildContext ctx, Chat chat){
   //   Navigator.of(ctx).pushNamed()
   // }
+  static Future<List<Message>> queryMessages(String sender, String receiver)async{
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    return await Messageprovider.getMessagesOfChat(db!, sender, receiver);
+  }
 
-
-   static socketHandler(String message){
+  static socketHandler(String message){
     print(message);
     Map p = jsonDecode(message);
     if (p['signal'] == 0){
@@ -67,7 +78,9 @@ class ChatManagement {
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     Messageprovider.insert(m, db!);
-    //_messages.value = List.from(_messages.value)..add(m);
+    if(messages!= null){
+      messages!.value = List.from(messages!.value)..add(m);
+    }
     print(m);
   }
   static void handleLogoutSignal(){

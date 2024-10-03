@@ -16,14 +16,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final theme = Theme.of(context);
 
     return AppBar(
-      backgroundColor: theme.colorScheme.primary,
+      backgroundColor: theme.colorScheme.secondary,
       title: Text(title),
       actions: [
         if (!menuOptions.isEmpty)
         PopupMenuButton<MenuOption>(
           icon: Icon(
             Icons.more_vert,
-            color: theme.colorScheme.onPrimary,
+            color: theme.colorScheme.onSecondary,
           ),
           onSelected: (MenuOption selectedOption) {
             // Navigate to the route of the selected option

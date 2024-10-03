@@ -47,6 +47,7 @@ dependencies:
   permission_handler: ^11.3.1
   contacts_service: ^0.6.3
   web_socket_channel: ^3.0.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

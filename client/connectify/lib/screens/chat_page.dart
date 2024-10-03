@@ -1,12 +1,13 @@
 import 'package:Connectify/core/chat.dart';
 import 'package:Connectify/core/message.dart';
+import 'package:Connectify/core/user.dart';
 import 'package:Connectify/utils/chatManagement.dart';
 import 'package:Connectify/widgets/MessageInput.dart';
 import 'package:Connectify/widgets/ReceivedMessage.dart';
 import 'package:Connectify/widgets/SentMessage.dart';
+import 'package:Connectify/widgets/costumAppBar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key, required this.chat}) : super(key: key);
@@ -18,34 +19,20 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   _ChatScreenState(this.chat);
   Chat chat;
-  final ValueNotifier<List<Message>> _messages = ValueNotifier([]);
-  late ChatManagement chatManagement;
+  late ValueNotifier<List<Message>> _messages = ValueNotifier([]);
   final TextEditingController _controller = TextEditingController();
+  late User? sender;
 
   void initState() {
     super.initState();
-    chatManagement = ChatManagement(_messages);
-    chatManagement.listenForMessages();
+    
+    _prepWidget();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            // Handle back action
-          },
-        ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(chat.contact!, style: TextStyle(fontSize: 18)),
-          ],
-        ),
-      ),
+      appBar: CustomAppBar(title: chat.contact!, menuOptions: []),
       body: Column(
         children: [
           Expanded(
@@ -59,9 +46,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     final message = messages[index];
                     return message.receiver == chat.phone
                         ? Sentmessage(
-                            message.stringContent!, message.time!, () {})
+                            message.stringContent!, DateFormat('HH:mm a').format(DateTime.parse(message.time!)), () {})
                         : Receivedmessage(
-                            message.stringContent!, message.time!, () {});
+                            message.stringContent!, DateFormat('HH:mm a').format(DateTime.parse(message.time!)) , () {});
                   },
                 );
               },
@@ -72,12 +59,17 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-
+  Future<void> _prepWidget()async{
+    sender = await ChatManagement.loadSender();
+    List<Message> queried_m = await ChatManagement.queryMessages(sender!.phone!, chat.phone!);
+    _messages.value = queried_m;
+    ChatManagement.messages = _messages;
+  }
   // Function to send a new message
   void _sendMessage() {
     if (_controller.text.isNotEmpty) {
-      String time = TimeOfDay.now().format(context);
-      Message m = Message(time + "+201114339511", "+201114339511", chat.phone,
+      String time = DateTime.now().toIso8601String();
+      Message m = Message(time + sender!.phone!, sender!.phone!, chat.phone,
           time, _controller.text);
       ChatManagement.sendMessage(m);
       _messages.value = List.from(_messages.value)..add(m);
