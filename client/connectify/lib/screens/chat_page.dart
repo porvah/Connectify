@@ -5,6 +5,8 @@ import 'package:Connectify/widgets/MessageInput.dart';
 import 'package:Connectify/widgets/ReceivedMessage.dart';
 import 'package:Connectify/widgets/SentMessage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key, required this.chat}) : super(key: key);
@@ -17,8 +19,14 @@ class _ChatScreenState extends State<ChatScreen> {
   _ChatScreenState(this.chat);
   Chat chat;
   final ValueNotifier<List<Message>> _messages = ValueNotifier([]);
-
+  late ChatManagement chatManagement;
   final TextEditingController _controller = TextEditingController();
+
+  void initState() {
+    super.initState();
+    chatManagement = ChatManagement(_messages);
+    chatManagement.listenForMessages();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +74,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   // Function to send a new message
-  void _sendMessage () {
+  void _sendMessage() {
     if (_controller.text.isNotEmpty) {
       String time = TimeOfDay.now().format(context);
       Message m = Message(time + "+201114339511", "+201114339511", chat.phone,

@@ -6,9 +6,23 @@ import 'package:Connectify/db/chatProvider.dart';
 import 'package:Connectify/db/dbSingleton.dart';
 import 'package:Connectify/db/messageProvider.dart';
 import 'package:Connectify/requests/webSocketService.dart';
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ChatManagement {
+  
+  final ValueNotifier<List<Message>> _messages;
+  
+  ChatManagement(this._messages);
+
+  //  void listenForMessages() {
+  //   WebSocketService()
+  //   _channel!.stream.listen((message) {
+  //     socketHandler(message);
+  //   });
+  // }
+
   static Future<Chat> createChat(String name, String phone)async{
     Chat newChat = Chat(name, phone, "", 0);
     Dbsingleton dbsingleton = Dbsingleton();
@@ -27,7 +41,7 @@ class ChatManagement {
   // }
 
 
-  static void socketHandler(String message){
+   static socketHandler(String message){
     print(message);
     Map p = jsonDecode(message);
     if (p['signal'] == 0){
@@ -44,7 +58,7 @@ class ChatManagement {
 
   }
 
-  static void handleMessage(Map p)async{
+   static void handleMessage(Map p)async{
     Message m = Message(p['message_id'], p['sender'], p['receiver'],
      p['time'], p['text']);
     if(p.containsKey('replied') && p['replied'] != 'none'){
@@ -53,6 +67,7 @@ class ChatManagement {
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     Messageprovider.insert(m, db!);
+    //_messages.value = List.from(_messages.value)..add(m);
     print(m);
   }
   static void handleLogoutSignal(){
