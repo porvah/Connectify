@@ -16,24 +16,6 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   _ChatScreenState(this.chat);
   Chat chat;
-  // final ValueNotifier<List<Map<String, String>>> _messages = ValueNotifier([
-  //   {
-  //     'message': 'De la biblioteca envió?',
-  //     'time': '10:45 AM',
-  //     'type': 'received'
-  //   },
-  //   {'message': 'Sí, la biblioteca envió.', 'time': '10:46 AM', 'type': 'sent'},
-  //   {
-  //     'message': 'De componentes se encuentran...?',
-  //     'time': '10:47 AM',
-  //     'type': 'received'
-  //   },
-  //   {
-  //     'message': 'Si desea crear "nueva línea", ...',
-  //     'time': '10:48 AM',
-  //     'type': 'sent'
-  //   },
-  // ]);
   final ValueNotifier<List<Message>> _messages = ValueNotifier([]);
 
   final TextEditingController _controller = TextEditingController();
@@ -84,7 +66,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   // Function to send a new message
-  void _sendMessage() {
+  void _sendMessage () {
     if (_controller.text.isNotEmpty) {
       String time = TimeOfDay.now().format(context);
       Message m = Message(time + "+201114339511", "+201114339511", chat.phone,
