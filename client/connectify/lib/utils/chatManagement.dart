@@ -58,7 +58,7 @@ class ChatManagement {
   static void handleLogoutSignal(){
 
   }
-  static void sendMessage(Message m){
+  static void sendMessage(Message m)async{
     Map dict = {
       'signal' : 0,
       'message_id': m.id,
@@ -71,7 +71,9 @@ class ChatManagement {
     if( m.replied != null){
       dict['replied'] = m.replied;
     }
-
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    Messageprovider.insert(m, db!);
     String content = jsonEncode(dict);
     WebSocketService().sendMessage(content);
   }
