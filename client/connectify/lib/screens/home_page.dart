@@ -19,7 +19,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // Fake chat data for testing
   List<Chat> _chats = [];
   late PermissionStatus _permissionStatus;
   final List<MenuOption> menuOptions = [
