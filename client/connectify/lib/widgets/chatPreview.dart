@@ -1,16 +1,19 @@
+import 'package:Connectify/core/chat.dart';
 import 'package:flutter/material.dart';
 
 class ChatPreview extends StatelessWidget {
   final int contactId;
   final String name;
   final String lastMessage;
+  final String phoneNum;
   // photo, Activeness later
 
   const ChatPreview(
       {Key? key,
       required this.contactId,
       required this.name,
-      required this.lastMessage})
+      required this.lastMessage,
+      required this.phoneNum,})
       : super(key: key);
 
   @override
@@ -19,6 +22,7 @@ class ChatPreview extends StatelessWidget {
 
     return InkWell(
       onTap: () {
+        Navigator.of(context).pushNamed('/Chat', arguments: Chat(name, phoneNum, lastMessage, 1));
         print('clicked');
       },
       child: Column(
