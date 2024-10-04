@@ -52,6 +52,9 @@ class ChatPreview extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
                       Text(
                         name,
                         style: TextStyle(
@@ -60,6 +63,15 @@ class ChatPreview extends StatelessWidget {
                           color: theme.colorScheme.onSurface,
                         ),
                       ),
+                      Text(
+                         DateFormat('HH:mm a').format(DateTime.parse(time)),
+                         style: TextStyle(
+                         fontSize: 16, 
+                         color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            ),
+                          ),
+                      ],
+                    ),
                       const SizedBox(height: 4),
                       Text(
                         lastMessage,
@@ -71,18 +83,6 @@ class ChatPreview extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                    Row(
-                       mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            DateFormat('HH:mm a').format(DateTime.parse(time)),
-                            style: TextStyle(
-                              fontSize: 16, 
-                              color: theme.colorScheme.onSurface.withOpacity(0.6),
-                            ),
-                          ),
-                          ],
-                        ),
                     ],
                   ),
                 ),
