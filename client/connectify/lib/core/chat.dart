@@ -32,4 +32,5 @@ class Chat{
     last = map[columnLastMessage] as String;
     alert = map[columnAlert] as int;
   }
+
 }

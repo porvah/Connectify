@@ -33,8 +33,23 @@ class Messageprovider {
     for(Map<String, dynamic> map in maps){
       res.add(Message.fromMap(map));
     }
-
+    
     return res;
+  }
+
+    static Future<Message?> getLastMessage(Database db, String sender,
+   String receiver)async{
+    List<Map<String, dynamic>> maps = await db.query(tableMessage, 
+    columns:[columnId, columnSender, columnReceiver, columnReplied,
+     columnTime, columnString, columnAttachment],
+    where: '( $columnSender = ? AND $columnReceiver = ? ) OR ( $columnSender = ? AND $columnReceiver = ? )',
+    whereArgs: [sender, receiver, receiver, sender],
+    orderBy: '$columnTime DESC',
+    ) as List<Map<String,dynamic>>;
+    if (maps.length > 0){
+      return Message.fromMap(maps.first);
+    }
+    return null;
   }
 
   static Future<int> update(Message message, Database db) async{

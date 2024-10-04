@@ -1,7 +1,11 @@
 // home_page.dart
 import 'package:Connectify/core/chat.dart';
+import 'package:Connectify/core/message.dart';
+import 'package:Connectify/core/user.dart';
 import 'package:Connectify/db/chatProvider.dart';
 import 'package:Connectify/db/dbSingleton.dart';
+import 'package:Connectify/db/messageProvider.dart';
+import 'package:Connectify/db/userProvider.dart';
 import 'package:Connectify/requests/webSocketService.dart';
 import 'package:Connectify/utils/menuOption.dart';
 import 'package:Connectify/widgets/ChatPreview.dart';
@@ -47,7 +51,7 @@ class _HomePageState extends State<HomePage> {
             contactId: index,
             name: (chat.contact == "") ? chat.phone! : chat.contact!,
             lastMessage: chat.last!,
-            phoneNum : chat.phone!,
+            phoneNum: chat.phone!,
           );
         },
       ),
@@ -65,6 +69,7 @@ class _HomePageState extends State<HomePage> {
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     List<Chat> chats = await Chatprovider.getAllChats(db!);
+    User? loggedUser = await UserProvider.getLoggedUser(db!);
 
     if (_permissionStatus.isGranted) {
       Iterable<Contact> _contacts = await ContactsService.getContacts();
@@ -74,8 +79,10 @@ class _HomePageState extends State<HomePage> {
           String contact_num = contact.phones!.first.value!
               .replaceAll(" ", "")
               .replaceAll("-", "");
+          Message? lastmessage = await Messageprovider.getLastMessage(db, loggedUser == null ? "" : loggedUser.phone!, chat.phone!);
           if (chat.phone == contact_num) {
             chat.contact = contact.displayName;
+             chat.last = lastmessage?.stringContent;
             Chatprovider.update(chat, db);
           }
         }
