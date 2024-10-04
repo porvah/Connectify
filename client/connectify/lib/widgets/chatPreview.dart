@@ -8,6 +8,7 @@ class ChatPreview extends StatelessWidget {
   final String lastMessage;
   final String phoneNum;
   final String time;
+  final VoidCallback onNavigate;
 
   const ChatPreview(
       {Key? key,
@@ -15,7 +16,8 @@ class ChatPreview extends StatelessWidget {
       required this.name,
       required this.lastMessage,
       required this.phoneNum,
-      required this.time})
+      required this.time,
+      required this.onNavigate})
       : super(key: key);
 
   @override
@@ -23,9 +25,11 @@ class ChatPreview extends StatelessWidget {
     final theme = Theme.of(context);
 
     return InkWell(
-      onTap: () {
-        Navigator.of(context).pushNamed('/Chat',
+      onTap: () async{
+        await Navigator.of(context).pushNamed('/Chat',
             arguments: Chat(name, phoneNum, lastMessage, 1, time));
+
+        onNavigate();
         print('clicked');
       },
       child: Column(

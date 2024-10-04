@@ -1,12 +1,9 @@
 // home_page.dart
 import 'package:Connectify/core/chat.dart';
-import 'package:Connectify/core/message.dart';
-import 'package:Connectify/core/user.dart';
 import 'package:Connectify/db/chatProvider.dart';
 import 'package:Connectify/db/dbSingleton.dart';
-import 'package:Connectify/db/messageProvider.dart';
-import 'package:Connectify/db/userProvider.dart';
 import 'package:Connectify/requests/webSocketService.dart';
+import 'package:Connectify/utils/chatManagement.dart';
 import 'package:Connectify/utils/menuOption.dart';
 import 'package:Connectify/widgets/ChatPreview.dart';
 import 'package:Connectify/widgets/costumAppBar.dart';
@@ -23,7 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Chat> _chats = [];
+  late ValueNotifier<List<Chat>> _chats = ValueNotifier([]);
   final TextEditingController _searchController = TextEditingController();
   late PermissionStatus _permissionStatus;
   final List<MenuOption> menuOptions = [
@@ -70,18 +67,21 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: _chats.length,
+              itemCount: _chats.value.length,
               itemBuilder: (context, index) {
-                final chat = _chats[index];
+                final chat = _chats.value[index];
                 return ChatPreview(
                   contactId: index,
                   name: (chat.contact == "") ? chat.phone! : chat.contact!,
                   lastMessage: chat.last!,
                   phoneNum: chat.phone!,
                   time: chat.time!,
+                  onNavigate: (){
+                    _loadChats();
+                  }
                 );
-              },
-            ),
+              }
+            )
           ),
         ],
       ),
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     List<Chat> chats = await Chatprovider.getAllChats(db!);
-    User? loggedUser = await UserProvider.getLoggedUser(db!);
+    //User? loggedUser = await UserProvider.getLoggedUser(db);
 
     if (_permissionStatus.isGranted) {
       Iterable<Contact> _contacts = await ContactsService.getContacts();
@@ -109,26 +109,26 @@ class _HomePageState extends State<HomePage> {
           String contact_num = contact.phones!.first.value!
               .replaceAll(" ", "")
               .replaceAll("-", "");
-          Message? lastmessage = await Messageprovider.getLastMessage(
-              db, loggedUser == null ? "" : loggedUser.phone!, chat.phone!);
+          // Message? lastmessage = await Messageprovider.getLastMessage(
+          //     db, loggedUser == null ? "" : loggedUser.phone!, chat.phone!);
           if (chat.phone == contact_num) {
             chat.contact = contact.displayName;
-            chat.last = lastmessage?.stringContent;
-            chat.time = lastmessage?.time;
+            // chat.last = lastmessage?.stringContent;
+            // chat.time = lastmessage?.time;
             Chatprovider.update(chat, db);
           }
         }
       }
     }
-
-    chats.sort((a, b) {
-    String aTime = a.time ?? "";
-    String bTime = b.time ?? "";
-      return bTime.compareTo(aTime); 
-    });
-
     setState(() {
-      _chats = chats;
+      chats.sort((a, b) {
+        String aTime = a.time ?? "";
+        String bTime = b.time ?? "";
+        return bTime.compareTo(aTime); 
+      });
+      _chats.value = chats;
+      ChatManagement.chats = _chats;
+
     });
   }
 }

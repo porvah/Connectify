@@ -11,17 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ChatManagement {
-  
-  
-  
 
   static ValueNotifier<List<Message>>? messages = null;
-  //  void listenForMessages() {
-  //   WebSocketService()
-  //   _channel!.stream.listen((message) {
-  //     socketHandler(message);
-  //   });
-  // }
+  static ValueNotifier<List<Chat>>? chats = null;
+
   static Future<dynamic> loadSender()async{
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
@@ -43,9 +36,7 @@ class ChatManagement {
     return newChat;
     
   }
-  // static void navigateChat(BuildContext ctx, Chat chat){
-  //   Navigator.of(ctx).pushNamed()
-  // }
+
   static Future<List<Message>> queryMessages(String sender, String receiver)async{
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
@@ -81,6 +72,7 @@ class ChatManagement {
     if(messages!= null){
       messages!.value = List.from(messages!.value)..add(m);
     }
+    await updateChat(m.sender!, m, db);
     print(m);
   }
   static void handleLogoutSignal(){
@@ -104,5 +96,24 @@ class ChatManagement {
     Messageprovider.insert(m, db!);
     String content = jsonEncode(dict);
     WebSocketService().sendMessage(content);
+    await updateChat(m.receiver!, m, db);
+  }
+  static Future<void> updateChat(String contact, Message m, Database db)async{
+    Chat? chat = await Chatprovider.getChatByPhone(contact, db);
+    if(chat == null){
+      chat = Chat("", contact, m.stringContent, 0, m.time);
+      await Chatprovider.insert(chat, db);
+      chats!.value =  List.from(chats!.value)..insert(0, chat);
+    }else{
+      chat.last = m.stringContent;
+      chat.time = m.time;
+      await Chatprovider.update(chat, db);
+      for(int i = 0; i < chats!.value.length; i++){
+        if(chat.contact == chats!.value[i].contact){
+          chats!.value = List.from(chats!.value)..removeAt(i)..insert(0, chat);
+          break;
+        }
+      }
+    }
   }
 }
