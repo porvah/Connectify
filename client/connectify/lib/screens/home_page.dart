@@ -24,6 +24,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Chat> _chats = [];
+  final TextEditingController _searchController = TextEditingController();
   late PermissionStatus _permissionStatus;
   final List<MenuOption> menuOptions = [
     MenuOption(title: 'Settings', route: '/Settings'),
@@ -43,18 +44,46 @@ class _HomePageState extends State<HomePage> {
         title: "Connectify",
         menuOptions: menuOptions,
       ),
-      body: ListView.builder(
-        itemCount: _chats.length,
-        itemBuilder: (context, index) {
-          final chat = _chats[index];
-          return ChatPreview(
-            contactId: index,
-            name: (chat.contact == "") ? chat.phone! : chat.contact!,
-            lastMessage: chat.last!,
-            phoneNum: chat.phone!,
-            time: chat.time!,
-          );
-        },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _searchController, 
+                    decoration: InputDecoration(
+                      labelText: 'Search',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: (){}, 
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _chats.length,
+              itemBuilder: (context, index) {
+                final chat = _chats[index];
+                return ChatPreview(
+                  contactId: index,
+                  name: (chat.contact == "") ? chat.phone! : chat.contact!,
+                  lastMessage: chat.last!,
+                  phoneNum: chat.phone!,
+                  time: chat.time!,
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: "Start a Chat",
