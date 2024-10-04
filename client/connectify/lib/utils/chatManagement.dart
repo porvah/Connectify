@@ -31,7 +31,7 @@ class ChatManagement {
 
 
   static Future<Chat> createChat(String name, String phone)async{
-    Chat newChat = Chat(name, phone, "", 0);
+    Chat newChat = Chat(name, phone, "", 0,"");
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     Chat? createdChat = await Chatprovider.getChatByPhone(phone, db!);

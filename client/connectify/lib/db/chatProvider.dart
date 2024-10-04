@@ -8,7 +8,7 @@ class Chatprovider {
   }
   static Future<List<Chat>> getAllChats(Database db) async{
     List<Map<String, dynamic>> maps = await db.query(tableChat,
-    columns: [columnId, columnContact, columnPhone, columnLastMessage, columnAlert],
+    columns: [columnId, columnContact, columnPhone, columnLastMessage, columnAlert,columnTime],
     ) as List<Map<String, dynamic>>;
     List<Chat> res = [];
     for (Map<String, dynamic> map in maps){
@@ -18,7 +18,7 @@ class Chatprovider {
   }
   static Future<Chat?> getChat(int id, Database db) async{
     List<Map<String, dynamic>> maps = await db.query(tableChat, 
-    columns:[columnId, columnContact, columnPhone, columnLastMessage, columnAlert],
+    columns:[columnId, columnContact, columnPhone, columnLastMessage, columnAlert,columnTime],
     where: '$columnId = ?',
     whereArgs: [id]
     ) as List<Map<String,dynamic>>;
@@ -29,7 +29,7 @@ class Chatprovider {
   } 
   static Future<Chat?> getChatByPhone(String phone, Database db) async{
     List<Map<String, dynamic>> maps = await db.query(tableChat, 
-    columns:[columnId, columnContact, columnPhone, columnLastMessage, columnAlert],
+    columns:[columnId, columnContact, columnPhone, columnLastMessage, columnAlert,columnTime],
     where: '$columnPhone = ?',
     whereArgs: [phone]
     ) as List<Map<String,dynamic>>;

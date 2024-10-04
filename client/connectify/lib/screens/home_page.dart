@@ -52,6 +52,7 @@ class _HomePageState extends State<HomePage> {
             name: (chat.contact == "") ? chat.phone! : chat.contact!,
             lastMessage: chat.last!,
             phoneNum: chat.phone!,
+            time: chat.time!,
           );
         },
       ),
@@ -79,15 +80,24 @@ class _HomePageState extends State<HomePage> {
           String contact_num = contact.phones!.first.value!
               .replaceAll(" ", "")
               .replaceAll("-", "");
-          Message? lastmessage = await Messageprovider.getLastMessage(db, loggedUser == null ? "" : loggedUser.phone!, chat.phone!);
+          Message? lastmessage = await Messageprovider.getLastMessage(
+              db, loggedUser == null ? "" : loggedUser.phone!, chat.phone!);
           if (chat.phone == contact_num) {
             chat.contact = contact.displayName;
-             chat.last = lastmessage?.stringContent;
+            chat.last = lastmessage?.stringContent;
+            chat.time = lastmessage?.time;
             Chatprovider.update(chat, db);
           }
         }
       }
     }
+
+    chats.sort((a, b) {
+    String aTime = a.time ?? "";
+    String bTime = b.time ?? "";
+      return bTime.compareTo(aTime); 
+    });
+
     setState(() {
       _chats = chats;
     });
