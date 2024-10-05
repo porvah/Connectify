@@ -9,6 +9,7 @@ class ChatPreview extends StatelessWidget {
   final String phoneNum;
   final String time;
   final VoidCallback onNavigate;
+  final String? imageUrl ;
 
   const ChatPreview(
       {Key? key,
@@ -17,7 +18,8 @@ class ChatPreview extends StatelessWidget {
       required this.lastMessage,
       required this.phoneNum,
       required this.time,
-      required this.onNavigate})
+      required this.onNavigate,
+      required this.imageUrl})
       : super(key: key);
 
   @override
@@ -42,14 +44,17 @@ class ChatPreview extends StatelessWidget {
                 CircleAvatar(
                   radius: 30,
                   backgroundColor: theme.colorScheme.primary,
-                  child: Text(
-                    name[0].toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: theme.colorScheme.onPrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  backgroundImage: imageUrl != null ? NetworkImage(imageUrl!) : null,
+                  child: imageUrl == null
+                      ? Text(
+                          name[0].toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: theme.colorScheme.onPrimary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : null, 
                 ),
                 const SizedBox(width: 16),
                 Expanded(

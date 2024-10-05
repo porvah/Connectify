@@ -22,6 +22,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late ValueNotifier<List<Chat>> _chats = ValueNotifier([]);
   final TextEditingController _searchController = TextEditingController();
+  late Map _phoneImageMap;
+  List<String> phones = [];
   late PermissionStatus _permissionStatus;
   final List<MenuOption> menuOptions = [
     MenuOption(title: 'Settings', route: '/Settings'),
@@ -49,7 +51,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Expanded(
                   child: TextField(
-                    controller: _searchController, 
+                    controller: _searchController,
                     decoration: InputDecoration(
                       labelText: 'Search',
                       border: OutlineInputBorder(
@@ -60,29 +62,29 @@ class _HomePageState extends State<HomePage> {
                 ),
                 IconButton(
                   icon: Icon(Icons.search),
-                  onPressed: (){}, 
+                  onPressed: () {},
                 ),
               ],
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: _chats.value.length,
-              itemBuilder: (context, index) {
-                final chat = _chats.value[index];
-                return ChatPreview(
-                  contactId: index,
-                  name: (chat.contact == "") ? chat.phone! : chat.contact!,
-                  lastMessage: chat.last!,
-                  phoneNum: chat.phone!,
-                  time: chat.time!,
-                  onNavigate: (){
-                    _loadChats();
-                  }
-                );
-              }
-            )
-          ),
+              child: ListView.builder(
+                  itemCount: _chats.value.length,
+                  itemBuilder: (context, index) {
+                    final chat = _chats.value[index];
+                    String? imageUrl = _phoneImageMap[chat.phone];
+                    return ChatPreview(
+                        contactId: index,
+                        name:
+                            (chat.contact == "") ? chat.phone! : chat.contact!,
+                        lastMessage: chat.last!,
+                        phoneNum: chat.phone!,
+                        time: chat.time!,
+                        onNavigate: () {
+                          _loadChats();
+                        },
+                        imageUrl : imageUrl);
+                  })),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -99,8 +101,9 @@ class _HomePageState extends State<HomePage> {
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     List<Chat> chats = await Chatprovider.getAllChats(db!);
-    //User? loggedUser = await UserProvider.getLoggedUser(db);
-
+    for (Chat chat in chats) {
+      phones.add(chat.phone!);
+    }
     if (_permissionStatus.isGranted) {
       Iterable<Contact> _contacts = await ContactsService.getContacts();
       List<Contact> contact_list = _contacts.toList();
@@ -109,26 +112,23 @@ class _HomePageState extends State<HomePage> {
           String contact_num = contact.phones!.first.value!
               .replaceAll(" ", "")
               .replaceAll("-", "");
-          // Message? lastmessage = await Messageprovider.getLastMessage(
-          //     db, loggedUser == null ? "" : loggedUser.phone!, chat.phone!);
           if (chat.phone == contact_num) {
             chat.contact = contact.displayName;
-            // chat.last = lastmessage?.stringContent;
-            // chat.time = lastmessage?.time;
             Chatprovider.update(chat, db);
           }
         }
       }
     }
+    Map images = await ChatManagement.get_Profiles(phones);
     setState(() {
       chats.sort((a, b) {
         String aTime = a.time ?? "";
         String bTime = b.time ?? "";
-        return bTime.compareTo(aTime); 
+        return bTime.compareTo(aTime);
       });
       _chats.value = chats;
       ChatManagement.chats = _chats;
-
+      _phoneImageMap = images;
     });
   }
 }

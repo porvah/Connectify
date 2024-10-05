@@ -19,4 +19,5 @@ urlpatterns = [
     path('uploadphoto/',profileviews.Upload),
     path('getphotoes/',profileviews.getPhotoes),
     path('getimage/',profileviews.getImage),
+    path('getimages/',profileviews.getImages),
 ]

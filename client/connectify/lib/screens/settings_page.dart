@@ -1,3 +1,4 @@
+import 'package:Connectify/widgets/costumAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -50,19 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
       builder: (context, themeManager, child) {
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
-          appBar: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.surface,
-            elevation: 0,
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ),
+          appBar: CustomAppBar(title: "Settings", menuOptions: []),
           body: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(

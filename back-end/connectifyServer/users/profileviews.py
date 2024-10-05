@@ -39,6 +39,19 @@ def getImage(request):
     except json.JSONDecodeError:
         return Response({'error': 'Invalid JSON'}, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+def getImages(request):
+    data = request.data
+    phones = data.get('phones', [])
+    if not phones:
+        return Response({'error': 'Phones list is required.'}, status=400)
+    profiles = Profile.objects.filter(phone__in=phones)
+    result = {
+        profile.phone: request.build_absolute_uri(profile.image.url)
+        for profile in profiles if profile.image  
+    }
+    return Response(result, status=status.HTTP_200_OK)
+
     
 @api_view(['Get'])
 def getPhotoes(request):
