@@ -21,6 +21,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
+      Settings.upload_photo(File(pickedFile.path));
       setState(() {
         _profileImage = File(pickedFile.path);
       });
@@ -99,4 +100,3 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 }
-

@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http; 
+import 'package:http_parser/http_parser.dart';
 
 class SettingsApi {
     final _url = dotenv.env['API_URL'];
@@ -58,4 +60,25 @@ class SettingsApi {
     }
   }
 
+Future<void> uploadImage(File imageFile , String phone) async {
+    var url = Uri.parse(_url! + 'uploadphoto/');
+
+    var request = http.MultipartRequest('POST', url);
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'image',  
+        imageFile.path,
+        contentType: MediaType('image', 'jpeg'),  
+      ),
+    );
+
+    request.fields['phone'] = phone;
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      print('Image uploaded successfully');
+    } else {
+      print('Image upload failed with status code: ${response.statusCode}');
+    }
+  }
 }
