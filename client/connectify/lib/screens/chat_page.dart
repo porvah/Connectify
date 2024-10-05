@@ -7,7 +7,6 @@ import 'package:Connectify/widgets/ReceivedMessage.dart';
 import 'package:Connectify/widgets/SentMessage.dart';
 import 'package:Connectify/widgets/costumAppBar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart' show View;
 import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -25,19 +24,63 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   late User? sender;
   final ScrollController _scrollController = ScrollController();
   bool _isKeyboardVisible = false;
+  bool _isLoading = false;
+  bool _hasMore = true;
+  
+
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _prepWidget();
-    
-    // Add listener to messages for automatic scrolling
-    _messages.addListener(() {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToBottom(animate: true);
-      });
+    _scrollController.addListener(_scrollListener);
+    // _messages.addListener(() {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     _scrollToBottom(animate: true);
+    //   });
+    // });
+  }
+
+  void _scrollListener(){
+    if(_scrollController.hasClients){
+      if(_scrollController.position.pixels <= _scrollController.position.minScrollExtent+200 &&
+        !_isLoading && _hasMore){
+          print("extending triggered");
+          _extendMessages();
+        }
+    }
+  }
+
+  Future<void> _extendMessages()async{
+    if(_isLoading || !_hasMore) return;
+    setState((){
+      _isLoading = true;
     });
+    int offset = _messages.value.length;
+    List<Message> addedMessages = await ChatManagement.queryMessages(sender!.phone!, chat.phone!, offset);
+    if(addedMessages.isEmpty){
+      setState((){
+        _isLoading = false;
+        _hasMore = false;
+      });
+      return;
+    }
+    double currPos = _scrollController.position.pixels;
+    double max = _scrollController.position.maxScrollExtent;
+    
+    setState(() {
+      _messages.value = List.from(_messages.value)..insertAll(0, addedMessages);
+      _isLoading = false;
+    });
+      
+    WidgetsBinding.instance.addPersistentFrameCallback((_){
+      double max2 = _scrollController.position.maxScrollExtent;
+      _scrollController.jumpTo(currPos+(max2-max)); 
+
+    });
+    
+
   }
 
   @override
@@ -61,7 +104,15 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   Future<void> _prepWidget() async {
     sender = await ChatManagement.loadSender();
-    List<Message> queried_m = await ChatManagement.queryMessages(sender!.phone!, chat.phone!);
+    setState(() {
+      _isLoading = true;
+    });
+    List<Message> queried_m = await ChatManagement.queryMessages(sender!.phone!, chat.phone!, 0);
+    setState(() {
+      _isLoading = false;
+    });
+      
+    if (queried_m.length < 20) _hasMore = false;
     _messages.value = queried_m;
     ChatManagement.messages = _messages;
     
@@ -154,6 +205,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         _messages.value = List.from(_messages.value)..add(m);
       }
       _controller.clear();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToBottom(animate: true);
+      });
     }
   }
 

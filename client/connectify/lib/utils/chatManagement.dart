@@ -35,10 +35,11 @@ class ChatManagement {
   }
 
   static Future<List<Message>> queryMessages(
-      String sender, String receiver) async {
+      String sender, String receiver, int offset) async {
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
-    return await Messageprovider.getMessagesOfChat(db!, sender, receiver);
+    List<Message> queried_messages =  await Messageprovider.getMessagesOfChat(db!, sender, receiver, offset);
+    return List.from(queried_messages.reversed);
   }
 
   static socketHandler(String message) {
