@@ -38,6 +38,9 @@ class Chatprovider {
     }
     return null;
   } 
+  static Future<void> clearTable(Database db ) async{
+    await db.delete(tableChat);
+  }
 
   static Future<int> update(Chat chat, Database db) async{
     return await db.update(tableChat, chat.toMap(),

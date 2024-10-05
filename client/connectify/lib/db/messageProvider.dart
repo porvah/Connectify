@@ -38,6 +38,11 @@ class Messageprovider {
     }
     return res;
   }
+  static Future<void> clearMessages(Database db, String phone)async{
+    await db.delete(tableMessage,
+     where: '$columnReceiver = ? OR $columnSender = ?',
+     whereArgs: [phone, phone]);
+  }
 
   static Future<Message?> getLastMessage(Database db, String sender,
    String receiver)async{

@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:Connectify/core/user.dart';
+import 'package:Connectify/db/chatProvider.dart';
 import 'package:Connectify/db/dbSingleton.dart';
+import 'package:Connectify/db/messageProvider.dart';
 import 'package:Connectify/db/userProvider.dart';
 import 'package:Connectify/requests/settings_api.dart';
 import 'package:Connectify/widgets/texButton.dart';
@@ -41,9 +43,11 @@ class Settings {
       SettingsApi settingsApi = SettingsApi();
       String? token = loggedUser?.token;
       bool success = await settingsApi.logout(token!);
+      await Chatprovider.clearTable(db);
+      await Messageprovider.clearMessages(db, loggedUser!.phone!);
       if (success) {
-        loggedUser?.logged = 0;
-        UserProvider.update(loggedUser!, db);
+        loggedUser.logged = 0;
+        UserProvider.update(loggedUser, db);
       } else {
         ScaffoldMessenger.of(ctx).showSnackBar(
           SnackBar(
@@ -89,7 +93,9 @@ class Settings {
       SettingsApi settingsApi = SettingsApi();
       String? token = loggedUser?.token;
       bool success = await settingsApi.deleteAccount(token!);
-      int? id = loggedUser!.id;
+      await Chatprovider.clearTable(db);
+      await Messageprovider.clearMessages(db, loggedUser!.phone!);
+      int? id = loggedUser.id;
       if (success) {
         UserProvider.delete(id!, db);
       } else {
