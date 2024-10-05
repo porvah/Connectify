@@ -18,4 +18,5 @@ urlpatterns = [
     path('loginauth/', authviews.LogInAuthentication),
     path('uploadphoto/',profileviews.Upload),
     path('getphotoes/',profileviews.getPhotoes),
+    path('getimage/',profileviews.getImage),
 ]

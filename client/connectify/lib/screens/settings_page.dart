@@ -16,16 +16,28 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   File? _profileImage;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileImage();
+  }
+
+  Future<void> _loadProfileImage() async {
+    File? image = await Settings.get_image();
+    setState(() {
+      _profileImage = image;
+      print(_profileImage);
+    });
+  }
+
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
-      Settings.upload_photo(File(pickedFile.path));
-      setState(() {
-        _profileImage = File(pickedFile.path);
-      });
-    }
+    setState(() {
+      Settings.upload_photo(File(pickedFile!.path));
+      _profileImage = File(pickedFile.path);
+    });
   }
 
   @override
