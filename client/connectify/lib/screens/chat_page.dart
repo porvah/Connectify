@@ -72,7 +72,9 @@ class _ChatScreenState extends State<ChatScreen> {
       Message m = Message(time + sender!.phone!, sender!.phone!, chat.phone,
           time, _controller.text);
       ChatManagement.sendMessage(m);
-      _messages.value = List.from(_messages.value)..add(m);
+      if(m.sender != m.receiver) {
+        _messages.value = List.from(_messages.value)..add(m);
+      }
       _controller.clear();
     }
   }
