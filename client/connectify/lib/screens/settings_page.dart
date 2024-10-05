@@ -13,8 +13,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  String? _profileImageUrl; // Changed to store image URL instead of File
-
+  String? _profileImageUrl;
   @override
   void initState() {
     super.initState();
@@ -22,10 +21,9 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _loadProfileImage() async {
-    // Assuming this retrieves the image URL from your backend or settings
     String? imageUrl = await Settings.get_image();
     setState(() {
-      _profileImageUrl = imageUrl; // Store the URL
+      _profileImageUrl = imageUrl; 
     });
   }
 
