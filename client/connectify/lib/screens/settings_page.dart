@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
 import 'package:Connectify/themes/themeManager.dart';
 import 'package:Connectify/utils/settings.dart';
 import 'package:Connectify/widgets/listTile.dart';
@@ -14,7 +13,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  File? _profileImage;
+  String? _profileImageUrl; // Changed to store image URL instead of File
 
   @override
   void initState() {
@@ -23,10 +22,10 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _loadProfileImage() async {
-    File? image = await Settings.get_image();
+    // Assuming this retrieves the image URL from your backend or settings
+    String? imageUrl = await Settings.get_image();
     setState(() {
-      _profileImage = image;
-      print(_profileImage);
+      _profileImageUrl = imageUrl; // Store the URL
     });
   }
 
@@ -34,10 +33,17 @@ class _SettingsPageState extends State<SettingsPage> {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    setState(() {
-      Settings.upload_photo(File(pickedFile!.path));
-      _profileImage = File(pickedFile.path);
-    });
+    if (pickedFile != null) {
+      await Settings.upload_photo(File(pickedFile.path)); 
+      await _loadProfileImage(); 
+    }
+  }
+
+  String _getImageUrl(String? imageUrl) {
+    if (imageUrl == null) {
+      return 'https://via.placeholder.com/150'; 
+    }
+    return "$imageUrl?timestamp=${DateTime.now().millisecondsSinceEpoch}";
   }
 
   @override
@@ -68,9 +74,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 GestureDetector(
                   onTap: _pickImage,
                   child: Photo(
-                    _profileImage != null
-                        ? FileImage(_profileImage!)
-                        : NetworkImage('https://via.placeholder.com/150'),
+                    _profileImageUrl != null
+                        ? NetworkImage(_getImageUrl(_profileImageUrl)) 
+                        : NetworkImage('https://via.placeholder.com/150'), 
                     50,
                   ),
                 ),
@@ -86,12 +92,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 Divider(color: Theme.of(context).colorScheme.surface),
 
-                // Starred messages
-                ListtileWidget('Starred Messages', () {}, Icons.star),
+                // Starred Messages
+                ListtileWidget('Starred Messages', () {
+                  // Handle the action for Starred Messages
+                }, Icons.star),
                 Divider(color: Theme.of(context).colorScheme.surface),
 
                 // Favorite Contacts
-                ListtileWidget('Favorite Contacts', () {}, Icons.favorite),
+                ListtileWidget('Favorite Contacts', () {
+                  // Handle the action for Favorite Contacts
+                }, Icons.favorite),
                 Divider(color: Theme.of(context).colorScheme.surface),
 
                 // Logout
@@ -100,7 +110,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 }, Icons.logout),
                 Divider(color: Theme.of(context).colorScheme.surface),
 
-                // Delete account
+                // Delete Account
                 ListtileWidget('Delete Account', () {
                   Settings.delete_account(context);
                 }, Icons.delete),
@@ -112,3 +122,6 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 }
+
+
+

@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 class SettingsApi {
   final _url = dotenv.env['API_URL'];
@@ -87,7 +85,7 @@ class SettingsApi {
     }
   }
 
-  Future<File?> getImage(String phone) async {
+  Future<String?> getImage(String phone) async {
     try {
       final response = await http.post(
         Uri.parse(_url! + 'getimage/'),
@@ -102,36 +100,13 @@ class SettingsApi {
         Map<String, dynamic> data = jsonDecode(response.body);
         String? imageUrl = data['image'];
         print(imageUrl);
-        return await _downloadImage(imageUrl);
+        return imageUrl;
       } else {
         print('Failed to get image with status: ${response.statusCode}');
         return null;
       }
     } catch (e) {
       print('Get image failed! Error: $e');
-      return null;
-    }
-  }
-
-  Future<File?> _downloadImage(String? imageUrl) async {
-    if (imageUrl == null) return null;
-
-    try {
-      var response = await http.get(Uri.parse(imageUrl));
-
-      if (response.statusCode == 200) {
-        var directory = await getApplicationDocumentsDirectory();
-        var filePath = path.join(directory.path, 'profile_image.png');
-        var file = File(filePath);
-        await file.writeAsBytes(response.bodyBytes);
-        print(file);
-        return file;
-      } else {
-        print('Failed to download image with status: ${response.statusCode}');
-        return null;
-      }
-    } catch (e) {
-      print('Download failed! Error: $e');
       return null;
     }
   }

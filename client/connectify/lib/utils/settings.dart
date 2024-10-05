@@ -114,13 +114,13 @@ class Settings {
     return await settingsApi.uploadImage(imageFile, phone!);
   }
 
-  static Future<File?> get_image() async {
+  static Future<String?> get_image() async {
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     User? loggedUser = await UserProvider.getLoggedUser(db!);
     SettingsApi settingsApi = SettingsApi();
     String? phone = loggedUser?.phone;
     print(await settingsApi.getImage(phone!));
-    return await settingsApi.getImage(phone!);
+    return await settingsApi.getImage(phone);
   }
 }
