@@ -123,4 +123,12 @@ class Settings {
     print(await settingsApi.getImage(phone!));
     return await settingsApi.getImage(phone);
   }
+
+  static Future<String?> get_user_phone() async {
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    User? loggedUser = await UserProvider.getLoggedUser(db!);
+    String? phone = loggedUser?.phone;
+    return phone;
+  }
 }

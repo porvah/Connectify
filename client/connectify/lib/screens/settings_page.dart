@@ -15,16 +15,19 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   String? _profileImageUrl;
+  String? _userPhone;
   @override
   void initState() {
     super.initState();
-    _loadProfileImage();
+    _loaduserData();
   }
 
-  Future<void> _loadProfileImage() async {
+  Future<void> _loaduserData() async {
     String? imageUrl = await Settings.get_image();
+    String? phone = await Settings.get_user_phone();
     setState(() {
-      _profileImageUrl = imageUrl; 
+      _profileImageUrl = imageUrl;
+      _userPhone = phone;
     });
   }
 
@@ -33,14 +36,14 @@ class _SettingsPageState extends State<SettingsPage> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      await Settings.upload_photo(File(pickedFile.path)); 
-      await _loadProfileImage(); 
+      await Settings.upload_photo(File(pickedFile.path));
+      await _loaduserData();
     }
   }
 
   String _getImageUrl(String? imageUrl) {
     if (imageUrl == null) {
-      return 'https://via.placeholder.com/150'; 
+      return 'https://via.placeholder.com/150';
     }
     return "$imageUrl?timestamp=${DateTime.now().millisecondsSinceEpoch}";
   }
@@ -62,13 +65,19 @@ class _SettingsPageState extends State<SettingsPage> {
                   onTap: _pickImage,
                   child: Photo(
                     _profileImageUrl != null
-                        ? NetworkImage(_getImageUrl(_profileImageUrl)) 
-                        : NetworkImage('https://via.placeholder.com/150'), 
+                        ? NetworkImage(_getImageUrl(_profileImageUrl))
+                        : NetworkImage('https://via.placeholder.com/150'),
                     50,
                   ),
                 ),
-                SizedBox(height: 25),
-
+                SizedBox(height: 15),
+                 Text( _userPhone == null ? "" : _userPhone!,
+                  style: TextStyle(
+                    fontSize: 25,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                 ),
+                 SizedBox(height: 15),
                 // Dark Mode Switch
                 ListtileWidget(
                   themeManager.isLight() ? 'Dark mode' : 'Light mode',
@@ -109,6 +118,3 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 }
-
-
-
