@@ -83,4 +83,18 @@ class Messageprovider {
   return [];
   }
 
+
+  static Future<List<Message>> getMessagesContaining(String searchString, Database db) async {
+    List<Map<String, dynamic>> maps = await db.query(
+      tableMessage, 
+      columns: [columnId, columnSender, columnReceiver, columnReplied, columnTime, columnString, 
+        columnAttachment, columnStarred],
+      where: '$columnString LIKE ?',  
+      whereArgs: ['%$searchString%'],  
+    );
+
+    return List.generate(maps.length, (i) {
+      return Message.fromMap(maps[i]);
+    });
+  }
 }

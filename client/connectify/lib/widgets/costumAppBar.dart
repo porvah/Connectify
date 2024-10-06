@@ -30,14 +30,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             // Navigate to the route of the selected option
             Navigator.pushNamed(context, selectedOption.route);
           },
-          itemBuilder: (BuildContext context) {
-            return menuOptions.map((MenuOption option) {
-              return PopupMenuItem<MenuOption>(
-                value: option,
-                child: Text(option.title), // Display the title of the option
-              );
-            }).toList();
-          },
+            itemBuilder: (BuildContext context) {
+              return menuOptions.map((MenuOption option) {
+                return PopupMenuItem<MenuOption>(
+                  value: option,
+                  child: Row(
+                    children: [
+                      Icon(option.icon, size: 20), 
+                      SizedBox(width: 8), 
+                      Text(option.title), 
+                    ],
+                  ),
+                );
+              }).toList();
+            },
         ),
       ],
     );

@@ -21,12 +21,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late ValueNotifier<List<Chat>> _chats = ValueNotifier([]);
-  final TextEditingController _searchController = TextEditingController();
   late Map _phoneImageMap;
   List<String> phones = [];
   late PermissionStatus _permissionStatus;
   final List<MenuOption> menuOptions = [
-    MenuOption(title: 'Settings', route: '/Settings'),
+    MenuOption(title: 'Settings', route: '/Settings' , icon: Icons.settings),
+    MenuOption(title: 'Search', route: '/Search',icon: Icons.search),
   ];
   @override
   void initState() {
@@ -45,28 +45,6 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      labelText: 'Search',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-          ),
           Expanded(
               child: ListView.builder(
                   itemCount: _chats.value.length,
@@ -83,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                         onNavigate: () {
                           _loadChats();
                         },
-                        imageUrl : imageUrl);
+                        imageUrl: imageUrl);
                   })),
         ],
       ),

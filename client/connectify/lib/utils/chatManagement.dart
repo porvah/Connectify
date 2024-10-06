@@ -137,10 +137,16 @@ class ChatManagement {
     return Messageprovider.getStarredMessages(db!);
   }
 
-  static Future<String?> getName(String phone)  async{
+  static Future<String?> getName(String phone) async {
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     Chat? chat = await Chatprovider.getChatByPhone(phone, db!);
     return chat?.contact;
+  }
+
+  static Future<List<Message>> getSearched(String searchString) async {
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    return Messageprovider.getMessagesContaining(searchString, db!);
   }
 }

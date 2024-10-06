@@ -4,6 +4,7 @@ import 'package:Connectify/screens/chat_page.dart';
 import 'package:Connectify/screens/contacts_page.dart';
 import 'package:Connectify/screens/home_page.dart';
 import 'package:Connectify/screens/login_page.dart';
+import 'package:Connectify/screens/search_page.dart';
 import 'package:Connectify/screens/signup_page.dart';
 import 'package:Connectify/screens/splash_screen.dart';
 import 'package:Connectify/screens/settings_page.dart';
@@ -36,6 +37,8 @@ class RouteGen{
         return MaterialPageRoute(builder: (_)=> ContactsScreen());
       case '/Starred':
         return MaterialPageRoute(builder: (_)=> StarredMessagesScreen());
+      case '/Search':
+        return MaterialPageRoute(builder: (_)=> SearchMessagesScreen());
       case '/Chat':
         if (args is Chat){
           return MaterialPageRoute(builder: (_)=> ChatScreen(chat: args));
