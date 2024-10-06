@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:Connectify/core/chat.dart';
 import 'package:Connectify/core/message.dart';
@@ -19,6 +20,15 @@ class ChatManagement {
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     return await UserProvider.getLoggedUser(db!);
+  }
+  static Future<String?> encodeFile(File file) async {
+    try{
+      List<int> bytes = await file.readAsBytes();
+      String base64 = base64Encode(bytes);
+      return base64;
+    }catch(e){
+      return null;
+    }
   }
 
   static Future<Chat> createChat(String name, String phone) async {
@@ -66,6 +76,10 @@ class ChatManagement {
     if (p.containsKey('replied') && p['replied'] != 'none') {
       m.replied = p['replied'];
     }
+    if (p.containsKey('attachment')){
+      m.attachment = p['attachment'];
+    }
+    
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     Messageprovider.insert(m, db!);
@@ -85,7 +99,7 @@ class ChatManagement {
       'receiver': m.receiver,
       'time': m.time,
       'text': m.stringContent,
-      'hasattachment': 0
+      'attachment': m.attachment
     };
     if (m.replied != null) {
       dict['replied'] = m.replied;

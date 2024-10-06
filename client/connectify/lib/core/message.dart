@@ -5,7 +5,7 @@ final String columnReceiver = 'receiver';
 final String columnReplied = 'replied_id';
 final String columnTime = 'time';
 final String columnString = 'string_content';
-final String columnAttachment = 'attachment_id';
+final String columnAttachment = 'attachment';
 final String columnStarred = 'starred';
 
 class Message {
@@ -16,7 +16,9 @@ class Message {
   String? time;
   String? stringContent;
   int? starred;
-  int? attachment_id;
+  String? attachment;
+
+
 
   Message(this.id, this.sender, this.receiver, this.time, this.stringContent);
 
@@ -32,8 +34,8 @@ class Message {
     if (replied != null) {
       map[columnReplied] = replied;
     }
-    if (attachment_id != null) {
-      map[columnAttachment] = attachment_id;
+    if (attachment != null) {
+      map[columnAttachment] = attachment;
     }
     return map;
   }
@@ -45,7 +47,7 @@ class Message {
     replied = map[columnReplied] as String?;
     time = map[columnTime] as String;
     stringContent = map[columnString] as String;
-    attachment_id = map[columnAttachment] as int?;
+    attachment = map[columnAttachment] as String?;
     starred = map[columnStarred] as int?;
   }
 }

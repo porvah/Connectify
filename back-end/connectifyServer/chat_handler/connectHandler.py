@@ -21,6 +21,6 @@ def getQueuedMessages(phone):
     from . messagemodels import Message
     messages = Message.objects.filter(receiver = phone)
     messages_list = list(messages.values('id', 'sender','receiver',
-     'text', 'time', 'attachment_name', 'attachment', 'message_id', 'hasattachment', 'signal','replied'))
+     'text', 'time', 'attachment', 'message_id', 'signal','replied'))
     Message.objects.filter(receiver = phone).delete()
     return messages_list

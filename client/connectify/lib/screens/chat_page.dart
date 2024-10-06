@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:Connectify/core/chat.dart';
 import 'package:Connectify/core/message.dart';
 import 'package:Connectify/core/user.dart';
@@ -9,6 +11,7 @@ import 'package:Connectify/widgets/SentMessage.dart';
 import 'package:Connectify/widgets/costumAppBar.dart';
 import 'package:Connectify/widgets/ReplyPreview.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -29,6 +32,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   bool _isLoading = false;
   bool _hasMore = true;
   Message? _replyingTo;
+  String? _toBeSentImage;
 
   @override
   void initState() {
@@ -136,7 +140,63 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     }
   }
+  void _sendMessage() {
+    if (_controller.text.isNotEmpty) {
+      String time = DateTime.now().toIso8601String();
+      Message m = Message(
+        time + sender!.phone!,
+        sender!.phone!,
+        chat.phone,
+        time,
+        _controller.text,
+      );
 
+      if (_replyingTo != null) {
+        m.replied = _replyingTo!.id;
+      }
+      m.attachment = _toBeSentImage;
+
+      ChatManagement.sendMessage(m);
+
+      if (m.sender != m.receiver) {
+        _messages.value = List.from(_messages.value)..add(m);
+      }
+      _controller.clear();
+      _toBeSentImage = null;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToBottom(animate: true);
+      });
+    }
+    // remove preview
+    _setReplyingTo(null);
+  }
+
+  void _sendPhoto() async{
+    XFile? xfile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if(xfile != null){
+      File file = File(xfile.path);
+      String? b64 = await ChatManagement.encodeFile(file);
+      _controller.text = 'Sent a picture 📸';
+      _toBeSentImage = b64;
+
+      _sendMessage();
+    }
+  }
+
+  void _setReplyingTo(Message? message) {
+    setState(() {
+      _replyingTo = message;
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _scrollController.dispose();
+    _controller.dispose();
+    _messages.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -180,16 +240,16 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                             if (repliedMessage != null)
                               ReplyLabel(repliedMessage: repliedMessage),
                             message.receiver == chat.phone
-                                ? Sentmessage(
-                                    message,
-                                    timeFormatted,
-                                    onReply: _setReplyingTo,
-                                  )
-                                : Receivedmessage(
-                                    message,
-                                    timeFormatted,
-                                    onReply: _setReplyingTo,
-                                  ),
+                            ? Sentmessage(
+                              message,
+                              timeFormatted,
+                              onReply: _setReplyingTo,
+                            )
+                            : Receivedmessage(
+                              message,
+                              timeFormatted,
+                              onReply: _setReplyingTo,
+                            ),
                           ],
                         );
                       },
@@ -208,65 +268,5 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         ),
       ),
     );
-  }
-
-  void _sendMessage() {
-    if (_controller.text.isNotEmpty) {
-      String time = DateTime.now().toIso8601String();
-      Message m = Message(
-        time + sender!.phone!,
-        sender!.phone!,
-        chat.phone,
-        time,
-        _controller.text,
-      );
-
-      if (_replyingTo != null) {
-        m.replied = _replyingTo!.id;
-      }
-      ChatManagement.sendMessage(m);
-
-      if (m.sender != m.receiver) {
-        _messages.value = List.from(_messages.value)..add(m);
-      }
-      _controller.clear();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToBottom(animate: true);
-      });
-    }
-    // DEBUGGING: Print all messages in the list
-    // for (Message m in _messages.value) {
-    //   print('Message ID: ${m.id}');
-    //   print('Sender: ${m.sender}');
-    //   print('Receiver: ${m.receiver}');
-    //   print('Replied To: ${m.replied}');
-    //   print('Time: ${m.time}');
-    //   print('Content: ${m.stringContent}');
-    //   print('Starred: ${m.starred}');
-    //   print('Attachment ID: ${m.attachment_id}');
-    //   print('-------------------'); // Separator for better readability
-    // }
-
-    // remove preview
-    _setReplyingTo(null);
-  }
-
-  void _sendPhoto() {
-    // Implementation for sending photos
-  }
-
-  void _setReplyingTo(Message? message) {
-    setState(() {
-      _replyingTo = message;
-    });
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _scrollController.dispose();
-    _controller.dispose();
-    _messages.dispose();
-    super.dispose();
   }
 }

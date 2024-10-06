@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:Connectify/core/message.dart';
 import 'package:Connectify/utils/chatManagement.dart';
 import 'package:flutter/material.dart';
@@ -74,6 +76,41 @@ class Sentmessage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if(message.attachment != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.6,
+                    maxHeight: MediaQuery.of(context).size.height * 0.3,
+                  ),
+                  child: InkWell(
+                    onTap: () => _showFullImage(context),
+                    child: Hero(
+                      tag: 'image_${message.id}',
+                      child: Image.memory(
+                        base64Decode(message.attachment!),
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Icon(
+                              Icons.broken_image,
+                              size: 50,
+                              color: Colors.grey[600],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              if(message.attachment == null)
               Text(message.stringContent!,
                   style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurface,
@@ -84,6 +121,32 @@ class Sentmessage extends StatelessWidget {
                       color: Theme.of(context).colorScheme.onSurface,
                       fontSize: 12)),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+  void _showFullImage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          backgroundColor: Colors.black,
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            iconTheme: IconThemeData(color: Colors.white),
+          ),
+          body: Center(
+            child: Hero(
+              tag: 'image_${message.id}',
+              child: InteractiveViewer(
+                minScale: 0.5,
+                maxScale: 4.0,
+                child: Image.memory(
+                  base64Decode(message.attachment!),
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
           ),
         ),
       ),

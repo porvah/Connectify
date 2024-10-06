@@ -72,7 +72,7 @@ class Messageprovider {
   List<Map<String, dynamic>> maps = await db.query(
     tableMessage,
     columns: [columnId,columnSender,columnReceiver,columnReplied,columnTime,
-      columnString,columnAttachment,columnStarred],
+      columnString, columnAttachment,columnStarred],
     where: '$columnStarred = ?',
     whereArgs: [1], 
     distinct: true,
