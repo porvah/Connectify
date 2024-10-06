@@ -137,7 +137,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< Updated upstream
     return GestureDetector(
       // Add this to dismiss keyboard when tapping outside
       onTap: () => FocusScope.of(context).unfocus(),
@@ -167,37 +166,16 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                             
                         return message.receiver == chat.phone
                             ? Sentmessage(
-                                message.stringContent!,
+                                message,
                                 timeFormatted,
                                 () {},
                               )
                             : Receivedmessage(
-                                message.stringContent!,
+                                message,
                                 timeFormatted,
-                                () {},
                               );
                       },
                     );
-=======
-    return Scaffold(
-      appBar: CustomAppBar(title: chat.contact!, menuOptions: []),
-      body: Column(
-        children: [
-          Expanded(
-            child: ValueListenableBuilder<List<Message>>(
-              valueListenable: _messages,
-              builder: (context, messages, _) {
-                return ListView.builder(
-                  padding: EdgeInsets.all(16.0),
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    final message = messages[index];
-                    return message.receiver == chat.phone
-                        ? Sentmessage(
-                            message, DateFormat('HH:mm a').format(DateTime.parse(message.time!)), () {})
-                        : Receivedmessage(
-                            message, DateFormat('HH:mm a').format(DateTime.parse(message.time!)));
->>>>>>> Stashed changes
                   },
                 ),
               ),
