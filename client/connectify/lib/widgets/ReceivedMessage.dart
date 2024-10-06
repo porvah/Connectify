@@ -10,8 +10,8 @@ class Receivedmessage extends StatelessWidget {
   String time;
 
   final Function(Message) onReply;
-
-  Receivedmessage(this.message, this.time, {required this.onReply});
+  final VoidCallback onImageLoaded;
+  Receivedmessage(this.message, this.time, {required this.onReply, required this.onImageLoaded});
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +90,14 @@ class Receivedmessage extends StatelessWidget {
                       child: Image.memory(
                         base64Decode(message.attachment!),
                         fit: BoxFit.contain,
+                        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                          if (frame != null) {
+                            onImageLoaded();
+                          }
+                          return child;
+                        },
                         errorBuilder: (context, error, stackTrace) {
+                          onImageLoaded();
                           return Container(
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
