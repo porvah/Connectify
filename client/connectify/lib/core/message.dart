@@ -6,41 +6,39 @@ final String columnReplied = 'replied_id';
 final String columnTime = 'time';
 final String columnString = 'string_content';
 final String columnAttachment = 'attachment_id';
+final String columnStarred = 'starred';
 
-class Message{
+class Message {
   String? id;
   String? sender;
   String? receiver;
   String? replied;
   String? time;
   String? stringContent;
+  int? starred;
   int? attachment_id;
 
+  Message(this.id, this.sender, this.receiver, this.time, this.stringContent);
 
-  Message(this.id, this.sender, this.receiver, this.time,
-   this.stringContent);
-
-
-  Map<String, Object?> toMap(){
+  Map<String, Object?> toMap() {
     Map<String, Object?> map = <String, Object?>{
       columnId: id,
       columnSender: sender,
       columnReceiver: receiver,
       columnTime: time,
       columnString: stringContent,
-      
+      columnStarred: starred,
     };
-    if(replied != null){
+    if (replied != null) {
       map[columnReplied] = replied;
     }
-    if(attachment_id != null){
+    if (attachment_id != null) {
       map[columnAttachment] = attachment_id;
     }
     return map;
   }
 
-  
-  Message.fromMap(Map<String, Object?> map){
+  Message.fromMap(Map<String, Object?> map) {
     id = map[columnId] as String;
     sender = map[columnSender] as String;
     receiver = map[columnReceiver] as String;
@@ -48,5 +46,6 @@ class Message{
     time = map[columnTime] as String;
     stringContent = map[columnString] as String;
     attachment_id = map[columnAttachment] as int?;
+    starred = map[columnStarred] as int?;
   }
 }

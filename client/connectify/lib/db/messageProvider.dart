@@ -10,7 +10,7 @@ class Messageprovider {
   static Future<Message?> getMessage(int id, Database db) async{
     List<Map<String, dynamic>> maps = await db.query(tableMessage, 
     columns:[columnId, columnSender, columnReceiver, columnReplied,
-     columnTime, columnString, columnAttachment],
+     columnTime, columnString, columnAttachment , columnStarred],
     where: '$columnId = ?',
     whereArgs: [id]
     ) as List<Map<String,dynamic>>;
@@ -24,7 +24,7 @@ class Messageprovider {
    String receiver, int offset)async{
     List<Map<String, dynamic>> maps = await db.query(tableMessage, 
     columns:[columnId, columnSender, columnReceiver, columnReplied,
-     columnTime, columnString, columnAttachment],
+     columnTime, columnString, columnAttachment , columnStarred],
     where: '( $columnSender = ? AND $columnReceiver = ? ) OR ( $columnSender = ? AND $columnReceiver = ? )',
     whereArgs: [sender, receiver, receiver, sender],
     orderBy: '$columnTime DESC',
@@ -48,7 +48,7 @@ class Messageprovider {
    String receiver)async{
     List<Map<String, dynamic>> maps = await db.query(tableMessage, 
     columns:[columnId, columnSender, columnReceiver, columnReplied,
-     columnTime, columnString, columnAttachment],
+     columnTime, columnString, columnAttachment , columnStarred],
     where: '( $columnSender = ? AND $columnReceiver = ? ) OR ( $columnSender = ? AND $columnReceiver = ? )',
     whereArgs: [sender, receiver, receiver, sender],
     orderBy: '$columnTime DESC',

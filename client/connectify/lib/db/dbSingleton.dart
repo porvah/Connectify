@@ -55,7 +55,8 @@ class Dbsingleton {
         replied_id TEXT,
         time TEXT NOT NULL,
         string_content TEXT NOT NULL,
-        attachment_id INTEGER
+        attachment_id INTEGER,
+        starred INTEGER DEFAULT 0
       )
     ''');
     await db.execute('''

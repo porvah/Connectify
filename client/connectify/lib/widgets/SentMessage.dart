@@ -1,10 +1,12 @@
+import 'package:Connectify/core/message.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class Sentmessage extends StatelessWidget {
-  Sentmessage(this.message, this.time , this._onTap);
-  String message;
+  Sentmessage(this.message, this.time, this._onTap);
+  // String message;
   String time;
+  Message message;
   VoidCallback _onTap;
 
   @override
@@ -23,7 +25,7 @@ class Sentmessage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(message, style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 18)),  
+              Text(message.stringContent!, style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 18)),  
               SizedBox(height: 5),
               Text(time, style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 12)),
             ],

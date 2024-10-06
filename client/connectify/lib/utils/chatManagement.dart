@@ -22,7 +22,8 @@ class ChatManagement {
   }
 
   static Future<Chat> createChat(String name, String phone) async {
-    Chat newChat = Chat(name, phone, "", 0, "");
+    String time = DateTime.now().toIso8601String();
+    Chat newChat = Chat(name, phone, "", 0, time);
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     Chat? createdChat = await Chatprovider.getChatByPhone(phone, db!);
@@ -120,5 +121,12 @@ class ChatManagement {
   static Future<Map> get_Profiles(List<String> numbers) async {
     ChatsAPI chatsAPI = ChatsAPI();
     return chatsAPI.getProfiles(numbers);
+  }
+
+  static Future<void> update_starred(Message message) async {
+    message.starred = message.starred == 0 || message.starred == null? 1 : 0;
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    Messageprovider.update(message, db!);
   }
 }
