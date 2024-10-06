@@ -75,6 +75,7 @@ class Messageprovider {
       columnString,columnAttachment,columnStarred],
     where: '$columnStarred = ?',
     whereArgs: [1], 
+    distinct: true,
   ) as List<Map<String, dynamic>>;
 
   if (maps.isNotEmpty) {
