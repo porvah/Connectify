@@ -1,20 +1,62 @@
 import 'package:Connectify/core/message.dart';
+import 'package:Connectify/utils/chatManagement.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class Sentmessage extends StatelessWidget {
-  Sentmessage(this.message, this.time, this._onTap);
+  Sentmessage(this.message, this.time);
   // String message;
   String time;
   Message message;
-  VoidCallback _onTap;
 
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerRight,
       child: GestureDetector(
-        onTap: _onTap,
+        onTap: (){
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return Container(
+                padding: EdgeInsets.all(10.0),
+                height: 100,
+                color: Theme.of(context).colorScheme.surface,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(Icons.reply),
+                      label: Text(
+                        'Reply',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface),
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        ChatManagement.update_starred(message);
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.star,
+                        color: message.starred == 1
+                            ? Colors.amber[400]
+                            : Theme.of(context).colorScheme.primary,
+                      ),
+                      label: Text(message.starred == 0 || message.starred == null? 'Star' : 'UnStar',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface)),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
           margin: EdgeInsets.symmetric(vertical: 5.0),

@@ -168,7 +168,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                             ? Sentmessage(
                                 message,
                                 timeFormatted,
-                                () {},
                               )
                             : Receivedmessage(
                                 message,

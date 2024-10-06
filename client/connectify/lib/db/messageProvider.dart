@@ -67,4 +67,20 @@ class Messageprovider {
   static delete(int id, Database db) async{
     return await db.delete(tableMessage, where: '$columnId = ?', whereArgs: [id]);
   }
+
+  static Future<List<Message>> getStarredMessages(Database db) async {
+  List<Map<String, dynamic>> maps = await db.query(
+    tableMessage,
+    columns: [columnId,columnSender,columnReceiver,columnReplied,columnTime,
+      columnString,columnAttachment,columnStarred],
+    where: '$columnStarred = ?',
+    whereArgs: [1], 
+  ) as List<Map<String, dynamic>>;
+
+  if (maps.isNotEmpty) {
+    return maps.map((message) => Message.fromMap(message)).toList();
+  }
+  return [];
+  }
+
 }

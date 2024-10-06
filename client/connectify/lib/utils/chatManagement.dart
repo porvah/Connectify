@@ -39,7 +39,8 @@ class ChatManagement {
       String sender, String receiver, int offset) async {
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
-    List<Message> queried_messages =  await Messageprovider.getMessagesOfChat(db!, sender, receiver, offset);
+    List<Message> queried_messages =
+        await Messageprovider.getMessagesOfChat(db!, sender, receiver, offset);
     return List.from(queried_messages.reversed);
   }
 
@@ -124,9 +125,22 @@ class ChatManagement {
   }
 
   static Future<void> update_starred(Message message) async {
-    message.starred = message.starred == 0 || message.starred == null? 1 : 0;
+    message.starred = message.starred == 0 || message.starred == null ? 1 : 0;
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     Messageprovider.update(message, db!);
+  }
+
+  static Future<List<Message>> getStarred() async {
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    return Messageprovider.getStarredMessages(db!);
+  }
+
+  static Future<String?> getName(String phone)  async{
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    Chat? chat = await Chatprovider.getChatByPhone(phone, db!);
+    return chat?.contact;
   }
 }

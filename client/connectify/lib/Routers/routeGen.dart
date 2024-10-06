@@ -7,6 +7,7 @@ import 'package:Connectify/screens/login_page.dart';
 import 'package:Connectify/screens/signup_page.dart';
 import 'package:Connectify/screens/splash_screen.dart';
 import 'package:Connectify/screens/settings_page.dart';
+import 'package:Connectify/screens/starred_page.dart';
 import 'package:flutter/material.dart';
 
 class RouteGen{
@@ -33,6 +34,8 @@ class RouteGen{
         return _errorRoute('${settings.name}');
       case '/Contacts':
         return MaterialPageRoute(builder: (_)=> ContactsScreen());
+      case '/Starred':
+        return MaterialPageRoute(builder: (_)=> StarredMessagesScreen());
       case '/Chat':
         if (args is Chat){
           return MaterialPageRoute(builder: (_)=> ChatScreen(chat: args));

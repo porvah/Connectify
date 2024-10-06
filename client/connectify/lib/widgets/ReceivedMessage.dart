@@ -15,7 +15,6 @@ class Receivedmessage extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: GestureDetector(
         onTap: () {
-          // Show the bottom sheet when tapped
           showModalBottomSheet(
             context: context,
             builder: (BuildContext context) {

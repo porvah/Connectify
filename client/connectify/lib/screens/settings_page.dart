@@ -71,13 +71,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 SizedBox(height: 15),
-                 Text( _userPhone == null ? "" : _userPhone!,
+                Text(
+                  _userPhone == null ? "" : _userPhone!,
                   style: TextStyle(
                     fontSize: 25,
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
-                 ),
-                 SizedBox(height: 15),
+                ),
+                SizedBox(height: 15),
                 // Dark Mode Switch
                 ListtileWidget(
                   themeManager.isLight() ? 'Dark mode' : 'Light mode',
@@ -90,13 +91,13 @@ class _SettingsPageState extends State<SettingsPage> {
 
                 // Starred Messages
                 ListtileWidget('Starred Messages', () {
-                  // Handle the action for Starred Messages
+                  Navigator.pushNamed(context, "/Starred");
                 }, Icons.star),
                 Divider(color: Theme.of(context).colorScheme.surface),
 
                 // Favorite Contacts
                 ListtileWidget('Favorite Contacts', () {
-                  // Handle the action for Favorite Contacts
+                  
                 }, Icons.favorite),
                 Divider(color: Theme.of(context).colorScheme.surface),
 
