@@ -4,10 +4,12 @@ import 'package:Connectify/core/message.dart';
 
 // ignore: must_be_immutable
 class Receivedmessage extends StatelessWidget {
-  Receivedmessage(this.message, this.time);
-
   Message message;
   String time;
+
+  final Function(Message) onReply;
+
+  Receivedmessage(this.message, this.time, {required this.onReply});
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,7 @@ class Receivedmessage extends StatelessWidget {
                   children: [
                     ElevatedButton.icon(
                       onPressed: () {
+                        onReply(message);
                         Navigator.pop(context);
                       },
                       icon: Icon(Icons.reply),
@@ -47,7 +50,10 @@ class Receivedmessage extends StatelessWidget {
                             ? Colors.amber[400]
                             : Theme.of(context).colorScheme.primary,
                       ),
-                      label: Text(message.starred == 0 || message.starred == null? 'Star' : 'UnStar',
+                      label: Text(
+                          message.starred == 0 || message.starred == null
+                              ? 'Star'
+                              : 'UnStar',
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface)),
                     ),

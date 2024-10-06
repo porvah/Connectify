@@ -4,17 +4,20 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class Sentmessage extends StatelessWidget {
-  Sentmessage(this.message, this.time);
   // String message;
   String time;
   Message message;
+
+  final Function(Message) onReply;
+
+  Sentmessage(this.message, this.time, {required this.onReply});
 
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerRight,
       child: GestureDetector(
-        onTap: (){
+        onTap: () {
           showModalBottomSheet(
             context: context,
             builder: (BuildContext context) {
@@ -27,6 +30,7 @@ class Sentmessage extends StatelessWidget {
                   children: [
                     ElevatedButton.icon(
                       onPressed: () {
+                        onReply(message);
                         Navigator.pop(context);
                       },
                       icon: Icon(Icons.reply),
@@ -47,7 +51,10 @@ class Sentmessage extends StatelessWidget {
                             ? Colors.amber[400]
                             : Theme.of(context).colorScheme.primary,
                       ),
-                      label: Text(message.starred == 0 || message.starred == null? 'Star' : 'UnStar',
+                      label: Text(
+                          message.starred == 0 || message.starred == null
+                              ? 'Star'
+                              : 'UnStar',
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface)),
                     ),
@@ -67,9 +74,15 @@ class Sentmessage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(message.stringContent!, style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 18)),  
+              Text(message.stringContent!,
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: 18)),
               SizedBox(height: 5),
-              Text(time, style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 12)),
+              Text(time,
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: 12)),
             ],
           ),
         ),
