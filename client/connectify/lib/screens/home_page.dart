@@ -46,30 +46,36 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Expanded(
-              child: ListView.builder(
-                  itemCount: _chats.value.length,
-                  itemBuilder: (context, index) {
-                    final chat = _chats.value[index];
-                    String? imageUrl = _phoneImageMap[chat.phone];
-                    return ChatPreview(
-                        contactId: index,
-                        name:
-                            (chat.contact == "") ? chat.phone! : chat.contact!,
-                        lastMessage: chat.last!,
-                        phoneNum: chat.phone!,
-                        time: chat.time!,
-                        onNavigate: () {
-                          _loadChats();
-                        },
-                        imageUrl: imageUrl);
-                  })),
+            child: ListView.builder(
+              itemCount: _chats.value.length,
+              itemBuilder: (context, index) {
+                final chat = _chats.value[index];
+                String? imageUrl = _phoneImageMap[chat.phone];
+                return ChatPreview(
+                  contactId: index,
+                  name:
+                    (chat.contact == "") ? chat.phone! : chat.contact!,
+                  lastMessage: chat.last!,
+                  phoneNum: chat.phone!,
+                  time: chat.time!,
+                  onNavigate: () {
+                    _loadChats();
+                  },
+                  imageUrl: imageUrl
+                );
+              }
+            )
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: "Start a Chat",
         child: Icon(Icons.messenger_outlined),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        onPressed: () => Navigator.of(context).pushNamed("/Contacts"),
+        onPressed: ()async {
+            await Navigator.of(context).pushNamed("/Contacts");
+            _loadChats();
+          },
       ),
     );
   }
