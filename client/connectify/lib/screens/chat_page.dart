@@ -121,6 +121,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     if (queried_m.length < 20) _hasMore = false;
     _messages.value = queried_m;
     ChatManagement.messages = _messages;
+    ChatManagement.curr_contact = chat.phone;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToBottom(animate: false);
@@ -216,6 +217,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    ChatManagement.messages = null;
+    ChatManagement.curr_contact = null;
     _scrollController.dispose();
     _controller.dispose();
     _messages.dispose();
