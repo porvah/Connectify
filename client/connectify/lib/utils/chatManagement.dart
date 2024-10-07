@@ -25,7 +25,6 @@ class ChatManagement {
     return await UserProvider.getLoggedUser(db!);
   }
 
-
   static Future<String?> encodeFile(File file) async {
     try {
       List<int> bytes = await file.readAsBytes();
@@ -81,10 +80,9 @@ class ChatManagement {
     if (p.containsKey('replied') && p['replied'] != 'none') {
       m.replied = p['replied'];
     }
-    if (p.containsKey('attachment'))  {
+    if (p.containsKey('attachment')) {
       m.attachment = p['attachment'];
     }
-
 
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
@@ -116,9 +114,17 @@ class ChatManagement {
     if (m.replied != null) {
       dict['replied'] = m.replied;
     }
+    if (m.sender == curr_contact) {
+      m.isSeenLevel = 2;
+    }
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     Messageprovider.insert(m, db!);
+
+    if (m.sender == m.receiver) {
+      messages!.value = List.from(messages!.value)..add(m);
+      return;
+    }
     String content = jsonEncode(dict);
     WebSocketService().sendMessage(content);
     await updateChat(m.receiver!, m, db);
@@ -196,7 +202,6 @@ class ChatManagement {
     Database? db = await dbsingleton.db;
     return Chatprovider.getFavouriteContacts(db!);
   }
-
 
   static Future<void> acknowledgeMessageArrival(Message message) async {
     Map<String, dynamic> acknowledgment = {
