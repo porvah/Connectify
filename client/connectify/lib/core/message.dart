@@ -20,7 +20,8 @@ class Message {
   String? attachment;
   int? isSeenLevel;
 
-  Message(this.id, this.sender, this.receiver, this.time, this.stringContent);
+  Message(this.id, this.sender, this.receiver, this.time, this.stringContent,
+      this.isSeenLevel);
 
   Map<String, Object?> toMap() {
     Map<String, Object?> map = <String, Object?>{
@@ -50,5 +51,6 @@ class Message {
     stringContent = map[columnString] as String;
     attachment = map[columnAttachment] as String?;
     starred = map[columnStarred] as int?;
+    isSeenLevel = map[columnIsSeenLevel] as int?;
   }
 }
