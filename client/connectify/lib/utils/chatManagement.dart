@@ -21,12 +21,13 @@ class ChatManagement {
     Database? db = await dbsingleton.db;
     return await UserProvider.getLoggedUser(db!);
   }
+
   static Future<String?> encodeFile(File file) async {
-    try{
+    try {
       List<int> bytes = await file.readAsBytes();
       String base64 = base64Encode(bytes);
       return base64;
-    }catch(e){
+    } catch (e) {
       return null;
     }
   }
@@ -76,10 +77,10 @@ class ChatManagement {
     if (p.containsKey('replied') && p['replied'] != 'none') {
       m.replied = p['replied'];
     }
-    if (p.containsKey('attachment')){
+    if (p.containsKey('attachment')) {
       m.attachment = p['attachment'];
     }
-    
+
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     Messageprovider.insert(m, db!);
@@ -87,6 +88,9 @@ class ChatManagement {
       messages!.value = List.from(messages!.value)..add(m);
     }
     await updateChat(m.sender!, m, db);
+    // Send acknowledgment of arrival after storing the message
+    await ChatManagement.acknowledgeMessageArrival(m);
+
     print(m);
   }
 
@@ -162,5 +166,93 @@ class ChatManagement {
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     return Messageprovider.getMessagesContaining(searchString, db!);
+  }
+
+  static Future<void> acknowledgeMessageArrival(Message message) async {
+    Map<String, dynamic> acknowledgment = {
+      'signal': 2, // 2 is the signal for arrival acknowledgment
+      'message_id': message.id,
+      'sender': message.receiver, // The current user who received the message
+      'receiver': message.sender,
+      'time': DateTime.now().toIso8601String(),
+    };
+
+    String content = jsonEncode(acknowledgment);
+    WebSocketService().sendMessage(content);
+    print('Sent arrival acknowledgment for message: ${message.id}');
+  }
+
+  static Future<void> acknowledgeMessageSeen(Message message) async {
+    Map<String, dynamic> acknowledgment = {
+      'signal': 3, // 3 is the signal for seen acknowledgment
+      'message_id': message.id,
+      'sender': message.receiver,
+      'receiver': message.sender,
+      'time': DateTime.now().toIso8601String(),
+    };
+
+    String content = jsonEncode(acknowledgment);
+    WebSocketService().sendMessage(content);
+    print('Sent seen acknowledgment for message: ${message.id}');
+  }
+
+  static Future<void> receiveMessageArrival(Map<String, dynamic> data) async {
+    String messageId = data['message_id'];
+
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+
+    Message? message =
+        await Messageprovider.getMessage(int.parse(messageId), db!);
+
+    if (message != null) {
+      message.isSeenLevel = 1; // Mark as arrived
+      await Messageprovider.update(message, db);
+
+      if (messages != null) {
+        int index = messages!.value.indexWhere((m) => m.id == messageId);
+        // Update UI if inside the chat
+        if (index != -1) {
+          messages!.value[index] = message;
+        }
+      }
+
+      print('Updated arrival status for message: $messageId');
+    } else {
+      print('Message not found: $messageId');
+    }
+  }
+
+  static Future<void> receiveMessageSeen(Map<String, dynamic> data) async {
+    String messageId = data['message_id'];
+
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+
+    Message? message =
+        await Messageprovider.getMessage(int.parse(messageId), db!);
+
+    if (message != null) {
+      message.isSeenLevel = 2; // Mark as seen
+      await Messageprovider.update(message, db);
+
+      if (messages != null) {
+        int index = messages!.value.indexWhere((m) => m.id == messageId);
+        // Update UI if inside the chat
+        if (index != -1) {
+          messages!.value[index] = message;
+        }
+      }
+
+      print('Updated seen status for message: $messageId');
+    } else {
+      print('Message not found: $messageId');
+    }
+  }
+
+  static Future<void> acknowledgeIfNeeded(Message message) async {
+    if (message.isSeenLevel != 2) {
+      await acknowledgeMessageSeen(message);
+    }
   }
 }
