@@ -86,10 +86,10 @@ for Frontend
 
 3 - install packages
 
-4 - Create a .env file to store the IP host address.
-
 ######
       flutter pub get
+
+4 - Create a .env file to store the IP host address.
       
 5 - start debugging
 
