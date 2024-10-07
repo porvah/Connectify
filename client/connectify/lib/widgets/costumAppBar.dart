@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final List<MenuOption> menuOptions; // Store menu options
+  final List<MenuOption> menuOptions; 
+  // Store menu options
 
   const CustomAppBar({
     Key? key,
@@ -16,27 +17,33 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final theme = Theme.of(context);
 
     return AppBar(
-      backgroundColor: theme.colorScheme.primary,
+      backgroundColor: theme.colorScheme.secondary,
       title: Text(title),
       actions: [
         if (!menuOptions.isEmpty)
         PopupMenuButton<MenuOption>(
           icon: Icon(
             Icons.more_vert,
-            color: theme.colorScheme.onPrimary,
+            color: theme.colorScheme.onSecondary,
           ),
           onSelected: (MenuOption selectedOption) {
             // Navigate to the route of the selected option
             Navigator.pushNamed(context, selectedOption.route);
           },
-          itemBuilder: (BuildContext context) {
-            return menuOptions.map((MenuOption option) {
-              return PopupMenuItem<MenuOption>(
-                value: option,
-                child: Text(option.title), // Display the title of the option
-              );
-            }).toList();
-          },
+            itemBuilder: (BuildContext context) {
+              return menuOptions.map((MenuOption option) {
+                return PopupMenuItem<MenuOption>(
+                  value: option,
+                  child: Row(
+                    children: [
+                      Icon(option.icon, size: 20), 
+                      SizedBox(width: 8), 
+                      Text(option.title), 
+                    ],
+                  ),
+                );
+              }).toList();
+            },
         ),
       ],
     );

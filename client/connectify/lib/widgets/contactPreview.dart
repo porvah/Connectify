@@ -1,3 +1,5 @@
+import 'package:Connectify/core/chat.dart';
+import 'package:Connectify/utils/chatManagement.dart';
 import 'package:flutter/material.dart';
 
 class ContactPreview extends StatelessWidget {
@@ -9,8 +11,11 @@ class ContactPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return InkWell(
-      onTap: () {
+      onTap: () async{
         print('clicked');
+        Chat chat = await ChatManagement.createChat(name, phone);
+
+        Navigator.of(context).pushReplacementNamed('/Chat', arguments: chat);
       },
       child: Column(
         children: [

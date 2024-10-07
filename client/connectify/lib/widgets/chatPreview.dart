@@ -1,24 +1,37 @@
+import 'package:Connectify/core/chat.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ChatPreview extends StatelessWidget {
   final int contactId;
   final String name;
   final String lastMessage;
-  // photo, Activeness later
+  final String phoneNum;
+  final String time;
+  final VoidCallback onNavigate;
+  final String? imageUrl ;
 
   const ChatPreview(
       {Key? key,
       required this.contactId,
       required this.name,
-      required this.lastMessage})
+      required this.lastMessage,
+      required this.phoneNum,
+      required this.time,
+      required this.onNavigate,
+      required this.imageUrl})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // Access the current theme
+    final theme = Theme.of(context);
 
     return InkWell(
-      onTap: () {
+      onTap: () async{
+        await Navigator.of(context).pushNamed('/Chat',
+            arguments: Chat(name, phoneNum, lastMessage, 1, time));
+
+        onNavigate();
         print('clicked');
       },
       child: Column(
@@ -28,39 +41,53 @@ class ChatPreview extends StatelessWidget {
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
             child: Row(
               children: [
-                // Placeholder for the photo using a CircleAvatar with the first letter of the name
                 CircleAvatar(
                   radius: 30,
                   backgroundColor: theme.colorScheme.primary,
-                  child: Text(
-                    name[0].toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 24, // Larger font for the initial
-                      color: theme.colorScheme.onPrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  backgroundImage: imageUrl != null ? NetworkImage(imageUrl!) : null,
+                  child: imageUrl == null
+                      ? Text(
+                          name[0].toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: theme.colorScheme.onPrimary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : null, 
                 ),
-                const SizedBox(width: 16), // Space between avatar and text
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        name,
-                        style: TextStyle(
-                          fontSize: 20, // Increased font size for name
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.onSurface, // Use theme color
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            name,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.onSurface,
+                            ),
+                          ),
+                          Text(
+                            DateFormat('HH:mm a').format(DateTime.parse(time)),
+                            style: TextStyle(
+                              fontSize: 16,
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.6),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 4),
                       Text(
                         lastMessage,
                         style: TextStyle(
-                          fontSize: 18, // Increased font size for last message
-                          color: theme.colorScheme.onSurface
-                              .withOpacity(0.6), // Use theme color with opacity
+                          fontSize: 18,
+                          color: theme.colorScheme.onSurface.withOpacity(0.6),
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -72,11 +99,10 @@ class ChatPreview extends StatelessWidget {
             ),
           ),
           Divider(
-            thickness: 1, // Make the divider a bit thicker
-            color: theme.colorScheme.primary
-                .withOpacity(0.5), // Use primary color for divider
-            indent: 0, // Start divider at the beginning of the row
-            endIndent: 0, // Extend divider to the end of the row
+            thickness: 1,
+            color: theme.colorScheme.primary.withOpacity(0.5),
+            indent: 0,
+            endIndent: 0,
           ),
         ],
       ),

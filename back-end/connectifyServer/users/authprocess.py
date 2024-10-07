@@ -54,6 +54,7 @@ def ValidateCode(saved_time):
 
 
 def LogUser(email,phone):
+    from chat_handler.consumers import ChatConsumer
     token = generateSessionCode()
     data = {
         'email' : email,
@@ -63,6 +64,8 @@ def LogUser(email,phone):
     loggeduser = LoggedUsersModel.objects.filter(email = data.get('email'))
     serializer = LoggedUsersSerializer(data = data)
     if loggeduser.exists():
+        connectedUser = LoggedUsersModel.objects.get(email = data.get('email'))
+        ChatConsumer.send_signal(connectedUser.phone)
         loggeduser.update(token = token)
     else:
         if serializer.is_valid():

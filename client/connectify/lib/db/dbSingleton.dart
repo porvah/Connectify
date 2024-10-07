@@ -47,6 +47,29 @@ class Dbsingleton {
         token TEXT NOT NULL
       )
     ''');
+    await db.execute('''
+      CREATE TABLE message (
+        id TEXT NOT NULL,
+        sender TEXT NOT NULL,
+        receiver TEXT NOT NULL,
+        replied_id TEXT,
+        time TEXT NOT NULL,
+        string_content TEXT NOT NULL,
+        attachment TEXT,
+        starred INTEGER DEFAULT 0,
+        is_seen_level INTEGER DEFAULT 0
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE chat (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        contact TEXT NOT NULL,
+        phone TEXT NOT NULL UNIQUE,
+        last TEXT,
+        alert INTEGER NOT NULL,
+        time TEXT
+      )
+  ''');
   }
 
   // Close the database

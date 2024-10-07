@@ -44,6 +44,7 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
     'channels',
     'rest_framework',
+    'chat_handler.apps.ChatHandlerConfig',
     'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,6 +54,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders'
 ]
+
+ASGI_APPLICATION = 'connectifyServer.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer', 
+    },
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -143,3 +153,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import os
+from django.conf import settings
+from django.conf.urls.static import static
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
