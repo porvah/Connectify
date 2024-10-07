@@ -1,4 +1,3 @@
-// home_page.dart
 import 'package:Connectify/core/chat.dart';
 import 'package:Connectify/db/chatProvider.dart';
 import 'package:Connectify/db/dbSingleton.dart';
@@ -12,15 +11,15 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class FavouriteScreen extends StatefulWidget {
+  const FavouriteScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<FavouriteScreen> createState() => _FavouriteScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
-  late ValueNotifier<List<Chat>> _chats = ValueNotifier([]);
+class _FavouriteScreenState extends State<FavouriteScreen> {
+  late List<Chat> _chats = [];
   late Map _phoneImageMap;
   List<String> phones = [];
   late PermissionStatus _permissionStatus;
@@ -33,28 +32,28 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _loadChats();
-    ChatManagement.refreshHome = _loadChats;
   }
+
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
-    ChatManagement.refreshHome = (){};
   }
+
   @override
   Widget build(BuildContext context) {
     WebSocketService().connect();
     return Scaffold(
       appBar: CustomAppBar(
-        title: "Connectify",
+        title: "Favourite Chats",
         menuOptions: menuOptions,
       ),
       body: Column(
         children: [
           Expanded(
               child: ListView.builder(
-                  itemCount: _chats.value.length,
+                  itemCount: _chats.length,
                   itemBuilder: (context, index) {
-                    final chat = _chats.value[index];
+                    final chat = _chats[index];
                     String? imageUrl = _phoneImageMap[chat.phone];
                     return ChatPreview(
                       contactId: index,
@@ -64,6 +63,7 @@ class _HomePageState extends State<HomePage> {
                       time: chat.time!,
                       onNavigate: () {
                         _loadChats();
+                        ChatManagement.refreshHome();
                       },
                       imageUrl: imageUrl,
                       chat: chat,
@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
     _permissionStatus = await Permission.contacts.request();
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
-    List<Chat> chats = await Chatprovider.getAllChats(db!);
+    List<Chat> chats = await ChatManagement.getFavourite();
     for (Chat chat in chats) {
       phones.add(chat.phone!);
     }
@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
               .replaceAll("-", "");
           if (chat.phone == contact_num) {
             chat.contact = contact.displayName;
-            Chatprovider.update(chat, db);
+            Chatprovider.update(chat, db!);
           }
         }
       }
@@ -116,8 +116,7 @@ class _HomePageState extends State<HomePage> {
         String bTime = b.time ?? "";
         return bTime.compareTo(aTime);
       });
-      _chats.value = chats;
-      ChatManagement.chats = _chats;
+      _chats = chats;
       _phoneImageMap = images;
     });
   }

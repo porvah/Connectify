@@ -67,7 +67,8 @@ class Dbsingleton {
         phone TEXT NOT NULL UNIQUE,
         last TEXT,
         alert INTEGER NOT NULL,
-        time TEXT
+        time TEXT,
+        favourite INTEGER DEFAULT 0
       )
   ''');
   }

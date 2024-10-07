@@ -5,6 +5,7 @@ final String columnPhone = 'phone';
 final String columnLastMessage = 'last';
 final String columnAlert = 'alert';
 final String columnTime = 'time';
+final String columnFavourite = 'favourite';
 
 class Chat {
   int? id;
@@ -13,6 +14,7 @@ class Chat {
   String? last;
   String? time;
   int? alert;
+  int? favourite;
   Chat(this.contact, this.phone, this.last, this.alert, this.time);
 
   Map<String, Object?> toMap() {
@@ -23,6 +25,7 @@ class Chat {
       columnLastMessage: last,
       columnAlert: alert,
       columnTime: time,
+      columnFavourite: favourite,
     };
     return map;
   }
@@ -34,5 +37,6 @@ class Chat {
     last = map[columnLastMessage] as String;
     alert = map[columnAlert] as int;
     time = map[columnTime] as String;
+    favourite = map[columnFavourite] as int?;
   }
 }

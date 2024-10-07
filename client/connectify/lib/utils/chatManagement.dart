@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:Connectify/core/chat.dart';
 import 'package:Connectify/core/message.dart';
+import 'package:Connectify/core/user.dart';
 import 'package:Connectify/db/chatProvider.dart';
 import 'package:Connectify/db/dbSingleton.dart';
 import 'package:Connectify/db/messageProvider.dart';
@@ -23,6 +24,7 @@ class ChatManagement {
     Database? db = await dbsingleton.db;
     return await UserProvider.getLoggedUser(db!);
   }
+
 
   static Future<String?> encodeFile(File file) async {
     try {
@@ -79,9 +81,10 @@ class ChatManagement {
     if (p.containsKey('replied') && p['replied'] != 'none') {
       m.replied = p['replied'];
     }
-    if (p.containsKey('attachment')) {
+    if (p.containsKey('attachment'))  {
       m.attachment = p['attachment'];
     }
+
 
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
@@ -172,6 +175,28 @@ class ChatManagement {
     Database? db = await dbsingleton.db;
     return Messageprovider.getMessagesContaining(searchString, db!);
   }
+
+  static Future<void> deleteChat(Chat chat) async {
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    User? user = await UserProvider.getLoggedUser(db!);
+    Chatprovider.delete(chat.id!, db);
+    Messageprovider.DeleteMessages(db, user!.phone!, chat.phone!);
+  }
+
+  static Future<void> update_favourite(Chat chat) async {
+    chat.favourite = chat.favourite == 1 ? 0 : 1;
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    Chatprovider.update(chat, db!);
+  }
+
+  static Future<List<Chat>> getFavourite() async {
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    return Chatprovider.getFavouriteContacts(db!);
+  }
+
 
   static Future<void> acknowledgeMessageArrival(Message message) async {
     Map<String, dynamic> acknowledgment = {

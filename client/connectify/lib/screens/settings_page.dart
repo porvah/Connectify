@@ -1,3 +1,4 @@
+import 'package:Connectify/utils/chatManagement.dart';
 import 'package:Connectify/widgets/costumAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +39,7 @@ class _SettingsPageState extends State<SettingsPage> {
     if (pickedFile != null) {
       await Settings.upload_photo(File(pickedFile.path));
       await _loaduserData();
+      ChatManagement.refreshHome();
     }
   }
 
@@ -97,7 +99,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                 // Favorite Contacts
                 ListtileWidget('Favorite Contacts', () {
-                  
+                  Navigator.pushNamed(context, "/Favourite");
                 }, Icons.favorite),
                 Divider(color: Theme.of(context).colorScheme.surface),
 

@@ -8,7 +8,7 @@ class Chatprovider {
   }
   static Future<List<Chat>> getAllChats(Database db) async{
     List<Map<String, dynamic>> maps = await db.query(tableChat,
-    columns: [columnId, columnContact, columnPhone, columnLastMessage, columnAlert,columnTime],
+    columns: [columnId, columnContact, columnPhone, columnLastMessage, columnAlert,columnTime,columnFavourite],
     ) as List<Map<String, dynamic>>;
     List<Chat> res = [];
     for (Map<String, dynamic> map in maps){
@@ -18,7 +18,7 @@ class Chatprovider {
   }
   static Future<Chat?> getChat(int id, Database db) async{
     List<Map<String, dynamic>> maps = await db.query(tableChat, 
-    columns:[columnId, columnContact, columnPhone, columnLastMessage, columnAlert,columnTime],
+    columns:[columnId, columnContact, columnPhone, columnLastMessage, columnAlert,columnTime,columnFavourite],
     where: '$columnId = ?',
     whereArgs: [id]
     ) as List<Map<String,dynamic>>;
@@ -29,7 +29,7 @@ class Chatprovider {
   } 
   static Future<Chat?> getChatByPhone(String phone, Database db) async{
     List<Map<String, dynamic>> maps = await db.query(tableChat, 
-    columns:[columnId, columnContact, columnPhone, columnLastMessage, columnAlert,columnTime],
+    columns:[columnId, columnContact, columnPhone, columnLastMessage, columnAlert,columnTime,columnFavourite],
     where: '$columnPhone = ?',
     whereArgs: [phone]
     ) as List<Map<String,dynamic>>;
@@ -50,4 +50,20 @@ class Chatprovider {
   static delete(int id, Database db) async{
     return await db.delete(tableChat, where: '$columnId = ?', whereArgs: [id]);
   }
+
+  static Future<List<Chat>> getFavouriteContacts(Database db) async {
+  List<Map<String, dynamic>> maps = await db.query(
+    tableChat,
+    columns:[columnId, columnContact, columnPhone, columnLastMessage, columnAlert,columnTime,columnFavourite],
+    where: '$columnFavourite = ?',
+    whereArgs: [1], 
+    distinct: true,
+  ) as List<Map<String, dynamic>>;
+
+  if (maps.isNotEmpty) {
+    return maps.map((chat) => Chat.fromMap(chat)).toList();
+  }
+  return [];
+  }
+
 }

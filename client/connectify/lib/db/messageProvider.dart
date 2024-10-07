@@ -6,7 +6,7 @@ class Messageprovider {
     await db.insert(tableMessage, message.toMap());
   }
 
-  static Future<Message?> getMessage(int id, Database db) async {
+  static Future<Message?> getMessage(String id, Database db) async {
     List<Map<String, dynamic>> maps = await db.query(tableMessage,
         columns: [
           columnId,
@@ -144,5 +144,13 @@ class Messageprovider {
     return List.generate(maps.length, (i) {
       return Message.fromMap(maps[i]);
     });
+  }
+
+    static Future<void> DeleteMessages(
+      Database db, String sender, String receiver) async {
+    await db.delete(tableMessage,
+        where:
+            '( $columnSender = ? AND $columnReceiver = ? ) OR ( $columnSender = ? AND $columnReceiver = ? )',
+        whereArgs: [sender, receiver, receiver, sender]);
   }
 }
