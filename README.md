@@ -1,5 +1,5 @@
 # Connectify(real_time chat App)
-Connectify is a real-time chat app offering one-on-one messaging and a range of features, all within a user-friendly interface for a seamless communication experience.
+Connectify is a real-time chat app offering one-to-one messaging and a range of features, all within a user-friendly interface for a seamless communication experience.
 
 ![icon](https://github.com/user-attachments/assets/869c74aa-d551-43b4-a98e-d1d51ba1450c)
 
@@ -14,7 +14,7 @@ Connectify is a real-time chat app offering one-on-one messaging and a range of 
 
 1 - Secure **Login** and **Signup** Authentication, featuring email **verification** by sending a code to the user's email account. After successful login, a session code or token is provided to enhance security throughout the process.
 
-2 - **One-on-one messaging** supports image sharing and real-time communication.
+2 - **One-to-one messaging** supports image sharing and real-time communication.
 
 3 - **Messages queued on the server** if the receiver is offline. The server delivers these queued messages once the receiver reconnects.
 
@@ -36,7 +36,7 @@ Connectify is a real-time chat app offering one-on-one messaging and a range of 
 
 12 - **Delete chats** to optimize storage efficiency by removing unimportant conversations.
 
-13 - **Message seen indicators** enhance communication by providing users with visibility on whether their messages have been read.
+13 - **Message delivered and seen indicators** enhance communication by providing users with visibility on whether their messages have been read.
 
 14 - **Delete Account** option allows users to remove their account and all associated data.
 
