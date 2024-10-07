@@ -50,4 +50,6 @@ class Chatprovider {
   static delete(int id, Database db) async{
     return await db.delete(tableChat, where: '$columnId = ?', whereArgs: [id]);
   }
+
+  
 }

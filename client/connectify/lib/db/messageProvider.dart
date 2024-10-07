@@ -98,4 +98,12 @@ class Messageprovider {
       return Message.fromMap(maps[i]);
     });
   }
+
+    static Future<void> DeleteMessages(
+      Database db, String sender, String receiver) async {
+    await db.delete(tableMessage,
+        where:
+            '( $columnSender = ? AND $columnReceiver = ? ) OR ( $columnSender = ? AND $columnReceiver = ? )',
+        whereArgs: [sender, receiver, receiver, sender]);
+  }
 }

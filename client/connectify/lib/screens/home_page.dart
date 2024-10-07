@@ -25,8 +25,8 @@ class _HomePageState extends State<HomePage> {
   List<String> phones = [];
   late PermissionStatus _permissionStatus;
   final List<MenuOption> menuOptions = [
-    MenuOption(title: 'Settings', route: '/Settings' , icon: Icons.settings),
-    MenuOption(title: 'Search', route: '/Search',icon: Icons.search),
+    MenuOption(title: 'Settings', route: '/Settings', icon: Icons.settings),
+    MenuOption(title: 'Search', route: '/Search', icon: Icons.search),
   ];
   @override
   void initState() {
@@ -46,36 +46,37 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: _chats.value.length,
-              itemBuilder: (context, index) {
-                final chat = _chats.value[index];
-                String? imageUrl = _phoneImageMap[chat.phone];
-                return ChatPreview(
-                  contactId: index,
-                  name:
-                    (chat.contact == "") ? chat.phone! : chat.contact!,
-                  lastMessage: chat.last!,
-                  phoneNum: chat.phone!,
-                  time: chat.time!,
-                  onNavigate: () {
-                    _loadChats();
-                  },
-                  imageUrl: imageUrl
-                );
-              }
-            )
-          ),
+              child: ListView.builder(
+                  itemCount: _chats.value.length,
+                  itemBuilder: (context, index) {
+                    final chat = _chats.value[index];
+                    String? imageUrl = _phoneImageMap[chat.phone];
+                    return ChatPreview(
+                      contactId: index,
+                      name: (chat.contact == "") ? chat.phone! : chat.contact!,
+                      lastMessage: chat.last!,
+                      phoneNum: chat.phone!,
+                      time: chat.time!,
+                      onNavigate: () {
+                        _loadChats();
+                      },
+                      imageUrl: imageUrl,
+                      chat: chat,
+                      onDelete: () {
+                        _loadChats();
+                      },
+                    );
+                  })),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: "Start a Chat",
         child: Icon(Icons.messenger_outlined),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        onPressed: ()async {
-            await Navigator.of(context).pushNamed("/Contacts");
-            _loadChats();
-          },
+        onPressed: () async {
+          await Navigator.of(context).pushNamed("/Contacts");
+          _loadChats();
+        },
       ),
     );
   }

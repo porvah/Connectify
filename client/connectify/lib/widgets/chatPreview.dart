@@ -1,4 +1,5 @@
 import 'package:Connectify/core/chat.dart';
+import 'package:Connectify/utils/chatManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -9,25 +10,29 @@ class ChatPreview extends StatelessWidget {
   final String phoneNum;
   final String time;
   final VoidCallback onNavigate;
-  final String? imageUrl ;
+  final String? imageUrl;
+  final Chat? chat;
+  final VoidCallback onDelete;
 
-  const ChatPreview(
-      {Key? key,
-      required this.contactId,
-      required this.name,
-      required this.lastMessage,
-      required this.phoneNum,
-      required this.time,
-      required this.onNavigate,
-      required this.imageUrl})
-      : super(key: key);
+  const ChatPreview({
+    Key? key,
+    required this.contactId,
+    required this.name,
+    required this.lastMessage,
+    required this.phoneNum,
+    required this.time,
+    required this.onNavigate,
+    required this.imageUrl,
+    required this.chat,
+    required this.onDelete,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return InkWell(
-      onTap: () async{
+      onTap: () async {
         await Navigator.of(context).pushNamed('/Chat',
             arguments: Chat(name, phoneNum, lastMessage, 1, time));
 
@@ -44,7 +49,8 @@ class ChatPreview extends StatelessWidget {
                 CircleAvatar(
                   radius: 30,
                   backgroundColor: theme.colorScheme.primary,
-                  backgroundImage: imageUrl != null ? NetworkImage(imageUrl!) : null,
+                  backgroundImage:
+                      imageUrl != null ? NetworkImage(imageUrl!) : null,
                   child: imageUrl == null
                       ? Text(
                           name[0].toUpperCase(),
@@ -54,7 +60,7 @@ class ChatPreview extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         )
-                      : null, 
+                      : null,
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -95,6 +101,12 @@ class ChatPreview extends StatelessWidget {
                     ],
                   ),
                 ),
+                IconButton(
+                  icon: Icon(Icons.delete, color: theme.colorScheme.onSurface),
+                  onPressed: () {
+                    _showDeleteConfirmationDialog(context);
+                  },
+                ),
               ],
             ),
           ),
@@ -106,6 +118,34 @@ class ChatPreview extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Chat'),
+          content: Text('Are you sure you want to delete this chat?'),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text('Delete'),
+              onPressed: (){
+                ChatManagement.deleteChat(chat!);
+                 onDelete();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

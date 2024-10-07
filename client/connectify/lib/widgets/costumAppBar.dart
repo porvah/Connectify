@@ -10,6 +10,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     Key? key,
     required this.title,
     required this.menuOptions,
+    
   }) : super(key: key);
 
   @override
@@ -26,9 +27,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             Icons.more_vert,
             color: theme.colorScheme.onSecondary,
           ),
-          onSelected: (MenuOption selectedOption) {
+          onSelected: (MenuOption selectedOption) async {
             // Navigate to the route of the selected option
-            Navigator.pushNamed(context, selectedOption.route);
+            await Navigator.pushNamed(context, selectedOption.route);
+
           },
             itemBuilder: (BuildContext context) {
               return menuOptions.map((MenuOption option) {

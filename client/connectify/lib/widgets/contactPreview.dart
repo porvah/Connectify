@@ -15,7 +15,7 @@ class ContactPreview extends StatelessWidget {
         print('clicked');
         Chat chat = await ChatManagement.createChat(name, phone);
 
-        Navigator.of(context).pushReplacementNamed('/Chat', arguments: chat);
+       Navigator.of(context).pushNamed('/Chat', arguments: chat);
       },
       child: Column(
         children: [

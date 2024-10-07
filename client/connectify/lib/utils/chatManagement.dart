@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:Connectify/core/chat.dart';
 import 'package:Connectify/core/message.dart';
+import 'package:Connectify/core/user.dart';
 import 'package:Connectify/db/chatProvider.dart';
 import 'package:Connectify/db/dbSingleton.dart';
 import 'package:Connectify/db/messageProvider.dart';
@@ -21,12 +22,13 @@ class ChatManagement {
     Database? db = await dbsingleton.db;
     return await UserProvider.getLoggedUser(db!);
   }
+
   static Future<String?> encodeFile(File file) async {
-    try{
+    try {
       List<int> bytes = await file.readAsBytes();
       String base64 = base64Encode(bytes);
       return base64;
-    }catch(e){
+    } catch (e) {
       return null;
     }
   }
@@ -76,10 +78,10 @@ class ChatManagement {
     if (p.containsKey('replied') && p['replied'] != 'none') {
       m.replied = p['replied'];
     }
-    if (p.containsKey('attachment')){
+    if (p.containsKey('attachment')) {
       m.attachment = p['attachment'];
     }
-    
+
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     Messageprovider.insert(m, db!);
@@ -162,5 +164,13 @@ class ChatManagement {
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     return Messageprovider.getMessagesContaining(searchString, db!);
+  }
+
+  static Future<void> deleteChat(Chat chat) async {
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    User? user = await UserProvider.getLoggedUser(db!);
+    Chatprovider.delete(chat.id!, db);
+    Messageprovider.DeleteMessages(db, user!.phone!, chat.phone!);
   }
 }
