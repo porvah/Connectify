@@ -7,6 +7,7 @@ final String columnTime = 'time';
 final String columnString = 'string_content';
 final String columnAttachment = 'attachment';
 final String columnStarred = 'starred';
+final String columnIsSeenLevel = 'is_seen_level';
 
 class Message {
   String? id;
@@ -17,8 +18,7 @@ class Message {
   String? stringContent;
   int? starred;
   String? attachment;
-
-
+  int? isSeenLevel;
 
   Message(this.id, this.sender, this.receiver, this.time, this.stringContent);
 
@@ -30,6 +30,7 @@ class Message {
       columnTime: time,
       columnString: stringContent,
       columnStarred: starred,
+      columnIsSeenLevel: isSeenLevel
     };
     if (replied != null) {
       map[columnReplied] = replied;
