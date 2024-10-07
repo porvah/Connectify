@@ -16,7 +16,7 @@ class ChatManagement {
   static ValueNotifier<List<Message>>? messages = null;
   static String? curr_contact = null;
   static ValueNotifier<List<Chat>>? chats = null;
-  static VoidCallback refreshHome = (){};
+  static VoidCallback refreshHome = () {};
 
   static Future<dynamic> loadSender() async {
     Dbsingleton dbsingleton = Dbsingleton();
@@ -62,12 +62,12 @@ class ChatManagement {
     Map p = jsonDecode(message);
     if (p['signal'] == 0) {
       handleMessage(p);
-    } else {
-      if (p.containsKey('command_type')) {
-        handleLogoutSignal();
-      } else {
-        handleSeen(p);
-      }
+    } else if (p['signal'] == 1) {
+      handleLogoutSignal();
+    } else if (p['signal'] == 2) {
+      receiveMessageArrival(p);
+    } else if (p['signal'] == 3) {
+      receiveMessageSeen(p);
     }
   }
 
@@ -75,7 +75,7 @@ class ChatManagement {
 
   static void handleMessage(Map p) async {
     Message m = Message(
-        p['message_id'], p['sender'], p['receiver'], p['time'], p['text']);
+        p['message_id'], p['sender'], p['receiver'], p['time'], p['text'], 1);
     if (p.containsKey('replied') && p['replied'] != 'none') {
       m.replied = p['replied'];
     }
@@ -91,7 +91,8 @@ class ChatManagement {
     }
     await updateChat(m.sender!, m, db);
     // Send acknowledgment of arrival after storing the message
-    await ChatManagement.acknowledgeMessageArrival(m);
+    if (curr_contact != m.sender)
+      await ChatManagement.acknowledgeMessageArrival(m);
     refreshHome();
 
     print(m);
@@ -106,7 +107,8 @@ class ChatManagement {
       'receiver': m.receiver,
       'time': m.time,
       'text': m.stringContent,
-      'attachment': m.attachment
+      'attachment': m.attachment,
+      'is_seen_level': 1
     };
     if (m.replied != null) {
       dict['replied'] = m.replied;
@@ -186,6 +188,9 @@ class ChatManagement {
   }
 
   static Future<void> acknowledgeMessageSeen(Message message) async {
+    // Update the message's isSeenLevel to 2 (seen)
+    message.isSeenLevel = 2;
+
     Map<String, dynamic> acknowledgment = {
       'signal': 3, // 3 is the signal for seen acknowledgment
       'message_id': message.id,
@@ -197,19 +202,33 @@ class ChatManagement {
     String content = jsonEncode(acknowledgment);
     WebSocketService().sendMessage(content);
     print('Sent seen acknowledgment for message: ${message.id}');
+
+    // Update the database with the new isSeenLevel
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    await Messageprovider.update(message, db!);
+
+    // Update the messages list if necessary (UI update)
+    if (messages != null) {
+      int index = messages!.value.indexWhere((m) => m.id == message.id);
+      if (index != -1) {
+        messages!.value[index] = message;
+      }
+    }
+
+    print('Message marked as seen and database updated: ${message.id}');
   }
 
-  static Future<void> receiveMessageArrival(Map<String, dynamic> data) async {
+  static Future<void> receiveMessageArrival(Map<dynamic, dynamic> data) async {
+    print('Received message arrival: $data');
     String messageId = data['message_id'];
-
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
 
-    Message? message =
-        await Messageprovider.getMessage(int.parse(messageId), db!);
+    Message? message = await Messageprovider.getMessage(messageId, db!);
 
     if (message != null) {
-      message.isSeenLevel = 1; // Mark as arrived
+      if (message.isSeenLevel != 2) message.isSeenLevel = 1; // Mark as arrived
       await Messageprovider.update(message, db);
 
       if (messages != null) {
@@ -217,6 +236,7 @@ class ChatManagement {
         // Update UI if inside the chat
         if (index != -1) {
           messages!.value[index] = message;
+          messages!.value = List.from(messages!.value);
         }
       }
 
@@ -226,14 +246,14 @@ class ChatManagement {
     }
   }
 
-  static Future<void> receiveMessageSeen(Map<String, dynamic> data) async {
+  static Future<void> receiveMessageSeen(Map<dynamic, dynamic> data) async {
+    print('Received message seen: $data');
     String messageId = data['message_id'];
 
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
 
-    Message? message =
-        await Messageprovider.getMessage(int.parse(messageId), db!);
+    Message? message = await Messageprovider.getMessage(messageId, db!);
 
     if (message != null) {
       message.isSeenLevel = 2; // Mark as seen
@@ -244,6 +264,7 @@ class ChatManagement {
         // Update UI if inside the chat
         if (index != -1) {
           messages!.value[index] = message;
+          messages!.value = List.from(messages!.value);
         }
       }
 
