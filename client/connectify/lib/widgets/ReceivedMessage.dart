@@ -11,10 +11,12 @@ class Receivedmessage extends StatelessWidget {
 
   final Function(Message) onReply;
   final VoidCallback onImageLoaded;
-  Receivedmessage(this.message, this.time, {required this.onReply, required this.onImageLoaded});
+  Receivedmessage(this.message, this.time,
+      {required this.onReply, required this.onImageLoaded});
 
   @override
   Widget build(BuildContext context) {
+    ChatManagement.acknowledgeIfNeeded(message);
     return Align(
       alignment: Alignment.centerLeft,
       child: GestureDetector(
@@ -75,55 +77,56 @@ class Receivedmessage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if(message.attachment != null)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.6,
-                    maxHeight: MediaQuery.of(context).size.height * 0.3,
-                  ),
-                  child: InkWell(
-                    onTap: () => _showFullImage(context),
-                    child: Hero(
-                      tag: 'image_${message.id}',
-                      child: Image.memory(
-                        base64Decode(message.attachment!),
-                        fit: BoxFit.contain,
-                        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                          if (frame != null) {
+              if (message.attachment != null)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.6,
+                      maxHeight: MediaQuery.of(context).size.height * 0.3,
+                    ),
+                    child: InkWell(
+                      onTap: () => _showFullImage(context),
+                      child: Hero(
+                        tag: 'image_${message.id}',
+                        child: Image.memory(
+                          base64Decode(message.attachment!),
+                          fit: BoxFit.contain,
+                          frameBuilder:
+                              (context, child, frame, wasSynchronouslyLoaded) {
+                            if (frame != null) {
+                              onImageLoaded();
+                            }
+                            return child;
+                          },
+                          errorBuilder: (context, error, stackTrace) {
                             onImageLoaded();
-                          }
-                          return child;
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          onImageLoaded();
-                          return Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Icon(
-                              Icons.broken_image,
-                              size: 50,
-                              color: Colors.grey[600],
-                            ),
-                          );
-                        },
+                            return Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Icon(
+                                Icons.broken_image,
+                                size: 50,
+                                color: Colors.grey[600],
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              if(message.attachment == null)
-              Text(
-                message.stringContent!,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontSize: 18,
+              if (message.attachment == null)
+                Text(
+                  message.stringContent!,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontSize: 18,
+                  ),
                 ),
-              ),
               SizedBox(height: 5),
               Text(
                 time,
@@ -138,6 +141,7 @@ class Receivedmessage extends StatelessWidget {
       ),
     );
   }
+
   void _showFullImage(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
