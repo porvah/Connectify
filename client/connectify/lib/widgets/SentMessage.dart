@@ -14,18 +14,24 @@ class ReadReceipt extends StatelessWidget {
         ? Color(0xFF008800)
         : Color.fromARGB(255, 244, 228, 228);
 
-    List<Widget> checkmarks = List.generate(
-      isSeenLevel == 0 ? 1 : 2,
-      (index) => Icon(
-        Icons.check,
-        size: 18,
-        color: checkmarkColor,
-      ),
-    );
-
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: checkmarks,
+      children: [
+        if (isSeenLevel > 0)
+          Transform.translate(
+            offset: Offset(8, 0), // Move the first checkmark to the right
+            child: Icon(
+              Icons.check,
+              size: 18,
+              color: checkmarkColor,
+            ),
+          ),
+        Icon(
+          Icons.check,
+          size: 18,
+          color: checkmarkColor,
+        ),
+      ],
     );
   }
 }
