@@ -51,6 +51,8 @@ class Messageprovider {
     List<Message> res = [];
     for (Map<String, dynamic> map in maps) {
       res.add(Message.fromMap(map));
+      final isSeen = Message.fromMap(map).isSeenLevel;
+      print("isSeen: $isSeen, ${Message.fromMap(map).stringContent}");
     }
     return res;
   }
@@ -88,6 +90,7 @@ class Messageprovider {
   }
 
   static Future<int> update(Message message, Database db) async {
+    print("ALL: ${message.toMap()}");
     return await db.update(tableMessage, message.toMap(),
         where: '$columnId = ?', whereArgs: [message.id]);
   }
@@ -146,7 +149,7 @@ class Messageprovider {
     });
   }
 
-    static Future<void> DeleteMessages(
+  static Future<void> DeleteMessages(
       Database db, String sender, String receiver) async {
     await db.delete(tableMessage,
         where:
