@@ -16,31 +16,35 @@ Connectify is a real-time chat app offering one-to-one messaging and a range of 
 
 2 - **One-to-one messaging** supports image sharing and real-time communication.
 
-3 - **Messages queued on the server** if the receiver is offline. The server delivers these queued messages once the receiver reconnects.
+3 - The **self-chat** functionality allows users to create a personal chat space where they can message themselves. This feature serves as a private notepad,
 
-4 - **Replying to messages** enhances communication, allowing for more engaging and interactive conversations.
+4 - **Contact Access Permission** Granting access to your contacts enables Connectify to identify which of your contacts are also using the app
 
-5 - **Starred messages** allow users to highlight and prioritize specific messages for easy access.
+5 - **Messages queued on the server** if the receiver is offline. The server delivers these queued messages once the receiver reconnects.
 
-6 - Users can upload **profile photos** to personalize their accounts and enhance their presence within the app.
+6 - **Replying to messages** enhances communication, allowing for more engaging and interactive conversations.
 
-7 - **Search feature** for messages enables easy access and retrieval of specific conversations.
+7 - **Starred messages** allow users to highlight and prioritize specific messages for easy access.
 
-8 - **Pagination for loading chats**, along with **auto-scrolling to the bottom**, boosts efficiency and enhances the overall user experience.
+8 - Users can upload **profile photos** to personalize their accounts and enhance their presence within the app.
 
-9 - Chats are sorted on the home page based on the **most recent message**, ensuring users can easily find their latest conversations.
+9 - **Search feature** for messages enables easy access and retrieval of specific conversations.
 
-10 - A **mode switch** feature allows users to toggle between light and dark themes, providing a customizable and comfortable viewing experience based on their preferences.
+10 - **Pagination for loading chats**, along with **auto-scrolling to the bottom**, boosts efficiency and enhances the overall user experience.
 
-11 - **Favorite contacts** enable users to prioritize specific individuals for quicker access and enhanced communication.
+11 - Chats are sorted on the home page based on the **most recent message**, ensuring users can easily find their latest conversations.
 
-12 - **Delete chats** to optimize storage efficiency by removing unimportant conversations.
+12 - A **mode switch** feature allows users to toggle between light and dark themes, providing a customizable and comfortable viewing experience based on their preferences.
 
-13 - **Message delivered and seen indicators** enhance communication by providing users with visibility on whether their messages have been read.
+13 - **Favorite contacts** enable users to prioritize specific individuals for quicker access and enhanced communication.
 
-14 - **Delete Account** option allows users to remove their account and all associated data.
+14 - **Delete chats** to optimize storage efficiency by removing unimportant conversations.
 
-15 - **Logout**
+15 - **Message delivered and seen indicators** enhance communication by providing users with visibility on whether their messages have been read.
+
+16 - **Delete Account** option allows users to remove their account and all associated data.
+
+17 - **Logout**
 
 #### Screen shots 
 
