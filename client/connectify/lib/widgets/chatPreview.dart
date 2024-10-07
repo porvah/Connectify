@@ -102,6 +102,22 @@ class ChatPreview extends StatelessWidget {
                   ),
                 ),
                 IconButton(
+                  icon: Icon(
+                    chat!.favourite == 1
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    color: chat!.favourite == 1
+                        ? Colors.red
+                        : Theme.of(context).colorScheme.onSurface,
+                  ),
+                  onPressed: () {
+                    ChatManagement.update_favourite(chat!);
+                    ChatManagement.refreshHome();
+                    onDelete();
+                    print(chat!.favourite);
+                  },
+                ),
+                IconButton(
                   icon: Icon(Icons.delete, color: theme.colorScheme.onSurface),
                   onPressed: () {
                     _showDeleteConfirmationDialog(context);
@@ -137,9 +153,10 @@ class ChatPreview extends StatelessWidget {
             ),
             TextButton(
               child: Text('Delete'),
-              onPressed: (){
+              onPressed: () {
                 ChatManagement.deleteChat(chat!);
-                 onDelete();
+                ChatManagement.refreshHome();
+                onDelete();
                 Navigator.of(context).pop();
               },
             ),

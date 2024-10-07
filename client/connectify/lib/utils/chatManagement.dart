@@ -17,7 +17,7 @@ class ChatManagement {
   static ValueNotifier<List<Message>>? messages = null;
   static String? curr_contact = null;
   static ValueNotifier<List<Chat>>? chats = null;
-  static VoidCallback refreshHome = (){};
+  static VoidCallback refreshHome = () {};
 
   static Future<dynamic> loadSender() async {
     Dbsingleton dbsingleton = Dbsingleton();
@@ -176,4 +176,18 @@ class ChatManagement {
     Chatprovider.delete(chat.id!, db);
     Messageprovider.DeleteMessages(db, user!.phone!, chat.phone!);
   }
+
+  static Future<void> update_favourite(Chat chat) async {
+    chat.favourite = chat.favourite == 1 ? 0 : 1;
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    Chatprovider.update(chat, db!);
+  }
+
+  static Future<List<Chat>> getFavourite() async {
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+    return Chatprovider.getFavouriteContacts(db!);
+  }
+
 }
