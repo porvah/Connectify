@@ -56,7 +56,8 @@ class Dbsingleton {
         time TEXT NOT NULL,
         string_content TEXT NOT NULL,
         attachment TEXT,
-        starred INTEGER DEFAULT 0
+        starred INTEGER DEFAULT 0,
+        is_seen_level INTEGER DEFAULT 0
       )
     ''');
     await db.execute('''
