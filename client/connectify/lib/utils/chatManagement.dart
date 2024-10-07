@@ -15,7 +15,9 @@ import 'package:sqflite/sqflite.dart';
 
 class ChatManagement {
   static ValueNotifier<List<Message>>? messages = null;
+  static String? curr_contact = null;
   static ValueNotifier<List<Chat>>? chats = null;
+  static VoidCallback refreshHome = (){};
 
   static Future<dynamic> loadSender() async {
     Dbsingleton dbsingleton = Dbsingleton();
@@ -85,10 +87,11 @@ class ChatManagement {
     Dbsingleton dbsingleton = Dbsingleton();
     Database? db = await dbsingleton.db;
     Messageprovider.insert(m, db!);
-    if (messages != null) {
+    if (messages != null && curr_contact == m.sender) {
       messages!.value = List.from(messages!.value)..add(m);
     }
     await updateChat(m.sender!, m, db);
+    refreshHome();
     print(m);
   }
 

@@ -33,8 +33,13 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _loadChats();
+    ChatManagement.refreshHome = _loadChats;
   }
-
+  @override
+  void dispose(){
+    super.dispose();
+    ChatManagement.refreshHome = (){};
+  }
   @override
   Widget build(BuildContext context) {
     WebSocketService().connect();
