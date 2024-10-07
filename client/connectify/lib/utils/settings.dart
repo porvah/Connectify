@@ -68,7 +68,7 @@ class Settings {
         return AlertDialog(
           backgroundColor: Theme.of(context).colorScheme.primary,
           title: Text(
-            "Log Out",
+            "Delete Account",
             style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           ),
           content: Text(
