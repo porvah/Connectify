@@ -10,7 +10,7 @@ Connectify is a real-time chat app offering one-to-one messaging and a range of 
 
 3 - **WebSockets** for enabling real-time messaging.
 
-4 - **firebase cloud messaging** for sending notifications
+4 - **Firebase cloud messaging** for sending notifications
 
 5 - **Http restful APIs**
 
