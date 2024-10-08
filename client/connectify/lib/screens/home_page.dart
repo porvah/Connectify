@@ -2,6 +2,7 @@
 import 'package:Connectify/core/chat.dart';
 import 'package:Connectify/db/chatProvider.dart';
 import 'package:Connectify/db/dbSingleton.dart';
+import 'package:Connectify/requests/FCM_handler.dart';
 import 'package:Connectify/requests/webSocketService.dart';
 import 'package:Connectify/utils/chatManagement.dart';
 import 'package:Connectify/utils/menuOption.dart';
@@ -31,7 +32,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
+    NotificationService.getToken();
+    NotificationService.initialize();
     _loadChats();
     ChatManagement.refreshHome = _loadChats;
   }
