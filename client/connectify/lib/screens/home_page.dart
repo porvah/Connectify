@@ -35,11 +35,13 @@ class _HomePageState extends State<HomePage> {
     _loadChats();
     ChatManagement.refreshHome = _loadChats;
   }
+
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
-    ChatManagement.refreshHome = (){};
+    ChatManagement.refreshHome = () {};
   }
+
   @override
   Widget build(BuildContext context) {
     WebSocketService().connect();
@@ -70,6 +72,7 @@ class _HomePageState extends State<HomePage> {
                       onDelete: () {
                         _loadChats();
                       },
+                      unseenMessages: chat.alert!,
                     );
                   })),
         ],
