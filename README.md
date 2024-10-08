@@ -20,7 +20,7 @@ Connectify is a real-time chat app offering one-to-one messaging and a range of 
 
 2 - **One-to-one messaging** supports image sharing and real-time communication.
 
-3 - The **self-chat** functionality allows users to create a personal chat space where they can message themselves. This feature serves as a private notepad,
+3 - The **self-chat** functionality allows users to create a personal chat space where they can message themselves. This feature serves as a private notepad.
 
 4 - **Contact Access Permission** Granting access to your contacts enables Connectify to identify which of your contacts are also using the app
 
