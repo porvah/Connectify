@@ -1,7 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-from .connectHandler import get_user_phone,saveUser,getQueuedMessages
+from .connectHandler import get_user_phone,saveUser,getQueuedMessages,SendDataMessage
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
@@ -25,7 +25,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
         data['type'] = 'chat_message'
         receiver = data['receiver']
-
+        
+        await SendDataMessage(data)
         if receiver in connected_users:
             await self.channel_layer.send(
                 connected_users[receiver],
