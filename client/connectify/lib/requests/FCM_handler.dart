@@ -39,12 +39,12 @@ class NotificationService{
           'Content-Type': 'application/json; charset=UTF-8'
         },
         body: jsonEncode(<String, String>{
-          'userPhone ': logged!.phone!,
+          'userPhone': logged!.phone!,
           'fcm_token': device_token!,
         }),
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         print('Data posted: ${response.body}');
       } else {
         print('Failed with status: ${response.statusCode}, body: ${response.body}');
