@@ -17,10 +17,15 @@ def GetMessages(request):
 @api_view(['POST'])
 def SendFcmToken(request):
     data = request.data
-    serializer = NotificationSerializer(data = data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response({'message': 'success'},status = status.HTTP_201_CREATED)
+    user = Notification.objects.filter(userPhone = data.get('userPhone'))
+    if(user.exists()):
+         user.update(fcm_token = data.get('fcm_token'))
+         return Response({'message': 'success'},status = status.HTTP_201_CREATED)
     else:
-        return Response({'message': 'Failed'},status = status.HTTP_400_BAD_REQUEST) 
+        serializer = NotificationSerializer(data = data)
+        if serializer.is_valid():
+                serializer.save()
+                return Response({'message': 'success'},status = status.HTTP_201_CREATED)
+        else:
+                return Response({'message': 'Failed'},status = status.HTTP_400_BAD_REQUEST) 
     
