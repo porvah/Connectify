@@ -139,6 +139,11 @@ class ChatManagement {
     } else {
       chat.last = m.stringContent;
       chat.time = m.time;
+      if (curr_contact != chat.phone) {
+        print(curr_contact);
+        print(chat.contact);
+        chat.alert = chat.alert! + 1;
+      }
       await Chatprovider.update(chat, db);
       for (int i = 0; i < chats!.value.length; i++) {
         if (chat.contact == chats!.value[i].contact) {
@@ -307,6 +312,23 @@ class ChatManagement {
   static Future<void> acknowledgeIfNeeded(Message message) async {
     if (message.isSeenLevel != 2) {
       await acknowledgeMessageSeen(message);
+    }
+  }
+
+  static Future<void> clearAlert(String? phone) async {
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+
+    Chat? chat = await Chatprovider.getChatByPhone(phone!, db!);
+    print("Chat.alert -> ${chat!.alert}");
+    chat.alert = 0;
+    await Chatprovider.update(chat, db);
+
+    int index = chats!.value.indexWhere((c) => c.phone == phone);
+    if (index != -1) {
+      chats!.value[index] = chat;
+      chats!.value = List.from(chats!.value);
+      print("UPDATED CHAT ALERT");
     }
   }
 }
