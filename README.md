@@ -10,9 +10,13 @@ Connectify is a real-time chat app offering one-to-one messaging and a range of 
 
 3 - **WebSockets** for enabling real-time messaging.
 
+4 - **firebase cloud messaging** for sending notifications
+
+5 - **Http restful APIs**
+
 ### App Features
 
-1 - Secure **Login** and **Signup** Authentication, featuring email **verification** by sending a code to the user's email account. After successful login, a session code or token is provided to enhance security throughout the process.
+1 - Secure **Login** and **Signup** Authentication and Authorization, featuring email **verification** by sending a code to the user's email account. After successful login, a session code or token is provided to enhance security throughout the process.
 
 2 - **One-to-one messaging** supports image sharing and real-time communication.
 
@@ -22,29 +26,33 @@ Connectify is a real-time chat app offering one-to-one messaging and a range of 
 
 5 - **Messages queued on the server** if the receiver is offline. The server delivers these queued messages once the receiver reconnects.
 
-6 - **Replying to messages** enhances communication, allowing for more engaging and interactive conversations.
+6 - Send **Notifications** to users when they are not active in the chat or when the application is running in the background
 
-7 - **Starred messages** allow users to highlight and prioritize specific messages for easy access.
+7 - **Replying to messages** enhances communication, allowing for more engaging and interactive conversations.
 
-8 - Users can upload **profile photos** to personalize their accounts and enhance their presence within the app.
+8 - **Starred messages** allow users to highlight and prioritize specific messages for easy access.
 
-9 - **Search feature** for messages enables easy access and retrieval of specific conversations.
+9 - Users can upload **profile photos** to personalize their accounts and enhance their presence within the app.
 
-10 - **Pagination for loading chats**, along with **auto-scrolling to the bottom**, boosts efficiency and enhances the overall user experience.
+10 - **Search feature** for messages enables easy access and retrieval of specific conversations.
 
-11 - Chats are sorted on the home page based on the **most recent message**, ensuring users can easily find their latest conversations.
+11 - **Pagination for loading chats**, along with **auto-scrolling to the bottom**, boosts efficiency and enhances the overall user experience.
 
-12 - A **mode switch** feature allows users to toggle between light and dark themes, providing a customizable and comfortable viewing experience based on their preferences.
+12 - Chats are sorted on the home page based on the **most recent message**, ensuring users can easily find their latest conversations.
 
-13 - **Favorite contacts** enable users to prioritize specific individuals for quicker access and enhanced communication.
+13 - A **mode switch** feature allows users to toggle between light and dark themes, providing a customizable and comfortable viewing experience based on their preferences.
 
-14 - **Delete chats** to optimize storage efficiency by removing unimportant conversations.
+14 - **Favorite contacts** enable users to prioritize specific individuals for quicker access and enhanced communication.
 
-15 - **Message delivered and seen indicators** enhance communication by providing users with visibility on whether their messages have been read.
+15 - **Delete chats** to optimize storage efficiency by removing unimportant conversations.
 
-16 - **Delete Account** option allows users to remove their account and all associated data.
+16 - **Message delivered and seen indicators** enhance communication by providing users with visibility on whether their messages have been read.
 
-17 - **Logout**
+17 - Show the count of **message alerts** on the home screen to provide users with a quick overview of their unread messages.
+
+18 - **Delete Account** option allows users to remove their account and all associated data.
+
+19 - **Logout**
 
 #### Screen shots 
 
