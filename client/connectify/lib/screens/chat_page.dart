@@ -122,6 +122,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     ChatManagement.messages = _messages;
     ChatManagement.curr_contact = chat.phone;
 
+    ChatManagement.clearAlert(chat.phone!);
+
     if (_pendingImageLoads == 0) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _scrollToBottom(animate: false);
