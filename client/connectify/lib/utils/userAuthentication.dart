@@ -1,6 +1,8 @@
 import 'package:Connectify/core/user.dart';
 import 'package:Connectify/db/dbSingleton.dart';
 import 'package:Connectify/db/userProvider.dart';
+import 'package:Connectify/db/chatProvider.dart';
+import 'package:Connectify/db/messageProvider.dart';
 import 'package:Connectify/requests/authentication_api.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
@@ -18,6 +20,8 @@ class UserAuthentication {
       if (success) {
         go_home();
       } else {
+        await Chatprovider.clearTable(db);
+        await Messageprovider.clearMessages(db, loggedUser.phone!);
         loggedUser.logged = 0;
         UserProvider.update(loggedUser, db);
         go_login();
