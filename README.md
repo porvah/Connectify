@@ -50,7 +50,8 @@ Connectify is a real-time chat app offering one-to-one messaging and a range of 
   - **Messages queued on the server** if the receiver is offline
     - The server delivers these queued messages once the receiver reconnects.
 
-  - **Replying to messages** enhances communication
+  - **Replying to messages**
+    - enhances communication
     -  allowing for more engaging and interactive conversations.
 
   - **Starred messages** allow users to highlight and prioritize specific messages for easy access.
@@ -65,7 +66,8 @@ Connectify is a real-time chat app offering one-to-one messaging and a range of 
 
  - Chats are sorted on the home page based on the **most recent message**, ensuring users can easily find their latest conversations.
 
- - A **mode switch** feature allows users to toggle between light and dark themes
+ - A **mode switch** feature
+   - allows users to toggle between light and dark themes
    -  providing a customizable.
    -  comfortable viewing experience based on their preferences.
 
