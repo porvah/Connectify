@@ -2,6 +2,7 @@
 import 'package:Connectify/core/chat.dart';
 import 'package:Connectify/db/chatProvider.dart';
 import 'package:Connectify/db/dbSingleton.dart';
+import 'package:Connectify/requests/FCM_handler.dart';
 import 'package:Connectify/requests/webSocketService.dart';
 import 'package:Connectify/utils/chatManagement.dart';
 import 'package:Connectify/utils/menuOption.dart';
@@ -31,15 +32,19 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
+    NotificationService.createNotificationChannel();
+    NotificationService.getToken();
+    NotificationService.initialize();
     _loadChats();
     ChatManagement.refreshHome = _loadChats;
   }
+
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
-    ChatManagement.refreshHome = (){};
+    ChatManagement.refreshHome = () {};
   }
+
   @override
   Widget build(BuildContext context) {
     WebSocketService().connect();
@@ -70,6 +75,7 @@ class _HomePageState extends State<HomePage> {
                       onDelete: () {
                         _loadChats();
                       },
+                      unseenMessages: chat.alert!,
                     );
                   })),
         ],

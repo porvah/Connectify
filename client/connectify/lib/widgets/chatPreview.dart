@@ -13,6 +13,7 @@ class ChatPreview extends StatelessWidget {
   final String? imageUrl;
   final Chat? chat;
   final VoidCallback onDelete;
+  final int unseenMessages; // New property for unseen messages
 
   const ChatPreview({
     Key? key,
@@ -25,6 +26,7 @@ class ChatPreview extends StatelessWidget {
     required this.imageUrl,
     required this.chat,
     required this.onDelete,
+    required this.unseenMessages, // Initialize unseenMessages
   }) : super(key: key);
 
   @override
@@ -34,8 +36,7 @@ class ChatPreview extends StatelessWidget {
     return InkWell(
       onTap: () async {
         await Navigator.of(context).pushNamed('/Chat',
-            arguments: Chat(name, phoneNum, lastMessage, 1, time));
-
+            arguments: Chat(name, phoneNum, lastMessage, 0, time));
         onNavigate();
         print('clicked');
       },
@@ -46,21 +47,46 @@ class ChatPreview extends StatelessWidget {
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
             child: Row(
               children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: theme.colorScheme.primary,
-                  backgroundImage:
-                      imageUrl != null ? NetworkImage(imageUrl!) : null,
-                  child: imageUrl == null
-                      ? Text(
-                          name[0].toUpperCase(),
-                          style: TextStyle(
-                            fontSize: 24,
-                            color: theme.colorScheme.onPrimary,
-                            fontWeight: FontWeight.bold,
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundColor: theme.colorScheme.primary,
+                      backgroundImage:
+                          imageUrl != null ? NetworkImage(imageUrl!) : null,
+                      child: imageUrl == null
+                          ? Text(
+                              name[0].toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: theme.colorScheme.onPrimary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          : null,
+                    ),
+                    // Badge to show unseen messages count
+                    if (unseenMessages > 0)
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(6.0),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
                           ),
-                        )
-                      : null,
+                          child: Text(
+                            unseenMessages.toString(),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
                 const SizedBox(width: 16),
                 Expanded(
