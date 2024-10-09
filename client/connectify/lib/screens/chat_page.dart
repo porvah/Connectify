@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math' as math;
 
 import 'package:Connectify/core/chat.dart';
 import 'package:Connectify/core/message.dart';
@@ -35,15 +34,11 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   bool _hasMore = true;
   Message? _replyingTo;
   String? _toBeSentImage;
-  int _pendingImageLoads = 0;
-  bool _shouldScroll = true;
-  Timer? _scrollTimer;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _shouldScroll = true;
     _prepWidget();
     _scrollController.addListener(_scrollListener);
   }
@@ -58,51 +53,49 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     if (newValue != _isKeyboardVisible) {
       setState(() {
         _isKeyboardVisible = newValue;
-        if (_isKeyboardVisible) {
-          Future.delayed(const Duration(milliseconds: 200), () {
-            _shouldScroll = true;
-            _scrollToBottom(animate: true);
-          });
-        }
       });
     }
   }
 
   void _scrollListener() {
-    if (_scrollController.hasClients) {
-      if (_scrollController.position.pixels <=
-              _scrollController.position.minScrollExtent + 200 &&
-          !_isLoading &&
-          _hasMore) {
-        _extendMessages();
-      }
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange &&
+        !_isLoading &&
+        _hasMore) {
+      print("SHOULD LOAD MORE");
+      print("SHOULD LOAD MORE");
+      print("SHOULD LOAD MORE");
+      print("SHOULD LOAD MORE");
+      print("SHOULD LOAD MORE");
+      print("SHOULD LOAD MORE");
+      print("SHOULD LOAD MORE");
+      print("SHOULD LOAD MORE");
+      _loadMoreMessages();
     }
   }
 
-  Future<void> _extendMessages() async {
+  Future<void> _loadMoreMessages() async {
     if (_isLoading || !_hasMore) return;
-    _isLoading = true;
-    int offset = _messages.value.length;
-    List<Message> addedMessages =
-        await ChatManagement.queryMessages(sender!.phone!, chat.phone!, offset);
-    if (addedMessages.isEmpty) {
-      _isLoading = false;
-      _hasMore = false;
-      return;
-    }
-    double currPos = _scrollController.position.pixels;
-    double max = _scrollController.position.maxScrollExtent;
-
     setState(() {
-      _messages.value = List.from(_messages.value)..insertAll(0, addedMessages);
-      _isLoading = false;
+      _isLoading = true;
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        double max2 = _scrollController.position.maxScrollExtent;
-        _scrollController.jumpTo(currPos + (max2 - max));
-      }
+    int offset = _messages.value.length;
+    List<Message> oldMessages =
+        await ChatManagement.queryMessages(sender!.phone!, chat.phone!, offset);
+
+    if (oldMessages.isEmpty) {
+      setState(() {
+        _hasMore = false;
+        _isLoading = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _messages.value = List.from(_messages.value)..addAll(oldMessages);
+      _isLoading = false;
     });
   }
 
@@ -112,55 +105,15 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     List<Message> queriedMessages =
         await ChatManagement.queryMessages(sender!.phone!, chat.phone!, 0);
 
-    if (queriedMessages.length < 60) _hasMore = false;
-
-    // Count initial images that need loading
-    _pendingImageLoads =
-        queriedMessages.where((m) => m.attachment != null).length;
+    if (queriedMessages.length < 30) _hasMore = false;
 
     _messages.value = queriedMessages;
     ChatManagement.messages = _messages;
     ChatManagement.curr_contact = chat.phone;
 
-    if (_pendingImageLoads == 0) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToBottom(animate: false);
-      });
-    }
+    ChatManagement.clearAlert(chat.phone!);
 
     _isLoading = false;
-  }
-
-  void _scrollToBottom({bool animate = true}) {
-    if (!_scrollController.hasClients || !_shouldScroll) return;
-
-    // Cancel any existing delayed scroll
-    _scrollTimer?.cancel();
-
-    // If there are pending image loads, delay the scroll
-    if (_pendingImageLoads > 0) {
-      _scrollTimer = Timer(const Duration(milliseconds: 100), () {
-        _scrollToBottom(animate: animate);
-      });
-      return;
-    }
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!_scrollController.hasClients) return;
-
-      final double bottom = _scrollController.position.maxScrollExtent;
-      if (animate) {
-        _scrollController.animateTo(
-          bottom,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-        );
-      } else {
-        _scrollController.jumpTo(bottom);
-      }
-
-      _shouldScroll = false;
-    });
   }
 
   void _sendMessage() {
@@ -181,20 +134,21 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
       if (_toBeSentImage != null) {
         m.attachment = _toBeSentImage;
-        _pendingImageLoads++; // Increment for the new image being sent
       }
 
       ChatManagement.sendMessage(m);
+      _scrollController.animateTo(
+        _scrollController.position.minScrollExtent,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
 
       if (m.sender != m.receiver) {
-        _messages.value = List.from(_messages.value)..add(m);
+        _messages.value = List.from(_messages.value)..insert(0, m);
       }
 
       _controller.clear();
       _toBeSentImage = null;
-
-      _shouldScroll = true;
-      _scrollToBottom(animate: true);
     }
     _setReplyingTo(null);
   }
@@ -212,14 +166,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       }
     } catch (e) {
       // Handle error
-    }
-  }
-
-  void _onImageLoaded(String messageId) {
-    _pendingImageLoads = math.max(0, _pendingImageLoads - 1);
-
-    if (_pendingImageLoads == 0 && _shouldScroll) {
-      _scrollToBottom(animate: true);
     }
   }
 
@@ -245,14 +191,22 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   builder: (context, messages, _) {
                     return ListView.builder(
                       controller: _scrollController,
+                      reverse: true,
                       padding: EdgeInsets.only(
                         left: 16.0,
                         right: 16.0,
                         top: 16.0,
                         bottom: _isKeyboardVisible ? 20.0 : 16.0,
                       ),
-                      itemCount: messages.length,
+                      itemCount:
+                          messages.length + 1, // +1 for loading indicator
                       itemBuilder: (context, index) {
+                        if (index == messages.length) {
+                          return _hasMore
+                              ? const Center(child: CircularProgressIndicator())
+                              : const SizedBox.shrink();
+                        }
+
                         final message = messages[index];
                         final timeFormatted = DateFormat('HH:mm a')
                             .format(DateTime.parse(message.time!));
@@ -275,15 +229,17 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                     message,
                                     timeFormatted,
                                     onReply: _setReplyingTo,
-                                    onImageLoaded: () =>
-                                        _onImageLoaded(message.id!),
+                                    onImageLoaded: () {
+                                      print("SHOULD BUILD");
+                                    },
                                   )
                                 : Receivedmessage(
                                     message,
                                     timeFormatted,
                                     onReply: _setReplyingTo,
-                                    onImageLoaded: () =>
-                                        _onImageLoaded(message.id!),
+                                    onImageLoaded: () {
+                                      print("SHOULD BUILD");
+                                    },
                                   ),
                           ],
                         );
@@ -307,7 +263,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    _scrollTimer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     ChatManagement.messages = null;
     ChatManagement.curr_contact = null;

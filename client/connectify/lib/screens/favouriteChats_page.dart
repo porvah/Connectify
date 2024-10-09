@@ -70,6 +70,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                       onDelete: () {
                         _loadChats();
                       },
+                      unseenMessages: chat.alert!,
                     );
                   })),
         ],

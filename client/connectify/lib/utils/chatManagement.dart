@@ -55,7 +55,7 @@ class ChatManagement {
     Database? db = await dbsingleton.db;
     List<Message> queried_messages =
         await Messageprovider.getMessagesOfChat(db!, sender, receiver, offset);
-    return List.from(queried_messages.reversed);
+    return List.from(queried_messages);
   }
 
   static socketHandler(String message) {
@@ -88,7 +88,7 @@ class ChatManagement {
     Database? db = await dbsingleton.db;
     Messageprovider.insert(m, db!);
     if (messages != null && curr_contact == m.sender) {
-      messages!.value = List.from(messages!.value)..add(m);
+      messages!.value = List.from(messages!.value)..insert(0, m);
     }
     await updateChat(m.sender!, m, db);
     // Send acknowledgment of arrival after storing the message
@@ -122,7 +122,7 @@ class ChatManagement {
     Messageprovider.insert(m, db!);
 
     if (m.sender == m.receiver) {
-      messages!.value = List.from(messages!.value)..add(m);
+      messages!.value = List.from(messages!.value)..insert(0, m);
       return;
     }
     String content = jsonEncode(dict);
@@ -139,6 +139,11 @@ class ChatManagement {
     } else {
       chat.last = m.stringContent;
       chat.time = m.time;
+      if (curr_contact != chat.phone) {
+        print(curr_contact);
+        print(chat.contact);
+        chat.alert = chat.alert! + 1;
+      }
       await Chatprovider.update(chat, db);
       for (int i = 0; i < chats!.value.length; i++) {
         if (chat.contact == chats!.value[i].contact) {
@@ -307,6 +312,23 @@ class ChatManagement {
   static Future<void> acknowledgeIfNeeded(Message message) async {
     if (message.isSeenLevel != 2) {
       await acknowledgeMessageSeen(message);
+    }
+  }
+
+  static Future<void> clearAlert(String? phone) async {
+    Dbsingleton dbsingleton = Dbsingleton();
+    Database? db = await dbsingleton.db;
+
+    Chat? chat = await Chatprovider.getChatByPhone(phone!, db!);
+    print("Chat.alert -> ${chat!.alert}");
+    chat.alert = 0;
+    await Chatprovider.update(chat, db);
+
+    int index = chats!.value.indexWhere((c) => c.phone == phone);
+    if (index != -1) {
+      chats!.value[index] = chat;
+      chats!.value = List.from(chats!.value);
+      print("UPDATED CHAT ALERT");
     }
   }
 }
