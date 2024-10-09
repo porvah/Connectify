@@ -29,7 +29,7 @@ def SendFcmToken(request):
         serializer = NotificationSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response({'message': 'New user and FCM token created successfully'}, status=status.HTTP_201_CREATED)
+            return Response({'message': 'New user and FCM token created successfully'}, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
