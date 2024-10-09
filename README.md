@@ -16,17 +16,17 @@ Connectify is a real-time chat app offering one-to-one messaging and a range of 
 5 - **Http restful APIs**
 
 ## Main Design Patterns used
- 1 - **Singleton** design pattern ensures that only one instance of the database is created throughout the application’s lifecycle
+ 1 - **Singleton** design pattern ensures that only one instance of the database is created throughout the application’s lifecycle.
 
- 2 - **Proxy** pattern acts as an intermediary layer between the authentication system and the application, managing login and signup requests
+ 2 - **Proxy** pattern acts as an intermediary layer between the authentication system and the application, managing login and signup requests.
 
- 3 - **Chain of Responsibility** pattern handles authentication and authorization by choosing the appropriate handler according to the current state, such as verifying the email, phone number, and authentication code
+ 3 - **Chain of Responsibility** pattern handles authentication and authorization by choosing the appropriate handler according to the current state, such as verifying the email, phone number, and authentication code.
 
- 4 - **Builder** pattern is used to construct complex objects, such as messages and chats, step by step. It allows for flexible configuration and customization, making it easier to build different parts of a message or cha
+ 4 - **Builder** pattern is used to construct complex objects, such as messages and chats, step by step. It allows for flexible configuration and customization, making it easier to build different parts of a message or chat.
 
  5 - **Observer** pattern notifies all pages when a mode switch occurs, ensuring that any changes in the theme are automatically updated across the application.
 
- 6 - **Mediator** pattern is employed to reduce the direct dependencies between APIs and other application logic, promoting loose coupling. It centralizes communication, ensuring that different components interact through the mediator
+ 6 - **Mediator** pattern is employed to reduce the direct dependencies between APIs and other application logic, promoting loose coupling. It centralizes communication, ensuring that different components interact through the mediator.
 
 
 ## App Features
