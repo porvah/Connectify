@@ -45,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           Container(
             decoration: BoxDecoration(color: Theme.of(context).primaryColor),
           ),
-          const Column(
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
@@ -54,16 +54,17 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 50.0,
-                      child: Icon(
-                        Icons.messenger_outline_rounded,
-                        color: Colors.black,
-                        size: 50.0,
+                      backgroundColor: Theme.of(context).primaryColor,
+                      radius: 100.0,
+                      child: Image.asset(
+                        'lib/assets/logos/icon.png', 
+                        width: 300.0, 
+                        height: 300.0,
+                        fit: BoxFit.contain, 
                       ),
                     ),
-                    Padding(padding: EdgeInsets.only(top: 10.0)),
-                    Text(
+                    const Padding(padding: EdgeInsets.only(top: 10.0)),
+                    const Text(
                       "Connectify",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
