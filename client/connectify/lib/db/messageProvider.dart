@@ -46,7 +46,7 @@ class Messageprovider {
         whereArgs: [sender, receiver, receiver, sender],
         orderBy: '$columnTime DESC',
         distinct: true,
-        limit: 10,
+        limit: 30,
         offset: offset) as List<Map<String, dynamic>>;
     List<Message> res = [];
     for (Map<String, dynamic> map in maps) {

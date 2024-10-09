@@ -105,7 +105,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     List<Message> queriedMessages =
         await ChatManagement.queryMessages(sender!.phone!, chat.phone!, 0);
 
-    if (queriedMessages.length < 10) _hasMore = false;
+    if (queriedMessages.length < 30) _hasMore = false;
 
     _messages.value = queriedMessages;
     ChatManagement.messages = _messages;
