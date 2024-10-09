@@ -1,7 +1,8 @@
 # Connectify(real_time chat App)
 Connectify is a real-time chat app offering one-to-one messaging and a range of features, all within a user-friendly interface for a seamless communication experience.
 
-![icon](https://github.com/user-attachments/assets/869c74aa-d551-43b4-a98e-d1d51ba1450c)
+
+![icon](https://github.com/user-attachments/assets/37b093ac-62e5-4d51-a791-54ebef11f596)
 
 ## Technologies used in Connectify include
 1 - **Flutter (Dart)** for the frontend, utilizing sqflite for local storage to save user chats and messages.
@@ -14,7 +15,7 @@ Connectify is a real-time chat app offering one-to-one messaging and a range of 
 
 5 - **Http restful APIs**
 
-### App Features
+## App Features
 
 1 - Secure **Login** and **Signup** Authentication and Authorization, featuring email **verification** by sending a code to the user's email account. After successful login, a session code or token is provided to enhance security throughout the process.
 
@@ -54,11 +55,11 @@ Connectify is a real-time chat app offering one-to-one messaging and a range of 
 
 19 - **Logout**
 
-#### Screen shots 
+## Screen shots 
 
 
 
-##### To run the app
+## To run the app
 
 clone the repo
 
