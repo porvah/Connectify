@@ -55,7 +55,7 @@ class ChatManagement {
     Database? db = await dbsingleton.db;
     List<Message> queried_messages =
         await Messageprovider.getMessagesOfChat(db!, sender, receiver, offset);
-    return List.from(queried_messages.reversed);
+    return List.from(queried_messages);
   }
 
   static socketHandler(String message) {
@@ -88,7 +88,7 @@ class ChatManagement {
     Database? db = await dbsingleton.db;
     Messageprovider.insert(m, db!);
     if (messages != null && curr_contact == m.sender) {
-      messages!.value = List.from(messages!.value)..add(m);
+      messages!.value = List.from(messages!.value)..insert(0, m);
     }
     await updateChat(m.sender!, m, db);
     // Send acknowledgment of arrival after storing the message
@@ -122,7 +122,7 @@ class ChatManagement {
     Messageprovider.insert(m, db!);
 
     if (m.sender == m.receiver) {
-      messages!.value = List.from(messages!.value)..add(m);
+      messages!.value = List.from(messages!.value)..insert(0, m);
       return;
     }
     String content = jsonEncode(dict);
