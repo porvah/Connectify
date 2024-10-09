@@ -4,7 +4,7 @@ Connectify is a real-time chat app offering one-to-one messaging and a range of 
 
 ![icon](https://github.com/user-attachments/assets/37b093ac-62e5-4d51-a791-54ebef11f596)
 
-## Technologies used in Connectify include
+## Technologies used in Connectify 
 1 - **Flutter (Dart)** for the frontend, utilizing sqflite for local storage to save user chats and messages.
 
 2 - **Python - Django** for the backend, with PostgreSQL for storing users and profiles information of logged-in users.
@@ -109,7 +109,7 @@ Connectify is a real-time chat app offering one-to-one messaging and a range of 
 
 ![b7388569-98a0-4385-ba83-a30a7d1cb784](https://github.com/user-attachments/assets/f1bf0d90-dff8-473e-9b14-8d42b827db38)
 
-## To run the app
+## Steps To run the app
 
 clone the repo
 
