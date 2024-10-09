@@ -31,7 +31,7 @@ Connectify is a real-time chat app offering one-to-one messaging and a range of 
 
 ## App Features
 
-1 - Secure **Login** and **Signup** Authentication and Authorization, featuring email **verification** by sending a code to the user's email account. After successful login, a session code or token is provided to enhance security throughout the process.
+1 - Secure **Login** and **Signup** Authentication and Authorization, featuring email **verification** by sending a code to the user's email account expired after five minutes. After successful login, a session code or token is provided to enhance security throughout the process.
 
 2 - **One-to-one messaging** supports image sharing and real-time communication.
 
