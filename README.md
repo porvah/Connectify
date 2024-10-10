@@ -127,7 +127,8 @@ Connectify is a real-time chat app offering one-to-one messaging and a range of 
 
 ## Linkedin Post and Video
 
-https://example.com](https://www.linkedin.com/posts/rowan-mohammad-902327288_introducing-connectify-your-real-time-activity-7250109637864083457-pU9A?utm_source=share&utm_medium=member_desktop
+[Linkedin Post](https://www.linkedin.com/posts/rowan-mohammad-902327288_introducing-connectify-your-real-time-activity-7250109637864083457-pU9A?utm_source=share&utm_medium=member_desktop)
+
 
 ## Steps To run the app
 
