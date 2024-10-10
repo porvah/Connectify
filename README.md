@@ -125,6 +125,10 @@ Connectify is a real-time chat app offering one-to-one messaging and a range of 
 
 ![b7388569-98a0-4385-ba83-a30a7d1cb784](https://github.com/user-attachments/assets/f1bf0d90-dff8-473e-9b14-8d42b827db38)
 
+## Linkedin Post and Video
+
+https://example.com](https://www.linkedin.com/posts/rowan-mohammad-902327288_introducing-connectify-your-real-time-activity-7250109637864083457-pU9A?utm_source=share&utm_medium=member_desktop
+
 ## Steps To run the app
 
 clone the repo
